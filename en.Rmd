@@ -1,0 +1,320 @@
+---
+title: "English Data Combination"
+author: "Erin M. Buchanan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(rio)
+```
+
+## Item Data
+
+```{r}
+data("primeData")
+# filter to just english
+primeData <- primeData %>% 
+  filter(language == "en") %>% 
+  filter(type == "item_data")
+
+# only need this line if you don't have the dataset yet 
+#DF <- import_prime("en_item_data.csv")
+DF <- import("item_data/en/en_item_data.csv") %>% 
+  filter(class == "word") %>% 
+  select(word)
+```
+
+## Datasets
+
+```{r}
+data("labData")
+labData <- labData %>% 
+  filter(language == "English" | language == "British English" | language == "Multiple") %>% 
+  filter(type1 == "Words" | type1 == "Word Pairs")
+```
+
+## AOA 
+
+- here take a note if they say which version 
+- mostly want the subjective ones
+
+- @Bestgen2012
+- @Clark2004
+- @Juhasz2015
+  - Range = ... 
+  - Coverage =   
+
+- @Morrow2005  
+  - Range = ... 
+  - Coverage =    
+  
+```{r}
+aoaData <- labData %>% 
+  filter(aoa == 1)
+
+aoaData
+
+#Kuperman2012
+#Brysbaert2017
+```
+
+## Imagine
+
+- @Elsherif2020
+  - Range = ... 
+  - Coverage = 4
+  
+- @Altarriba1999
+  - Range = ... 
+  - Coverage = 154
+  
+- @Bestgen2012
+  - Range = ... 
+  - Coverage_M = 525
+  - Coverage_LSA_M = 1889
+
+- @Chiarello1999
+  - Range = ... 
+  - Coverage = 265 
+
+- @Clark2004
+  - Range = ... 
+  - Coverage = 279 
+  
+- @Cohen-Shikora2013
+  - Range = ... 
+  - Coverage = 343  
+ 
+- @Cortese2004
+  - Range = ... 
+  - Coverage = 562     
+  
+- @Janschewitz2008
+  - Range = ... 
+  - Coverage = 405     
+  
+- @Juhasz2015
+  - Range = ... 
+  - Coverage =  16    
+  
+- @Morrow2005  
+  - Range = ... 
+  - Coverage_younger =  124
+  - Coverage_older =  124
+  
+  
+  Bestgen2012
+
+
+```{r}
+imageData <- labData %>% 
+  filter(imagine == 1) 
+
+#Elsherif2020 <- import_lab("Elsherif2020")
+Elsherif2020 <- import("lab_data/Elsherif2020.csv")
+#Altarriba1999 <- import_lab("Altarriba1999")
+Altarriba1999 <- import("lab_data/Altarriba1999.csv")
+#Bestgen2012 <- import_lab("Bestgen2012")
+Bestgen2012 <- import("lab_data/Bestgen2012.csv") 
+#Chiarello1999 <- import_lab("Chiarello1999")
+Chiarello1999 <- import("lab_data/Chiarello1999.csv")
+#Clark2004 <- import_lab("Clark2004")
+Clark2004 <- import("lab_data/Clark2004.csv")
+Clark2004$word_english <- tolower(Clark2004$word_english)
+#Clark2004 <- import_lab("Clark2004")
+Clark2004 <- import("lab_data/Clark2004.csv")
+#Cohen_Shikora2013 <- import_lab("Cohen-Shikora2013")
+Cohen_Shikora2013 <- import("lab_data/Cohen-Shikora2013.csv")
+#Cortese2004 <- import_lab("Cortese2004")
+Cortese2004 <- import("lab_data/Cortese2004.csv")
+#Janschewitz2008 <- import_lab("Janschewitz2008")
+Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
+#Juhasz2013 <- import_lab("Juhasz2013")
+#Juhasz2013 <- import("lab_data/Juhasz2013.csv")
+#Juhasz2015 <- import_lab("Juhasz2015")
+Juhasz2015 <- import("lab_data/Juhasz2015.csv")
+#Morrow2005 <- import_lab("Morrow2005")
+Morrow2005 <- import("lab_data/Morrow2005.csv")
+
+# join together 
+imageDF <- DF %>% 
+  left_join(Elsherif2020 %>% 
+              select(word_english, imagine_M_British, imagine_M_American), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Elsherif2020_M_British = imagine_M_British, 
+                Elsherif2020_M_American = imagine_M_American) %>%
+  left_join(Altarriba1999 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Altarriba1999_M = imagine_M) %>%
+  left_join(Bestgen2012 %>% 
+              select(word_english, imagine_norms_M, imagine_LSA_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Bestgen2012_M = imagine_norms_M,
+                Bestgen2012_LSA_M = imagine_LSA_M) %>% 
+  left_join(Chiarello1999 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Chiarello1999_M = imagine_M) %>% 
+  left_join(Clark2004 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Clark2004_M = imagine_M) %>% 
+  left_join(Cohen_Shikora2013 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Cohen_Shikora2013_M = imagine_M) %>% 
+  left_join(Cortese2004 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Cortese2004_M = imagine_M) %>% 
+  left_join(Janschewitz2008 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Janschewitz2008_M = imagine_M) %>% 
+  left_join(Juhasz2015 %>% 
+              select(word_english, imagine_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Juhasz2015_M = imagine_M) %>% 
+  left_join(Morrow2005 %>% 
+              select(word_english, imagine_M_younger, imagine_M_older), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Morrow2005_M_younger = imagine_M_younger,
+                Morrow2005_M_older = imagine_M_older)                       
+
+
+nrow(imageDF)
+
+# coverage
+nrow(imageDF) - sum(is.na(imageDF$Morrow2005))
+
+```
+
+## Concrete
+
+- @Altarriba1999
+- @Bestgen2012
+- @Clark2004
+- @Altarriba1999_M  
+  - Range = ... 
+  - Coverage =  134
+- @Bestgen2012 
+  - Range = ... 
+  - Coverage =  545  
+
+```{r}
+concreteData <- labData %>% 
+  filter(concrete == 1)
+
+#Altarriba1999 <- import_lab("Altarriba1999")
+Altarriba1999 <- import("lab_data/Altarriba1999.csv")
+#Bestgen2012 <- import_lab("Bestgen2012")
+Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+
+
+# join together 
+concreteDF <- DF %>% 
+  left_join(Altarriba1999 %>% 
+              select(word_english, concrete_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Altarriba1999_M = concrete_M) %>% 
+  left_join(Bestgen2012 %>% 
+              select(word_english, concrete_norms_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Bestgen2012_M = concrete_norms_M)
+
+
+# coverage
+nrow(concreteData) - sum(is.na(concreteDF$Altarriba1999_M))
+nrow(concreteData) - sum(is.na(concreteDF$Bestgen2012_M))
+
+```
+
+
+
+## Valence
+
+- @Warriner2013: 
+  - Range = 
+  - Coverage = 1853/2000
+  
+- @Bestgen2012
+  - Range = 
+  - Coverage = 409/2000
+  
+- @Clark2004
+  - Range = ... 
+  - Coverage =  
+
+- @Janschewitz2008
+  - Range = ... 
+  - Coverage =  
+
+```{r}
+valData <- labData %>% 
+  filter(valence == 1)
+
+# Warriner2013 <- import_lab("Warriner2013")
+Warriner2013 <- import("lab_data/Warriner2013.csv")
+# Bestgen2012 <- import_lab("Bestgen2012")
+Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+
+# join together 
+valDF <- DF %>% 
+  left_join(Warriner2013 %>% 
+              select(word_english, valence_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Warriner2013_M = valence_M) %>% 
+  left_join(Bestgen2012 %>% 
+              select(word_english, valence_norms_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Bestgen2012 = valence_norms_M)
+
+
+# coverage
+nrow(valDF) - sum(is.na(valDF$Warriner2013_M))
+nrow(valDF) - sum(is.na(valDF$Bestgen2012))
+
+```
+
+## Arousal
+
+Bestgen2012
+
+- @Janschewitz2008
+  - Range = ... 
+  - Coverage =  
+  
+## Familiar
+
+Elsherif2020
+Chiarello1999
+@Clark2004
+- @Janschewitz2008
+  - Range = ... 
+  - Coverage =  
+
+- @Juhasz2015
+  - Range = ... 
+  - Coverage =   
+
+- @Morrow2005  
+  - Range = ... 
+  - Coverage =  
+  
+## Prime
+
+## Combine
+
+```{r}
+
+```
