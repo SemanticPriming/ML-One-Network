@@ -210,6 +210,15 @@ nrow(imageDF) - sum(is.na(imageDF$Morrow2005))
 - @Bestgen2012 
   - Range = ... 
   - Coverage =  545  
+- @Brysbaert2014
+  - Range = ...  
+  - Coverage =  1952  
+- @Eilola2010
+  - Range = ...  
+  - Coverage = 92 
+- @Pexman2017
+  - Range = ...  
+  - Coverage = 613
 
 ```{r}
 concreteData <- labData %>% 
@@ -219,6 +228,12 @@ concreteData <- labData %>%
 Altarriba1999 <- import("lab_data/Altarriba1999.csv")
 #Bestgen2012 <- import_lab("Bestgen2012")
 Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+#Brysbaert2014 <- import_lab("Brysbaert2014")
+Brysbaert2014 <- import("lab_data/Brysbaert2014.csv") 
+#Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv") 
+#Pexman2017 <- import_lab("Pexman2017")
+Pexman2017 <- import("lab_data/Pexman2017.csv") 
 
 
 # join together 
@@ -230,12 +245,27 @@ concreteDF <- DF %>%
   left_join(Bestgen2012 %>% 
               select(word_english, concrete_norms_M), 
             by = c("word" = "word_english")) %>% 
-  dplyr::rename(Bestgen2012_M = concrete_norms_M)
+  dplyr::rename(Bestgen2012_M = concrete_norms_M) %>% 
+  left_join(Brysbaert2014 %>% 
+              select(word_english, concrete_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Brysbaert2014_M = concrete_M) %>% 
+  left_join(Eilola2010 %>% 
+              select(word_english, concrete_M_english), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Eilola2010_M = concrete_M_english) %>% 
+  left_join(Pexman2017 %>% 
+              select(word_english, concrete_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Pexman2017_M = concrete_M)
 
 
 # coverage
 nrow(concreteData) - sum(is.na(concreteDF$Altarriba1999_M))
 nrow(concreteData) - sum(is.na(concreteDF$Bestgen2012_M))
+nrow(concreteData) - sum(is.na(concreteDF$Brysbaert2014_M))
+nrow(concreteData) - sum(is.na(concreteDF$Eilola2010_M))
+nrow(concreteData) - sum(is.na(concreteDF$Pexman2017_M))
 
 ```
 
@@ -258,6 +288,8 @@ nrow(concreteData) - sum(is.na(concreteDF$Bestgen2012_M))
 - @Janschewitz2008
   - Range = ... 
   - Coverage =  
+  
+Eilola2010  
 
 ```{r}
 valData <- labData %>% 
@@ -298,6 +330,7 @@ Bestgen2012
 
 Elsherif2020
 Chiarello1999
+Eilola2010
 @Clark2004
 - @Janschewitz2008
   - Range = ... 
