@@ -280,25 +280,41 @@ nrow(concreteData) - sum(is.na(concreteDF$Pexman2017_M))
 - @Bestgen2012
   - Range = 
   - Coverage = 409/2000
-  
-- @Clark2004
+
+- @Eilola2010 
   - Range = ... 
-  - Coverage =  
+  - Coverage =  112
+
+- @Ferstl2011 
+  - Range = ... 
+  - Coverage =  5  
 
 - @Janschewitz2008
   - Range = ... 
-  - Coverage =  
+  - Coverage =  426  
   
-Eilola2010  
+- @Leveau2012 
+  - Range = ... 
+  - Coverage =  2284  
+
+- @Warriner2013
+  - Range = ... 
+  - Coverage =  
 
 ```{r}
 valData <- labData %>% 
   filter(valence == 1)
 
-# Warriner2013 <- import_lab("Warriner2013")
+#Warriner2013 <- import_lab("Warriner2013")
 Warriner2013 <- import("lab_data/Warriner2013.csv")
-# Bestgen2012 <- import_lab("Bestgen2012")
+#Bestgen2012 <- import_lab("Bestgen2012")
 Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+#Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv")
+#Ferstl2011 <- import_lab("Ferstl2011")
+Ferstl2011 <- import("lab_data/Ferstl2011.csv")
+#Janschewitz2008 <- import_lab("Janschewitz2008")
+Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
 
 # join together 
 valDF <- DF %>% 
@@ -309,13 +325,27 @@ valDF <- DF %>%
   left_join(Bestgen2012 %>% 
               select(word_english, valence_norms_M), 
             by = c("word" = "word_english")) %>% 
-  dplyr::rename(Bestgen2012 = valence_norms_M)
+  dplyr::rename(Bestgen2012_M = valence_norms_M) %>% 
+  left_join(Eilola2010 %>% 
+              select(word_english, valence_M_english), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Eilola2010_M = valence_M_english) %>% 
+  left_join(Ferstl2011 %>% 
+              select(word_english, valence_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Ferstl2011_M = valence_M) %>% 
+  left_join(Janschewitz2008 %>% 
+              select(word_english, valence_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Janschewitz2008_M = valence_M) 
 
 
 # coverage
 nrow(valDF) - sum(is.na(valDF$Warriner2013_M))
-nrow(valDF) - sum(is.na(valDF$Bestgen2012))
-
+nrow(valDF) - sum(is.na(valDF$Bestgen2012_M))
+nrow(valDF) - sum(is.na(valDF$Eilola2010_M))
+nrow(valDF) - sum(is.na(valDF$Ferstl2011_M))
+nrow(valDF) - sum(is.na(valDF$Janschewitz2008_M))
 ```
 
 ## Arousal
