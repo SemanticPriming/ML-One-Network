@@ -350,11 +350,52 @@ nrow(valDF) - sum(is.na(valDF$Janschewitz2008_M))
 
 ## Arousal
 
-Bestgen2012
+- @Bestgen2012
+  - Range = ... 
+  - Coverage =  389
 
 - @Janschewitz2008
   - Range = ... 
+  - Coverage =  1853
+
+- @Warriner2013
+  - Range = ... 
   - Coverage =  
+
+
+```{r}
+arouData <- labData %>% 
+  filter(arousal == 1)
+
+#Bestgen2012 <- import_lab("Warriner2013")
+Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+#Janschewitz2008 <- import_lab("Janschewitz2008")
+Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
+#Warriner2013 <- import_lab("Warriner2013")
+Warriner2013 <- import("lab_data/Warriner2013.csv")
+
+# join together 
+arouDF <- DF %>% 
+  left_join(Bestgen2012 %>% 
+              select(word_english, arousal_norms_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Bestgen2012_M = arousal_norms_M) %>% 
+  left_join(Warriner2013 %>% 
+              select(word_english, arousal_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Warriner2013_M = arousal_M) #%>% 
+#  left_join(Janschewitz2008 %>% 
+#              select(word_english, arousal_M), 
+#            by = c("word" = "word_english")) %>% 
+#  dplyr::rename(Janschewitz2008_M = arousal_M)
+
+# coverage
+nrow(arouDF) - sum(is.na(valDF$Bestgen2012_M))
+nrow(arouDF) - sum(is.na(valDF$Warriner2013_M ))
+```
+
+
+
   
 ## Familiar
 
