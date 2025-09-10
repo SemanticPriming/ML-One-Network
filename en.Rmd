@@ -287,10 +287,20 @@ imageDF <- DF %>%
                 Morrow2005_M_older = imagine_M_older)                       
 
 
-nrow(imageDF)
-
 # coverage
-nrow(imageDF) - sum(is.na(imageDF$Morrow2005))
+nrow(imageDF) - sum(is.na(imageDF$Elsherif2020_M_British))
+nrow(imageDF) - sum(is.na(imageDF$Elsherif2020_M_American))
+nrow(imageDF) - sum(is.na(imageDF$Altarriba1999_M))
+nrow(imageDF) - sum(is.na(imageDF$Bestgen2012_M))
+nrow(imageDF) - sum(is.na(imageDF$Bestgen2012_LSA_M))
+nrow(imageDF) - sum(is.na(imageDF$Chiarello1999_M))
+nrow(imageDF) - sum(is.na(imageDF$Clark2004_M))
+nrow(imageDF) - sum(is.na(imageDF$Cohen_Shikora2013_M))
+nrow(imageDF) - sum(is.na(imageDF$Cortese2004_M))
+nrow(imageDF) - sum(is.na(imageDF$Janschewitz2008_M))
+nrow(imageDF) - sum(is.na(imageDF$Juhasz2015_M))
+nrow(imageDF) - sum(is.na(imageDF$Morrow2005_M_older))
+nrow(imageDF) - sum(is.na(imageDF$Morrow2005_M_younger))
 
 ```
 
@@ -483,10 +493,22 @@ arouDF <- DF %>%
 #              select(word_english, arousal_M), 
 #            by = c("word" = "word_english")) %>% 
 #  dplyr::rename(Janschewitz2008_M = arousal_M)
+#> names(Janschewitz2008)
+# [1] "rater"            "word_english"     "type"            
+# [4] "letters_N"        "syllables_N"      "frequency_KF"    
+# [7] "valence_ANEW_M"   "arousal_M"        "personal_use_M"  ## arousal_M one 
+#[10] "personal_use_SD"  "familiarity_M"    "familiarity_SD"  
+#[13] "offensiveness_M"  "offensiveness_SD" "tabooness_M"     
+#[16] "tabooness_SD"     "valence_M"        "valence_SD"      
+#[19] "arousal_M"        "arousal_SD"       "imagine_M"       ## arousal_M two 
+#[22] "imagine_SD"     
+
+
 
 # coverage
-nrow(arouDF) - sum(is.na(valDF$Bestgen2012_M))
-nrow(arouDF) - sum(is.na(valDF$Warriner2013_M ))
+nrow(arouDF) - sum(is.na(arouDF$Bestgen2012_M))
+#nrow(arouDF) - sum(is.na(arouDF$Janschewitz2008_M))
+nrow(arouDF) - sum(is.na(arouDF$Warriner2013_M ))
 ```
 
 
@@ -514,20 +536,65 @@ Eilola2010
 familiarData <- labData %>% 
   filter(familiar == 1)
 
-#Bestgen2012 <- import_lab("Warriner2013")
-Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+#Amsel2012 <- import_lab("Amsel2012")
+Amsel2012 <- import("lab_data/Amsel2012.csv")
+#Clark2004 <- import_lab("Clark2004")
+Clark2004 <- import("lab_data/Clark2004.csv")
+Clark2004$word_english <- tolower(Clark2004$word_english)
+#Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv")
+#Elsherif2020 <- import_lab("Elsherif2020")
+Elsherif2020 <- import("lab_data/Elsherif2020.csv")
 #Janschewitz2008 <- import_lab("Janschewitz2008")
 Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
-#Warriner2013 <- import_lab("Warriner2013")
-Warriner2013 <- import("lab_data/Warriner2013.csv")
+#Juhasz2015 <- import_lab("Juhasz2015")
+Juhasz2015 <- import("lab_data/Juhasz2015.csv")
+#Morrow2005 <- import_lab("Morrow2005")
+Morrow2005 <- import("lab_data/Morrow2005.csv")
 
 # join together 
 familiarDF <- DF %>% 
-  left_join(Bestgen2012 %>% 
-              select(word_english, arousal_norms_M), 
-            by = c("word" = "word_english"))
+  left_join(Amsel2012 %>% 
+              select(word_english, familiar_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Amsel2012_M = familiar_M) %>% 
+  left_join(Clark2004 %>% 
+              select(word_english, familiar_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Clark2004_M = familiar_M) %>% 
+  left_join(Eilola2010 %>% 
+              select(word_english, familiar_M_english, familiar_M_finnish), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Eilola2010_M_english = familiar_M_english, 
+                Eilola2010_M_finnish = familiar_M_finnish,) %>% 
+  left_join(Elsherif2020 %>% 
+              select(word_english, familiar_M_American,familiar_M_British), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Elsherif2020_M_American = familiar_M_American,
+                Elsherif2020_M_British = familiar_M_British) %>% 
+  left_join(Janschewitz2008 %>% 
+              select(word_english, familiarity_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Janschewitz2008_M = familiarity_M) %>% 
+  left_join(Juhasz2015 %>% 
+              select(word_english, familiar_M), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Juhasz2015_M = familiar_M) %>% 
+  left_join(Morrow2005 %>% 
+              select(word_english, familiar_M_older, familiar_M_younger), 
+            by = c("word" = "word_english")) %>% 
+  dplyr::rename(Morrow2005_M_older = familiar_M_older,
+                Morrow2005_M_younger = familiar_M_younger)  
 
-nrow(familiarDF) - sum(is.na(familiarDF$Bestgen2012_M))
+
+nrow(familiarDF) - sum(is.na(familiarDF$Amsel2012_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Clark2004_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Eilola2010_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Elsherif2020_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Janschewitz2008_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Juhasz2015_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_older))
+nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_younger))
 ```
 
   
