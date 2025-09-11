@@ -1,6 +1,6 @@
 ---
 title: "English Data Combination"
-author: "Erin M. Buchanan"
+author: "Erin M. Buchanan - Addie Clark"
 date: "`r Sys.Date()`"
 output: html_document
 ---
