@@ -9,6 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Goals
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
 ## Libraries
 
 ```{r}
@@ -33,7 +37,15 @@ DF <- import("item_data/en/en_item_data.csv") %>%
   select(word)
 ```
 
-## Datasets
+
+## Lexical Data
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
 
 ```{r}
 data("labData")
@@ -42,7 +54,7 @@ labData <- labData %>%
   filter(type1 == "Words" | type1 == "Word Pairs")
 ```
 
-## AOA 
+### AOA 
 
 - here take a note if they say which version 
 - mostly want the subjective ones
@@ -109,7 +121,6 @@ Morrow2005 <- import("lab_data/Morrow2005.csv")
 #Schock2012 <- import_lab("Schock2012")
 Schock2012 <- import("lab_data/Schock2012.csv")
 
-
 # join together 
 aoaDF <- DF %>% 
   left_join(Clark2004 %>% 
@@ -147,7 +158,6 @@ aoaDF <- DF %>%
             by = c("word" = "word_english")) %>% 
   dplyr::rename(Schock2012_M = aoa_M)
 
-
 nrow(aoaDF) - sum(is.na(aoaDF$Clark2004_M)) 
 nrow(aoaDF) - sum(is.na(aoaDF$Cortese2008_M)) 
 nrow(aoaDF) - sum(is.na(aoaDF$Elsherif2020_M)) 
@@ -158,11 +168,9 @@ nrow(aoaDF) - sum(is.na(aoaDF$Khanna2011_2_M_subordinate))
 nrow(aoaDF) - sum(is.na(aoaDF$Morrow2005_M_older)) 
 nrow(aoaDF) - sum(is.na(aoaDF$Morrow2005_M_younger)) 
 nrow(aoaDF) - sum(is.na(aoaDF$Schock2012_M)) 
-
-
 ```
 
-## Imagine
+### Imagine
 
 - @Elsherif2020
   - Range = ... 
@@ -223,7 +231,6 @@ Bestgen2012 <- import("lab_data/Bestgen2012.csv")
 #Chiarello1999 <- import_lab("Chiarello1999")
 Chiarello1999 <- import("lab_data/Chiarello1999.csv")
 #Clark2004 <- import_lab("Clark2004")
-Clark2004 <- import("lab_data/Clark2004.csv")
 Clark2004$word_english <- tolower(Clark2004$word_english)
 #Clark2004 <- import_lab("Clark2004")
 Clark2004 <- import("lab_data/Clark2004.csv")
@@ -234,7 +241,7 @@ Cortese2004 <- import("lab_data/Cortese2004.csv")
 #Janschewitz2008 <- import_lab("Janschewitz2008")
 Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
 #Juhasz2013 <- import_lab("Juhasz2013")
-#Juhasz2013 <- import("lab_data/Juhasz2013.csv")
+Juhasz2013 <- import("lab_data/Juhasz2013.csv")
 #Juhasz2015 <- import_lab("Juhasz2015")
 Juhasz2015 <- import("lab_data/Juhasz2015.csv")
 #Morrow2005 <- import_lab("Morrow2005")
@@ -304,7 +311,7 @@ nrow(imageDF) - sum(is.na(imageDF$Morrow2005_M_younger))
 
 ```
 
-## Concrete
+### Concrete
 
 - @Altarriba1999
 - @Bestgen2012
@@ -376,7 +383,7 @@ nrow(concreteData) - sum(is.na(concreteDF$Pexman2017_M))
 
 
 
-## Valence
+### Valence
 
 - @Warriner2013: 
   - Range = 
@@ -453,7 +460,7 @@ nrow(valDF) - sum(is.na(valDF$Ferstl2011_M))
 nrow(valDF) - sum(is.na(valDF$Janschewitz2008_M))
 ```
 
-## Arousal
+### Arousal
 
 - @Bestgen2012
   - Range = ... 
@@ -514,7 +521,7 @@ nrow(arouDF) - sum(is.na(arouDF$Warriner2013_M ))
 
 
   
-## Familiar
+### Familiar
 
 Elsherif2020
 Chiarello1999
@@ -597,27 +604,28 @@ nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_older))
 nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_younger))
 ```
 
-  
-## Prime
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
 ```{r}
-primeData <- labData %>% 
-  filter(prime == 1)
+data("primeData")
+# filter to just english
+primeData <- primeData %>% 
+  filter(language == "en") 
 
-#Bestgen2012 <- import_lab("Warriner2013")
-Bestgen2012 <- import("lab_data/Bestgen2012.csv")
-#Janschewitz2008 <- import_lab("Janschewitz2008")
-Janschewitz2008 <- import("lab_data/Janschewitz2008.csv")
-#Warriner2013 <- import_lab("Warriner2013")
-Warriner2013 <- import("lab_data/Warriner2013.csv")
+#en_prime <- import_prime("en_prime_summary.csv")
+en_prime <- import("priming_data/en/en_prime_summary.csv")
 
-# join together 
-primeDF <- DF %>% 
-  left_join(Bestgen2012 %>% 
-              select(word_english, arousal_norms_M), 
-            by = c("word" = "word_english"))
-
-nrow(primeDF) - sum(is.na(primeDF$Bestgen2012_M))
+en_matched <- import_prime("en_trial_unique.csv")
 ```
+
+### BERT Priming
+
+## Embeddings
 
 ## Combine
 
