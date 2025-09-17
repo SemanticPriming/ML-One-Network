@@ -146,11 +146,10 @@ Elsherif2020 <- import("lab_data/Elsherif2020.csv")
 
 # join together 
 imageDF <- DF %>% 
-  left_join(Elsherif2020 %>% 
-              select(word_english, imagine_M_British, imagine_M_American), 
-            by = c("word" = "word_english")) %>% 
-  dplyr::rename(Elsherif2020_M_British = imagine_M_British, 
-                Elsherif2020_M_American = imagine_M_American) 
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, imagine_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = imagine_M) 
   
 
 # coverage
@@ -173,10 +172,10 @@ Altarriba1999 <- import("lab_data/Altarriba1999.csv")
 
 # join together 
 concreteDF <- DF %>% 
-  left_join(Altarriba1999 %>% 
-              select(word_english, concrete_M), 
-            by = c("word" = "word_english")) %>% 
-  dplyr::rename(Altarriba1999_M = concrete_M)
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, concrete_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = concrete_M) 
 
 # coverage
 nrow(concreteData) - sum(is.na(concreteDF$Altarriba1999_M))
@@ -199,10 +198,10 @@ Warriner2013 <- import("lab_data/Warriner2013.csv")
 
 # join together 
 valDF <- DF %>% 
-  left_join(Warriner2013 %>% 
-              select(word_english, valence_M), 
-            by = c("word" = "word_english")) %>% 
-  dplyr::rename(Warriner2013_M = valence_M) 
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = valence_M) 
 
 
 # coverage
@@ -225,10 +224,10 @@ Bestgen2012 <- import("lab_data/Bestgen2012.csv")
 
 # join together 
 arouDF <- DF %>% 
-  left_join(Bestgen2012 %>% 
-              select(word_english, arousal_norms_M), 
-            by = c("word" = "word_english")) %>% 
-  dplyr::rename(Bestgen2012_M = arousal_norms_M)
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, arousal_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = arousal_M) 
 
 # coverage
 nrow(arouDF) - sum(is.na(arouDF$Bestgen2012_M))
@@ -252,10 +251,10 @@ Amsel2012 <- import("lab_data/Amsel2012.csv")
 
 # join together 
 familiarDF <- DF %>% 
-  left_join(Amsel2012 %>% 
-              select(word_english, familiar_M), 
-            by = c("word" = "word_english")) %>% 
-  dplyr::rename(Amsel2012_M = familiar_M) 
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, familiar_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = familiar_M) 
 
 nrow(familiarDF) - sum(is.na(familiarDF$Amsel2012_M))
 ```
@@ -274,9 +273,9 @@ primeData <- primeData %>%
   filter(language == "es") 
 
 #en_prime <- import_prime("en_prime_summary.csv")
-en_prime <- import("priming_data/es/es_prime_summary.csv")
+es_prime <- import("priming_data/es/es_prime_summary.csv")
 
-en_matched <- import_prime("en_trial_unique.csv")
+es_matched <- import_prime("es_trial_unique.csv")
 ```
 
 ### BERT Priming
