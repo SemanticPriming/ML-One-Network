@@ -132,105 +132,151 @@ nrow(aoaDF) - sum(is.na(aoaDF$MorenoMartinez2014_M))
 
 ### Imagine
 
-- @Elsherif2020
+- @Guasch2016
   - Range = ... 
-  - Coverage = 4
-  
+  - Coverage = 399
+
+- @Izura2005
+  - Range = ... 
+  - Coverage = 133
 
 ```{r}
 imageData <- labData %>% 
   filter(imagine == 1) 
 
-#Elsherif2020 <- import_lab("Elsherif2020")
-Elsherif2020 <- import("lab_data/Elsherif2020.csv")
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#Izura2005 <- import_lab("Izura2005")
+Izura2005 <- import("lab_data/Izura2005.csv")
+
 
 # join together 
 imageDF <- DF %>% 
-  left_join(MorenoMartinez2014 %>% 
+  left_join(Guasch2016 %>% 
               select(word_spanish, imagine_M),
             by = c("word" = "word_spanish")) %>% 
-  dplyr::rename(MorenoMartinez2014_M = imagine_M) 
-  
+  dplyr::rename(Guasch2016_M = imagine_M) %>% 
+  left_join(Izura2005 %>% 
+              select(word_spanish, imagine_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Izura2005_M = imagine_M) 
 
 # coverage
-nrow(imageDF) - sum(is.na(imageDF$Elsherif2020_M_British))
+nrow(imageDF) - sum(is.na(imageDF$Guasch2016_M))
+nrow(imageDF) - sum(is.na(imageDF$Izura2005_M))
 
 ```
 
 ### Concrete
 
-- @Altarriba1999_M  
+- @Guasch2016  
   - Range = ... 
-  - Coverage =  134
+  - Coverage =  380
 
 ```{r}
 concreteData <- labData %>% 
   filter(concrete == 1)
 
-#Altarriba1999 <- import_lab("Altarriba1999")
-Altarriba1999 <- import("lab_data/Altarriba1999.csv")
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
 
 # join together 
 concreteDF <- DF %>% 
-  left_join(MorenoMartinez2014 %>% 
+  left_join(Guasch2016 %>% 
               select(word_spanish, concrete_M),
             by = c("word" = "word_spanish")) %>% 
-  dplyr::rename(MorenoMartinez2014_M = concrete_M) 
+  dplyr::rename(Guasch2016_M = concrete_M) 
 
 # coverage
-nrow(concreteData) - sum(is.na(concreteDF$Altarriba1999_M))
+nrow(concreteData) - sum(is.na(concreteDF$Guasch2016_M))
+
 ```
 
 
 
 ### Valence
 
-- @Warriner2013: 
+- @Ferre2012: 
   - Range = 
-  - Coverage = 1853/2000
+  - Coverage = 94
+
+- @Guasch2016: 
+  - Range = 
+  - Coverage = 399
+
+- @StadthagenGonzalez2017: 
+  - Range = 
+  - Coverage = 1402
 
 ```{r}
 valData <- labData %>% 
   filter(valence == 1)
 
-#Warriner2013 <- import_lab("Warriner2013")
-Warriner2013 <- import("lab_data/Warriner2013.csv")
+#Ferre2012 <- import_lab("Ferre2012")
+Ferre2012 <- import("lab_data/Ferre2012.csv")
+Ferre2012$word_spanish <- tolower(Ferre2012$word_spanish)
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#StadthagenGonzalez2017 <- import_lab("Stadthagen-Gonzalez2017")
+StadthagenGonzalez2017 <- import("lab_data/Stadthagen-Gonzalez2017.csv")
 
 # join together 
 valDF <- DF %>% 
-  left_join(MorenoMartinez2014 %>% 
+  left_join(Ferre2012 %>% 
               select(word_spanish, valence_M),
             by = c("word" = "word_spanish")) %>% 
-  dplyr::rename(MorenoMartinez2014_M = valence_M) 
+  dplyr::rename(Ferre2012_M = valence_M) %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = valence_M) %>% 
+  left_join(StadthagenGonzalez2017 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(StadthagenGonzalez2017_M = valence_M) 
 
 
 # coverage
-nrow(valDF) - sum(is.na(valDF$Warriner2013_M))
+nrow(valDF) - sum(is.na(valDF$Ferre2012_M))
+nrow(valDF) - sum(is.na(valDF$Guasch2016_M))
+nrow(valDF) - sum(is.na(valDF$StadthagenGonzalez2017_M))
 
 ```
 
 ### Arousal
 
-- @Bestgen2012
+- @Guasch2016
   - Range = ... 
-  - Coverage =  389
+  - Coverage =  399
+
+- @StadthagenGonzalez2017
+  - Range = ... 
+  - Coverage =  1402  
 
 ```{r}
 arouData <- labData %>% 
   filter(arousal == 1)
 
-#Bestgen2012 <- import_lab("Warriner2013")
-Bestgen2012 <- import("lab_data/Bestgen2012.csv")
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#StadthagenGonzalez2017 <- import_lab("Stadthagen-Gonzalez2017")
+StadthagenGonzalez2017 <- import("lab_data/Stadthagen-Gonzalez2017.csv")
 
 # join together 
 arouDF <- DF %>% 
-  left_join(MorenoMartinez2014 %>% 
+  left_join(Guasch2016 %>% 
               select(word_spanish, arousal_M),
             by = c("word" = "word_spanish")) %>% 
-  dplyr::rename(MorenoMartinez2014_M = arousal_M) 
+  dplyr::rename(Guasch2016_M = arousal_M) %>% 
+  left_join(StadthagenGonzalez2017 %>% 
+              select(word_spanish, arousal_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(StadthagenGonzalez2017_M = arousal_M) 
 
 # coverage
-nrow(arouDF) - sum(is.na(arouDF$Bestgen2012_M))
+nrow(arouDF) - sum(is.na(arouDF$Guasch2016))
+nrow(arouDF) - sum(is.na(arouDF$StadthagenGonzalez2017_M))
+
 ```
 
 
@@ -238,25 +284,49 @@ nrow(arouDF) - sum(is.na(arouDF$Bestgen2012_M))
   
 ### Familiar
 
-- @Morrow2005  
+- @Guasch2016  
   - Range = ... 
-  - Coverage =  
+  - Coverage =  403
+
+- @Izura2005  
+  - Range = ... 
+  - Coverage =  134
+  
+- @MorenoMartinez2014  
+  - Range = ... 
+  - Coverage =  147  
 
 ```{r}
 familiarData <- labData %>% 
   filter(familiar == 1)
 
-#Amsel2012 <- import_lab("Amsel2012")
-Amsel2012 <- import("lab_data/Amsel2012.csv")
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#Izura2005 <- import_lab("Izura2005")
+Izura2005 <- import("lab_data/Izura2005.csv")
+#MorenoMartinez2014 <- import_lab("Moreno-Martinez2014")
+MorenoMartinez2014 <- import("lab_data/Moreno-Martinez2014.csv")
+
 
 # join together 
 familiarDF <- DF %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, familiar_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = familiar_M) %>% 
+  left_join(Izura2005 %>% 
+              select(word_spanish, familiarity),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Izura2005_M = familiarity) %>% 
   left_join(MorenoMartinez2014 %>% 
               select(word_spanish, familiar_M),
             by = c("word" = "word_spanish")) %>% 
-  dplyr::rename(MorenoMartinez2014_M = familiar_M) 
+  dplyr::rename(MorenoMartinez2014_M = familiar_M)
 
-nrow(familiarDF) - sum(is.na(familiarDF$Amsel2012_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Guasch2016_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Izura2005_M))
+nrow(familiarDF) - sum(is.na(familiarDF$MorenoMartinez2014_M))
+
 ```
 
 
