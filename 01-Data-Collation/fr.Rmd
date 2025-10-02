@@ -1,0 +1,317 @@
+---
+title: "French Data Combination"
+author: "Erin M. Buchanan - Addie Clark"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goals
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(rio)
+```
+
+## Item Data
+
+```{r}
+data("primeData")
+# filter to just german
+primeData <- primeData %>% 
+  filter(language == "fe") %>% 
+  filter(type == "item_data")
+
+# only need this line if you don't have the dataset yet 
+DF <- import_prime("fe_item_data.csv")
+DF <- import("item_data/fe/fe_item_data.csv") %>% 
+  filter(class == "word") %>% 
+  select(word)
+```
+
+
+## Lexical Data
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
+
+```{r}
+data("labData")
+labData <- labData %>% 
+  filter(language == "French" | language == "Multiple") %>% 
+  filter(type1 == "Words" | type1 == "Word Pairs")
+```
+
+### AOA 
+
+- here take a note if they say which version 
+- mostly want the subjective ones
+
+- @Birchenough2017
+  - Range = ... 
+  - Coverage =  195
+  
+ - @Russell1970
+  - Range = ... 
+  - Coverage =  231 
+
+
+```{r}
+aoaData <- labData %>% 
+  filter(aoa == 1)
+
+#Birchenough2017 <- import_lab("Birchenough2017")
+Birchenough2017 <- import("lab_data/Birchenough2017.csv")
+Birchenough2017$word_german <- tolower(Birchenough2017$word_german)
+#Russell1970 <- import_lab("Russell1970")
+Russell1970 <- import("lab_data/Russell1970.csv")
+
+
+# join together 
+aoaDF <- DF %>% 
+  left_join(Birchenough2017 %>% 
+              select(word_german, aoa_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Birchenough2017_M = aoa_M) %>% 
+  left_join(Russell1970 %>% 
+              select(word_german, aoa_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Russell1970_M = aoa_M) 
+
+
+# coverage
+nrow(aoaDF) - sum(is.na(aoaDF$Birchenough2017_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Russell1970_M))  
+```
+
+### Imagine
+
+- @Gruhn2008a
+  - Range = ... 
+  - Coverage = 41
+
+- @Schmidtke2014
+  - Range = ... 
+  - Coverage = 384
+
+```{r}
+imageData <- labData %>% 
+  filter(imagine == 1) 
+
+#Gruhn2008a <- import_lab("Gruhn2008a")
+Gruhn2008a <- import("lab_data/Gruhn2008a.csv")
+#Schmidtke2014 <- import_lab("Schmidtke2014")
+Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
+
+
+# join together 
+imageDF <- DF %>% 
+  left_join(Gruhn2008a %>% 
+              select(word_german, imagine_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Gruhn2008a_M = imagine_M) %>% 
+  left_join(Schmidtke2014 %>% 
+              select(word_german, imagine_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Schmidtke2014_M = imagine_M) 
+
+# coverage
+nrow(imageDF) - sum(is.na(imageDF$Gruhn2008a_M))
+nrow(imageDF) - sum(is.na(imageDF$Schmidtke2014_M))
+
+```
+
+### Concrete
+
+- @Kanske2010  
+  - Range = ... 
+  - Coverage =  261
+
+```{r}
+concreteData <- labData %>% 
+  filter(concrete == 1)
+
+#Kanske2010 <- import_lab("Kanske2010")
+Kanske2010 <- import("lab_data/Kanske2010.csv")
+Kanske2010$word_german <- tolower(Kanske2010$word_german)
+
+# join together 
+concreteDF <- DF %>% 
+  left_join(Kanske2010 %>% 
+              select(word_german, concrete_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Kanske2010_M = concrete_M) 
+
+# coverage
+nrow(concreteData) - sum(is.na(concreteDF$Kanske2010_M))
+
+```
+
+
+
+### Valence
+
+- @Kanske2010: 
+  - Range = 
+  - Coverage = 280
+
+- @Schauenburg2015: 
+  - Range = 
+  - Coverage = 177
+
+- @Schmidtke2014: 
+  - Range = 
+  - Coverage = 384
+
+```{r}
+valData <- labData %>% 
+  filter(valence == 1)
+
+#Kanske2010 <- import_lab("Kanske2010")
+Kanske2010 <- import("lab_data/Kanske2010.csv")
+Kanske2010$word_german <- tolower(Kanske2010$word_german)
+#Schauenburg2015 <- import_lab("Schauenburg2015")
+Schauenburg2015 <- import("lab_data/Schauenburg2015.csv")
+Schauenburg2015$word_german <- tolower(Schauenburg2015$word_german)
+#Schmidtke2014 <- import_lab("Schmidtke2014")
+Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
+
+# join together 
+valDF <- DF %>% 
+  left_join(Kanske2010 %>% 
+              select(word_german, valence_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Kanske2010_M = valence_M) %>% 
+  left_join(Schauenburg2015 %>% 
+              select(word_german, valence_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Schauenburg2015_M = valence_M) %>% 
+  left_join(Schmidtke2014 %>% 
+              select(word_german, valence_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Schmidtke2014_M = valence_M) 
+
+
+
+
+# coverage
+nrow(valDF) - sum(is.na(valDF$Kanske2010_M))
+nrow(valDF) - sum(is.na(valDF$Schauenburg2015_M))
+nrow(valDF) - sum(is.na(valDF$Schmidtke2014_M))
+
+```
+
+### Arousal
+
+- @Kanske2010: 
+  - Range = 
+  - Coverage = 280
+
+- @Schauenburg2015: 
+  - Range = 
+  - Coverage = 177
+
+- @Schmidtke2014: 
+  - Range = 
+  - Coverage = 384 
+
+```{r}
+arouData <- labData %>% 
+  filter(arousal == 1)
+
+#Kanske2010 <- import_lab("Kanske2010")
+Kanske2010 <- import("lab_data/Kanske2010.csv")
+Kanske2010$word_german <- tolower(Kanske2010$word_german)
+#Schauenburg2015 <- import_lab("Schauenburg2015")
+Schauenburg2015 <- import("lab_data/Schauenburg2015.csv")
+Schauenburg2015$word_german <- tolower(Schauenburg2015$word_german)
+#Schmidtke2014 <- import_lab("Schmidtke2014")
+Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
+
+# join together 
+arouDF <- DF %>% 
+  left_join(Kanske2010 %>% 
+              select(word_german, arousal_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Kanske2010_M = arousal_M) %>% 
+  left_join(Schauenburg2015 %>% 
+              select(word_german, arousal_M),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Schauenburg2015_M = arousal_M) %>% 
+  left_join(Schmidtke2014 %>% 
+              select(word_german, arousal_M_ANEW),
+            by = c("word" = "word_german")) %>% 
+  dplyr::rename(Schmidtke2014_M = arousal_M_ANEW)
+
+
+# coverage
+nrow(arouDF) - sum(is.na(arouDF$Kanske2010_M))
+nrow(arouDF) - sum(is.na(arouDF$Schauenburg2015_M))
+nrow(arouDF) - sum(is.na(arouDF$Schmidtke2014_M))
+
+```
+
+
+
+  
+### Familiar
+
+- @Guasch2016  
+  - Range = ... 
+  - Coverage =  403
+
+- @Izura2005  
+  - Range = ... 
+  - Coverage =  134
+  
+- @MorenoMartinez2014  
+  - Range = ... 
+  - Coverage =  147  
+
+```{r}
+familiarData <- labData %>% 
+  filter(familiar == 1)
+
+## zero coverage for german familiar :( 
+```
+
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
+```{r}
+data("primeData")
+# filter to just french
+primeData <- primeData %>% 
+  filter(language == "fe") 
+
+fe_prime <- import_prime("fe_prime_summary.csv")
+fe_prime <- import("priming_data/fe/fe_prime_summary.csv")
+
+fe_matched <- import_prime("fe_trial_unique.csv")
+```
+
+### BERT Priming
+
+## Embeddings
+
+## Combine
+
+```{r}
+
+```
