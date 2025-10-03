@@ -18,7 +18,9 @@ First, the lexical level variables for each item pair (prime and target frequenc
 ```{r}
 library(dplyr)
 library(semanticprimeR)
+library(reticulate)
 library(rio)
+source("functions.R")
 ```
 
 ## Item Data
@@ -31,19 +33,47 @@ primeData <- primeData %>%
   filter(type == "item_data")
 
 # only need this line if you don't have the dataset yet 
-#DF <- import_prime("en_item_data.csv")
-DF <- import("item_data/en/en_item_data.csv") %>% 
+# import_prime("en_item_data.csv")
+DF <- rio::import("item_data/en/en_item_data.csv") %>% 
   filter(class == "word") %>% 
   select(word)
 ```
 
-
 ## Lexical Data
 
-frequency open sub
-word length
+```{r}
+# length
+DF$length <- nchar(DF$word)
 
-1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+# frequency processed with phonemes
+subs_DF <- rio::import("subs_count/en/subs_DF_phono.csv") %>% 
+  unique()
+
+DF <- DF %>% 
+  left_join(subs_DF, by = c("word" = "unigram"))
+
+# orthographic neighborhood
+DF <- calc_neighbors(DF, subs_DF)
+
+# bigram frequency
+DF <- add_bigram_frequency(DF, subs_DF, weight = "unigram_freq")
+
+# orthographic Levenshtein
+DF <- add_orthographic_levenshtein(DF, subs_DF, k = 20, max_len_diff = 3)
+
+# phonographic Levenshtein
+DF <- add_phonographic_levenshtein(DF, k = 20, max_len_diff = 3)
+
+# semantic diversity
+DF <- DF %>% 
+  left_join(
+    rio::import("semdiv_data/en/en_semantic_diversity.csv") %>% 
+      select(-V1),
+    by = c("word" = "term")
+  )
+
+# check out the NAs
+```
 
 ## Subjective Data
 
@@ -604,7 +634,6 @@ nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_older))
 nrow(familiarDF) - sum(is.na(familiarDF$Morrow2005_M_younger))
 ```
 
-
 ## Similarity Statistics
 
 ## Priming
@@ -619,14 +648,94 @@ primeData <- primeData %>%
 
 #en_prime <- import_prime("en_prime_summary.csv")
 en_prime <- import("priming_data/en/en_prime_summary.csv")
-
 en_matched <- import_prime("en_trial_unique.csv")
 ```
 
-### BERT Priming
+### LLM Priming
+
+```{r}
+# cue needs to come first, target always last 
+llm_prime <- en_matched %>% 
+  select(target_word_unique, cue_word_related, cue_word_unrelated) %>% 
+  mutate(sentence_related = paste0("Given the word ", cue_word_related, ", the next word is ", target_word_unique), 
+         sentence_unrelated = paste0("Given the word ", cue_word_unrelated, ", the next word is ", target_word_unique)
+         )
+
+# 1) Compute last-word surprisal for each sentence and the priming delta (B − A)
+res <- priming_delta(
+  sentence_A = llm_prime$sentence_related,
+  sentence_B = llm_prime$sentence_unrelated,
+  log.p = 0.5,  # bits; use 1 for nats
+  model = "gpt2" # multilingual model like facebook 
+)
+
+# 2) Attach the results back to your data
+llm_prime <- bind_cols(
+  llm_prime,
+  res %>% select(
+    last_word_A, surprisal_A, 
+    last_word_B, surprisal_B, 
+    priming_delta
+  )
+)
+
+llm_prime
+```
+
+```{r}
+library(ggplot2)
+ggplot(llm_prime, aes(priming_delta)) + 
+  geom_density() + 
+  geom_vline(xintercept = 0) +
+  theme_classic()
+
+ggplot(en_prime, aes(avgZ_prime)) + 
+  geom_density() + 
+  geom_vline(xintercept = 0) +
+  theme_classic()
+
+together <- en_prime %>% 
+  select(target_word_unique, avgZ_prime) %>% 
+  left_join(llm_prime %>% 
+              select(target_word_unique, priming_delta))
+
+ggplot(together, aes(x = avgZ_prime, y = priming_delta)) + 
+  geom_point() +
+  theme_classic()
+
+cor(together$avgZ_prime, together$priming_delta)
+```
 
 ## Embeddings
 
+```{r}
+transformers <- import("transformers")
+torch <- import("torch")
+
+hf <- (function(model_name = "gpt2") {
+  tokzr <- transformers$AutoTokenizer$from_pretrained(model_name)
+  model <- transformers$AutoModelForCausalLM$from_pretrained(model_name)
+  model$eval()
+  list(tokzr = tokzr, model = model, name = model_name)
+})("gpt2")
+
+batched <- embed_dataframe(
+  llm_prime,
+  tokzr = hf$tokzr,
+  model = hf$model,
+  layer = 12,          # or NULL for last; for gpt2-small last == 13th entry in hidden_states list
+  occurrence = "last", # which occurrence to use if word appears multiple times
+  word_col = "target_word_unique",
+  sent_rel_col = "sentence_related",
+  sent_unrel_col = "sentence_unrelated",
+  quiet = FALSE
+)
+
+# Access results:
+static_mat      <- batched$static
+context_rel_mat <- batched$context_related
+context_unrel_mat <- batched$context_unrelated
+```
 ## Combine
 
 ```{r}
