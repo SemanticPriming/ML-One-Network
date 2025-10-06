@@ -661,6 +661,16 @@ llm_prime <- en_matched %>%
          sentence_unrelated = paste0("Given the word ", cue_word_unrelated, ", the next word is ", target_word_unique)
          )
 
+#sentence_related = paste0("After the word", cue_word_related, ", comes the word", target_word_unique). 
+#sentence_unrelated = paste0("After the word", cue_word_unrelated, ", comes the word, target_word_unique). 
+
+#sentence_related = paste0("The pair begins with", cue_word_related, ", and continues with", target_word_unique). 
+#sentence_unrelated = paste0("The pair begins with", cue_word_unrelated, ", and continues with", target_word_unique). 
+
+#sentence_related = paste0("If the first word is", cue_word_related, ", the next word you’ll see is", target_word_unique). 
+#sentence_unrelated = paste0("If the first word is", cue_word_unrelated, ", the next word you’ll see is", target_word_unique). 
+
+
 # 1) Compute last-word surprisal for each sentence and the priming delta (B − A)
 res <- priming_delta(
   sentence_A = llm_prime$sentence_related,
