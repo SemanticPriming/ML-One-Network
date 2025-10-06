@@ -27,12 +27,12 @@ library(rio)
 data("primeData")
 # filter to just german
 primeData <- primeData %>% 
-  filter(language == "fe") %>% 
+  filter(language == "fr") %>% 
   filter(type == "item_data")
 
 # only need this line if you don't have the dataset yet 
-DF <- import_prime("fe_item_data.csv")
-DF <- import("item_data/fe/fe_item_data.csv") %>% 
+DF <- import_prime("fr_item_data.csv")
+DF <- import("item_data/fr/fr_item_data.csv") %>% 
   filter(class == "word") %>% 
   select(word)
 ```
