@@ -31,7 +31,7 @@ primeData <- primeData %>%
   filter(type == "item_data")
 
 # only need this line if you don't have the dataset yet 
-DF <- import_prime("fr_item_data.csv")
+#DF <- import_prime("fr_item_data.csv")
 DF <- import("item_data/fr/fr_item_data.csv") %>% 
   filter(class == "word") %>% 
   select(word)
@@ -59,78 +59,86 @@ labData <- labData %>%
 - here take a note if they say which version 
 - mostly want the subjective ones
 
-- @Birchenough2017
+- @Bonin2021
   - Range = ... 
-  - Coverage =  195
+  - Coverage =  12
   
- - @Russell1970
+ - @Ferrand2008
   - Range = ... 
-  - Coverage =  231 
+  - Coverage =  385 
 
 
 ```{r}
 aoaData <- labData %>% 
   filter(aoa == 1)
 
-#Birchenough2017 <- import_lab("Birchenough2017")
-Birchenough2017 <- import("lab_data/Birchenough2017.csv")
-Birchenough2017$word_german <- tolower(Birchenough2017$word_german)
-#Russell1970 <- import_lab("Russell1970")
-Russell1970 <- import("lab_data/Russell1970.csv")
-
+#Birchenough2017$word_german <- tolower(Birchenough2017$word_german)
+#Bonin2021 <- import_lab("Bonin2021")
+Bonin2021 <- import("lab_data/Bonin2021.csv")
+#Ferrand2008 <- import_lab("Ferrand2008")
+Ferrand2008 <- import("lab_data/Ferrand2008.csv")
 
 # join together 
 aoaDF <- DF %>% 
-  left_join(Birchenough2017 %>% 
-              select(word_german, aoa_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Birchenough2017_M = aoa_M) %>% 
-  left_join(Russell1970 %>% 
-              select(word_german, aoa_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Russell1970_M = aoa_M) 
+  left_join(Bonin2021 %>% 
+              select(word_french, aoa_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Bonin2021_M = aoa_M) %>% 
+  left_join(Ferrand2008 %>% 
+              select(word_french, aoa_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Ferrand2008_M = aoa_M) 
 
 
 # coverage
-nrow(aoaDF) - sum(is.na(aoaDF$Birchenough2017_M))  
-nrow(aoaDF) - sum(is.na(aoaDF$Russell1970_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Bonin2021_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Ferrand2008_M))  
 ```
 
 ### Imagine
 
-- @Gruhn2008a
+- @Bonin2021
   - Range = ... 
-  - Coverage = 41
+  - Coverage = 12
 
-- @Schmidtke2014
+- @Desrochers2009
   - Range = ... 
-  - Coverage = 384
+  - Coverage = 702
+
+- @Monnier2014
+  - Range = ... 
+  - Coverage = 389  
 
 ```{r}
 imageData <- labData %>% 
   filter(imagine == 1) 
 
-#Gruhn2008a <- import_lab("Gruhn2008a")
-Gruhn2008a <- import("lab_data/Gruhn2008a.csv")
-#Schmidtke2014 <- import_lab("Schmidtke2014")
-Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
-
+#Bonin2021 <- import_lab("Bonin2021")
+Bonin2021 <- import("lab_data/Bonin2021.csv")
+#Desrochers2009 <- import_lab("Desrochers2009")
+Desrochers2009 <- import("lab_data/Desrochers2009.csv")
+#Monnier2014 <- import_lab("Monnier2014")
+Monnier2014 <- import("lab_data/Monnier2014.csv")
 
 # join together 
 imageDF <- DF %>% 
-  left_join(Gruhn2008a %>% 
-              select(word_german, imagine_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Gruhn2008a_M = imagine_M) %>% 
-  left_join(Schmidtke2014 %>% 
-              select(word_german, imagine_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Schmidtke2014_M = imagine_M) 
+  left_join(Bonin2021 %>% 
+              select(word_french, imagine_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Bonin2021_M = imagine_M) %>% 
+  left_join(Desrochers2009 %>% 
+              select(word_french, imagine_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Desrochers2009_M = imagine_M) %>% 
+  left_join(Monnier2014 %>% 
+              select(word_french, imagine_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Monnier2014_M = imagine_M) 
 
 # coverage
-nrow(imageDF) - sum(is.na(imageDF$Gruhn2008a_M))
-nrow(imageDF) - sum(is.na(imageDF$Schmidtke2014_M))
-
+nrow(imageDF) - sum(is.na(imageDF$Bonin2021_M))
+nrow(imageDF) - sum(is.na(imageDF$Desrochers2009_M))
+nrow(imageDF) - sum(is.na(imageDF$Monnier2014_M))
 ```
 
 ### Concrete
@@ -143,19 +151,21 @@ nrow(imageDF) - sum(is.na(imageDF$Schmidtke2014_M))
 concreteData <- labData %>% 
   filter(concrete == 1)
 
+#no french concrete data except Quadflieg2014 that needs processed 
+
 #Kanske2010 <- import_lab("Kanske2010")
-Kanske2010 <- import("lab_data/Kanske2010.csv")
-Kanske2010$word_german <- tolower(Kanske2010$word_german)
+#Kanske2010 <- import("lab_data/Kanske2010.csv")
+#Kanske2010$word_german <- tolower(Kanske2010$word_german)
 
 # join together 
-concreteDF <- DF %>% 
-  left_join(Kanske2010 %>% 
-              select(word_german, concrete_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Kanske2010_M = concrete_M) 
+#concreteDF <- DF %>% 
+#  left_join(Kanske2010 %>% 
+#              select(word_german, concrete_M),
+#            by = c("word" = "word_german")) %>% 
+#  dplyr::rename(Kanske2010_M = concrete_M) 
 
 # coverage
-nrow(concreteData) - sum(is.na(concreteDF$Kanske2010_M))
+#nrow(concreteData) - sum(is.na(concreteDF$Kanske2010_M))
 
 ```
 
@@ -163,104 +173,87 @@ nrow(concreteData) - sum(is.na(concreteDF$Kanske2010_M))
 
 ### Valence
 
-- @Kanske2010: 
+- @Leveau2012: 
   - Range = 
-  - Coverage = 280
+  - Coverage = 1312
 
-- @Schauenburg2015: 
+- @Monnier2014: 
   - Range = 
-  - Coverage = 177
+  - Coverage = 403
 
 - @Schmidtke2014: 
   - Range = 
-  - Coverage = 384
+  - Coverage = 1936
 
 ```{r}
 valData <- labData %>% 
   filter(valence == 1)
 
-#Kanske2010 <- import_lab("Kanske2010")
-Kanske2010 <- import("lab_data/Kanske2010.csv")
-Kanske2010$word_german <- tolower(Kanske2010$word_german)
-#Schauenburg2015 <- import_lab("Schauenburg2015")
-Schauenburg2015 <- import("lab_data/Schauenburg2015.csv")
-Schauenburg2015$word_german <- tolower(Schauenburg2015$word_german)
-#Schmidtke2014 <- import_lab("Schmidtke2014")
-Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
+#Leveau2012 <- import_lab("Leveau2012")
+Leveau2012 <- import("lab_data/Leveau2012.csv")
+#Monnier2014 <- import_lab("Monnier2014")
+Monnier2014 <- import("lab_data/Monnier2014.csv")
+#Syssau2009 <- import_lab("Syssau2009")
+Syssau2009 <- import("lab_data/Syssau2009.csv")
 
 # join together 
 valDF <- DF %>% 
-  left_join(Kanske2010 %>% 
-              select(word_german, valence_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Kanske2010_M = valence_M) %>% 
-  left_join(Schauenburg2015 %>% 
-              select(word_german, valence_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Schauenburg2015_M = valence_M) %>% 
-  left_join(Schmidtke2014 %>% 
-              select(word_german, valence_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Schmidtke2014_M = valence_M) 
-
-
+  left_join(Leveau2012 %>% 
+              select(word_french, valence_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Leveau2012_M = valence_M) %>% 
+  left_join(Monnier2014 %>% 
+              select(word_french, valence_M_all),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Monnier2014_M = valence_M_all) %>% 
+  left_join(Syssau2009 %>% 
+              select(word_french, valence_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Syssau2009_M = valence_M) 
 
 
 # coverage
-nrow(valDF) - sum(is.na(valDF$Kanske2010_M))
-nrow(valDF) - sum(is.na(valDF$Schauenburg2015_M))
+nrow(valDF) - sum(is.na(valDF$Leveau2012_M))
+nrow(valDF) - sum(is.na(valDF$Monnier2014_M))
 nrow(valDF) - sum(is.na(valDF$Schmidtke2014_M))
 
 ```
 
 ### Arousal
 
-- @Kanske2010: 
+- @Leveau2012_M: 
   - Range = 
-  - Coverage = 280
+  - Coverage = 948
 
-- @Schauenburg2015: 
+- @Monnier2014_M: 
   - Range = 
-  - Coverage = 177
-
-- @Schmidtke2014: 
-  - Range = 
-  - Coverage = 384 
+  - Coverage = 403
 
 ```{r}
 arouData <- labData %>% 
   filter(arousal == 1)
 
-#Kanske2010 <- import_lab("Kanske2010")
-Kanske2010 <- import("lab_data/Kanske2010.csv")
-Kanske2010$word_german <- tolower(Kanske2010$word_german)
-#Schauenburg2015 <- import_lab("Schauenburg2015")
-Schauenburg2015 <- import("lab_data/Schauenburg2015.csv")
-Schauenburg2015$word_german <- tolower(Schauenburg2015$word_german)
-#Schmidtke2014 <- import_lab("Schmidtke2014")
-Schmidtke2014 <- import("lab_data/Schmidtke2014.csv")
+#Leveau2012 <- import_lab("Leveau2012")
+Leveau2012 <- import("lab_data/Leveau2012.csv")
+#Monnier2014 <- import_lab("Monnier2014")
+Monnier2014 <- import("lab_data/Monnier2014.csv")
+
 
 # join together 
 arouDF <- DF %>% 
-  left_join(Kanske2010 %>% 
-              select(word_german, arousal_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Kanske2010_M = arousal_M) %>% 
-  left_join(Schauenburg2015 %>% 
-              select(word_german, arousal_M),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Schauenburg2015_M = arousal_M) %>% 
-  left_join(Schmidtke2014 %>% 
-              select(word_german, arousal_M_ANEW),
-            by = c("word" = "word_german")) %>% 
-  dplyr::rename(Schmidtke2014_M = arousal_M_ANEW)
+  left_join(Leveau2012 %>% 
+              select(word_french, arousal_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Leveau2012_M = arousal_M) %>% 
+  left_join(Monnier2014 %>% 
+              select(word_french, arousal_M_all),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Monnier2014_M = arousal_M_all) 
 
 
 # coverage
-nrow(arouDF) - sum(is.na(arouDF$Kanske2010_M))
-nrow(arouDF) - sum(is.na(arouDF$Schauenburg2015_M))
-nrow(arouDF) - sum(is.na(arouDF$Schmidtke2014_M))
-
+nrow(arouDF) - sum(is.na(arouDF$Leveau2012_M))
+nrow(arouDF) - sum(is.na(arouDF$Monnier2014_M))
 ```
 
 
@@ -268,23 +261,39 @@ nrow(arouDF) - sum(is.na(arouDF$Schmidtke2014_M))
   
 ### Familiar
 
-- @Guasch2016  
+- @Bonin2021  
   - Range = ... 
-  - Coverage =  403
+  - Coverage =  12
 
-- @Izura2005  
+- @Cordier2005  
   - Range = ... 
-  - Coverage =  134
-  
-- @MorenoMartinez2014  
-  - Range = ... 
-  - Coverage =  147  
+  - Coverage =  2
 
 ```{r}
 familiarData <- labData %>% 
   filter(familiar == 1)
 
-## zero coverage for german familiar :( 
+#Bonin2021 <- import_lab("Bonin2021")
+Bonin2021 <- import("lab_data/Bonin2021.csv")
+#Cordier2005 <- import_lab("Cordier2005")
+Cordier2005 <- import("lab_data/Cordier2005.csv")
+
+
+# join together 
+familiarDF <- DF %>% 
+  left_join(Bonin2021 %>% 
+              select(word_french, familiar_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Bonin2021_M = familiar_M) %>% 
+  left_join(Cordier2005 %>% 
+              select(word_french, familiar_M),
+            by = c("word" = "word_french")) %>% 
+  dplyr::rename(Cordier2005_M = familiar_M) 
+
+
+# coverage
+nrow(familiarDF) - sum(is.na(familiarDF$Bonin2021_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Cordier2005_M))
 ```
 
 
