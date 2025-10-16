@@ -1,0 +1,274 @@
+---
+title: "Portuguese Data Combination"
+author: "Erin M. Buchanan - Addie Clark"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goals
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(rio)
+```
+
+## Item Data
+
+```{r}
+data("primeData")
+# filter to just Portuguese
+primeData <- primeData %>% 
+  filter(language == "pt") %>% 
+  filter(type == "item_data")
+
+# only need this line if you don't have the dataset yet 
+#DF <- import_prime("pt_combo_item_data.csv")
+DF <- import("item_data/pt/pt_combo_item_data.csv") %>% 
+  filter(class == "word") %>% 
+  select(word)
+```
+
+
+## Lexical Data
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
+
+```{r}
+data("labData")
+labData <- labData %>% 
+  filter(language == "Portuguese" | language == "Multiple") %>% 
+  filter(type1 == "Words" | type1 == "Word Pairs")
+```
+
+### AOA 
+
+- here take a note if they say which version 
+- mostly want the subjective ones
+
+- @Cameirao2010
+  - Range = ... 
+  - Coverage =  561
+  
+ - @Marques2007
+  - Range = ... 
+  - Coverage =  235 
+
+```{r}
+aoaData <- labData %>% 
+  filter(aoa == 1)
+
+#Cameirao2010 <- import_lab("Cameirao2010")
+#Cameirao2010$word_portuguese <- tolower(Cameirao2010$word_portuguese)
+Cameirao2010 <- import("lab_data/Cameirao2010.csv")
+#Marques2007 <- import_lab("Marques2007")
+Marques2007 <- import("lab_data/Marques2007.csv")
+
+# join together 
+aoaDF <- DF %>% 
+  left_join(Cameirao2010 %>% 
+              select(word_portuguese, aoa_M),
+            by = c("word" = "word_portuguese")) %>% 
+  dplyr::rename(Cameirao2010_M = aoa_M) %>% 
+  left_join(Marques2007 %>% 
+              select(word_portuguese, aoa_M),
+            by = c("word" = "word_portuguese")) %>% 
+  dplyr::rename(Marques2007_M = aoa_M) 
+
+
+# coverage
+nrow(aoaDF) - sum(is.na(aoaDF$Cameirao2010_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Marques2007_M))  
+```
+
+### Imagine
+- @Marques2007
+  - Range = ... 
+  - Coverage = 100
+
+- @Soares2017
+  - Range = ... 
+  - Coverage = 1177  
+
+```{r}
+imageData <- labData %>% 
+  filter(imagine == 1) 
+
+#Marques2007 <- import_lab("Marques2007")
+Marques2007 <- import("lab_data/Marques2007.csv")
+#Soares2017 <- import_lab("Soares2017")
+Soares2017 <- import("lab_data/Soares2017.csv")
+
+# join together 
+imageDF <- DF %>% 
+  left_join(Marques2007 %>% 
+              select(word_portuguese, imagine_M),
+            by = c("word" = "word_portuguese")) %>% 
+  dplyr::rename(Marques2007_M = imagine_M) %>% 
+  left_join(Soares2017 %>% 
+              select(word_spanish, imagine_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Soares2017_M = imagine_M) 
+
+# coverage
+nrow(imageDF) - sum(is.na(imageDF$Marques2007_M))
+nrow(imageDF) - sum(is.na(imageDF$Soares2017_M))
+```
+
+### Concrete
+
+- @Marques2007  
+  - Range = ... 
+  - Coverage =  100
+  
+- @Soares2017  
+  - Range = ... 
+  - Coverage =  1177  
+
+```{r}
+concreteData <- labData %>% 
+  filter(concrete == 1)
+
+#Marques2007 <- import_lab("Marques2007")
+Marques2007 <- import("lab_data/Marques2007.csv")
+#Soares2017 <- import_lab("Soares2017")
+Soares2017 <- import("lab_data/Soares2017.csv")
+
+# join together 
+concreteDF <- DF %>% 
+  left_join(Marques2007 %>% 
+              select(word_portuguese, concrete_M),
+            by = c("word" = "word_portuguese")) %>% 
+  dplyr::rename(Marques2007_M = concrete_M) %>% 
+  left_join(Soares2017 %>% 
+              select(word_spanish, concrete_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Soares2017_M = concrete_M) 
+
+
+
+# coverage
+nrow(concreteDF) - sum(is.na(concreteDF$Marques2007_M))
+nrow(concreteDF) - sum(is.na(concreteDF$Soares2017_M))
+```
+
+
+
+### Valence
+
+- @Soares2012: 
+  - Range = 
+  - Coverage = 28
+
+```{r}
+valData <- labData %>% 
+  filter(valence == 1)
+
+#Soares2012 <- import_lab("Soares2012")
+Soares2012 <- import("lab_data/Soares2012.csv")
+
+# join together 
+valDF <- DF %>% 
+  left_join(Soares2012 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Soares2012_M = valence_M) 
+
+
+# coverage
+nrow(valDF) - sum(is.na(valDF$Soares2012_M))
+```
+
+### Arousal
+
+- @Soares2012: 
+  - Range = 
+  - Coverage = 28
+
+```{r}
+arouData <- labData %>% 
+  filter(arousal == 1)
+
+#Soares2012 <- import_lab("Soares2012")
+Soares2012 <- import("lab_data/Soares2012.csv")
+
+# join together 
+arouDF <- DF %>% 
+  left_join(Soares2012 %>% 
+              select(word_spanish, arousal_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Soares2012_M = arousal_M) 
+
+
+# coverage
+nrow(arouDF) - sum(is.na(arouDF$Soares2012_M))
+```
+
+
+
+  
+### Familiar
+
+- @Marques2007  
+  - Range = ... 
+  - Coverage =  226
+
+```{r}
+familiarData <- labData %>% 
+  filter(familiar == 1)
+
+#Marques2007 <- import_lab("Marques2007")
+Marques2007 <- import("lab_data/Marques2007.csv")
+
+# join together 
+familiarDF <- DF %>% 
+  left_join(Marques2007 %>% 
+              select(word_portuguese, familiar_M),
+            by = c("word" = "word_portuguese")) %>% 
+  dplyr::rename(Marques2007_M = familiar_M) 
+
+# coverage
+nrow(familiarDF) - sum(is.na(familiarDF$Marques2007_M))
+```
+
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
+```{r}
+data("primeData")
+# filter to just french
+primeData <- primeData %>% 
+  filter(language == "pt") 
+
+pt_prime <- import_prime("pt_prime_summary.csv")
+pt_prime <- import("priming_data/pt/pt_prime_summary.csv")
+
+pt_matched <- import_prime("pt_trial_unique.csv")
+```
+
+### BERT Priming
+
+## Embeddings
+
+## Combine
+
+```{r}
+
+```
