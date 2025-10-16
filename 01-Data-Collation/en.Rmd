@@ -670,13 +670,21 @@ llm_prime <- en_matched %>%
 #sentence_related = paste0("If the first word is", cue_word_related, ", the next word you’ll see is", target_word_unique). 
 #sentence_unrelated = paste0("If the first word is", cue_word_unrelated, ", the next word you’ll see is", target_word_unique). 
 
-
+transformers <- reticulate::import("transformers")
 # 1) Compute last-word surprisal for each sentence and the priming delta (B − A)
 res <- priming_delta(
   sentence_A = llm_prime$sentence_related,
   sentence_B = llm_prime$sentence_unrelated,
   log.p = 0.5,  # bits; use 1 for nats
-  model = "gpt2" # multilingual model like facebook 
+  model = "openai-community/gpt2" # multilingual model like facebook 
+)
+
+# 1) Compute last-word surprisal for each sentence and the priming delta (B − A)
+res2 <- priming_delta( #probably should have called this priming_delta2....
+  sentence_A = llm_prime$sentence_related,
+  sentence_B = llm_prime$sentence_unrelated,
+  log.p = 0.5,  # bits; use 1 for nats
+  model = "bigscience/bloom-560m" # multilingual model like facebook 
 )
 
 # 2) Attach the results back to your data
@@ -686,6 +694,11 @@ llm_prime <- bind_cols(
     last_word_A, surprisal_A, 
     last_word_B, surprisal_B, 
     priming_delta
+  ),
+  res2 %>% select(
+    last_word_A, surprisal_A, 
+    last_word_B, surprisal_B, 
+    priming_delta #probably should have called this priming_delta2...
   )
 )
 
@@ -719,8 +732,8 @@ cor(together$avgZ_prime, together$priming_delta)
 ## Embeddings
 
 ```{r}
-transformers <- import("transformers")
-torch <- import("torch")
+transformers <- reticulate::import("transformers")
+torch <- reticulate::import("torch")
 
 hf <- (function(model_name = "gpt2") {
   tokzr <- transformers$AutoTokenizer$from_pretrained(model_name)
