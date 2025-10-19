@@ -55,3 +55,5 @@ rsconnect/
 /01-Data-Collation/matched_stimuli
 /01-Data-Collation/priming_data
 /01-Data-Collation/open_subs
+01-Data-Collation/540Project_AC_environment.RData
+01-Data-Collation/outputs/all_model_context_embeddings.rds
