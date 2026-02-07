@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Valence and Arousal Study</title>
+  <title>Valence Study</title>
 
   <!-- Load jsPsych -->
   <script src="https://unpkg.com/jspsych@7.3.3"></script>
@@ -59,7 +59,7 @@
   // 1) Initialize jsPsych
   const jsPsych = initJsPsych({
     on_finish: function () {
-      jsPsych.data.displayData();
+      jsPsych.data.displayData(); // set to false/remove when deploying
     },
   });
 
@@ -164,28 +164,24 @@
         elements: [
           {
             type: "html",
-            name: "valaro_instructions",
+            name: "valence_instructions",
             html: `
                 <figure style="margin: 0 0 1rem 0;">
                   <img
-                    src="val_aro_image.png"
-                    alt="Self-Assessment Manikin (SAM) scales for valence and arousal"
+                    src="valence_image.png"
+                    alt="Self-Assessment Manikin (SAM) scale for valence"
                     style="max-width: 100%; height: auto; display: block;"
                   />
                   <figcaption style="font-size: 0.9em; margin-top: 0.25rem;">
-                    <em>Self-Assessment Manikin (SAM)</em> for valence and arousal. Adapted from Bradley &amp; Lang (1999).
+                    <em>Self-Assessment Manikin (SAM)</em> valence scale. Procedure adapted from Prete, Laeng, &amp; Tommasi (2022); SAM from Bradley &amp; Lang (1999).
                    </figcaption>
                 </figure>
 
-                <p>In this section, you will rate each word for <strong>valence</strong> and <strong>arousal</strong> using the <strong>Self-Assessment Manikin (SAM)</strong> image.</p>
+                <p>In this section, you will rate each word for <strong>valence</strong> using the <strong>Self-Assessment Manikin (SAM)</strong> image.</p>
 
-                <p><strong>Valence</strong> refers to how <strong>pleasant</strong> or <strong>unpleasant</strong> the word feels to you:
-                <br/><strong>1</strong> = very unhappy / very unpleasant
-                <br/><strong>9</strong> = very happy / very pleasant</p>
-
-                <p><strong>Arousal</strong> refers to how <strong>excited/activated</strong> or <strong>calm/relaxed</strong> the word makes you feel:
-                <br/><strong>1</strong> = very calm / very relaxed
-                <br/><strong>9</strong> = very excited / very activated</p>
+                <p>Valence refers to how <strong>pleasant</strong> or <strong>unpleasant</strong> the word feels to you:
+                <br/>1 = very unhappy / very unpleasant
+                <br/>9 = very happy / very pleasant</p>
 
                 <p>For each word, select the response that best matches your <strong>first and immediate reaction</strong> when you read the word. There are no right or wrong answers.</p>
 
@@ -203,7 +199,7 @@
   };
 
   // -----------------------------
-  // DEMO VALENCE AND AROUSAL TASK (SHORT LIST)
+  // DEMO VALENCE TASK (SHORT LIST)
   // Replace `sampleWords` with your 400 words later
   // -----------------------------
   const sampleWords = [
@@ -231,17 +227,17 @@
     wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
   }
 
-  // 3) Helper: build TWO SurveyJS pages per block (valence, then arousal) using clickable choices
-  function makeValaroMatrixSurvey(words, blockIndex) {
+  // 3) Helper: build ONE SurveyJS page per block (VALENCE only) using clickable choices
+  function makeValenceMatrixSurvey(words, blockIndex) {
     const samHtml = `
         <figure style="margin: 0 0 1rem 0;">
           <img
-            src="val_aro_image.png"
-            alt="Self-Assessment Manikin (SAM) scales for valence and arousal"
+            src="valence_image.png"
+            alt="Self-Assessment Manikin (SAM) scale for valence"
             style="max-width: 100%; height: auto; display: block;"
           />
           <figcaption style="font-size: 0.9em; margin-top: 0.25rem;">
-            <em>Self-Assessment Manikin (SAM)</em> for valence and arousal. Adapted from Bradley &amp; Lang (1999).
+            <em>Self-Assessment Manikin (SAM)</em> valence scale. Procedure adapted from Prete, Laeng, &amp; Tommasi (2022); SAM from Bradley &amp; Lang (1999).
           </figcaption>
         </figure>
       `;
@@ -256,7 +252,6 @@
       completedHtml: "",
       completeText: "Next",
       pages: [
-        // ---- VALENCE page ----
         {
           name: `valence_page_${blockIndex}`,
           title: `Valence ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
@@ -273,24 +268,6 @@
             },
           ],
         },
-
-        // ---- AROUSAL page ----
-        {
-          name: `arousal_page_${blockIndex}`,
-          title: `Arousal ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
-          elements: [
-            { type: "html", name: `sam_arousal_${blockIndex}`, html: samHtml },
-            {
-              type: "matrix",
-              name: `arousal_block_${blockIndex}`,
-              title:
-                "For each word, rate AROUSAL (1 = very calm/relaxed, 9 = very excited/activated). If you do not know the word, choose X.",
-              isAllRowRequired: true,
-              rows: rows,
-              columns: columns,
-            },
-          ],
-        },
       ],
     };
 
@@ -301,8 +278,8 @@
   }
 
   // 4) Create one jsPsych trial per block
-  const valaro_trials = wordBlocks.map((block, i) =>
-    makeValaroMatrixSurvey(block, i)
+  const valence_trials = wordBlocks.map((block, i) =>
+    makeValenceMatrixSurvey(block, i)
   );
 
   // Final thank-you screen shown AFTER all word-rating blocks (SurveyJS style)
@@ -336,7 +313,7 @@
 
   // 5) Timeline with consent gating
   const task_timeline = {
-    timeline: [...valaro_trials, final_thankyou],
+    timeline: [...valence_trials, final_thankyou],
     conditional_function: function () {
       const last = jsPsych.data.get().last(1).values()[0];
       return last.response && last.response.consent_choice === "I Consent";
