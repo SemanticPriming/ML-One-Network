@@ -1,0 +1,254 @@
+---
+title: "Japanese Data Combination"
+author: "Erin M. Buchanan - Addie Clark"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goals
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(rio)
+```
+
+## Item Data
+
+```{r}
+data("primeData")
+# filter to just finnish
+primeData <- primeData %>%
+  filter(language == "ja") %>%
+  filter(type == "item_data")
+
+# only need this line if you don't have the dataset yet 
+DF <- import_prime("ja_item_data.csv")
+DF <- import("item_data/ja/ja_item_data.csv") %>%
+  filter(class == "word") %>%
+  select(word)
+```
+
+
+## Lexical Data
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
+
+```{r}
+data("labData")
+labData <- labData %>% 
+  filter(language == "Japanese" | language == "Multiple") %>% 
+  filter(type1 == "Words" | type1 == "Word Pairs")
+```
+
+### AOA 
+
+- here take a note if they say which version 
+- mostly want the subjective ones
+
+- @
+  - Range = ... 
+  - Coverage =  
+
+
+```{r}
+aoaData <- labData %>% 
+  filter(aoa == 1)
+
+# no finnish aoa data 
+
+# #Imbir2015$word_polish <- tolower(Imbir2015$word_polish)
+# Imbir2015 <- import_lab("Imbir2015")
+# Imbir2015 <- import("lab_data/Imbir2015.csv")
+# 
+# # join together 
+# aoaDF <- DF %>% 
+#   left_join(Grigoriev2013 %>% 
+#               select(word_russian, aoa_o_M_months),
+#             by = c("word" = "word_russian")) %>% 
+#   dplyr::rename(Grigoriev2013_M = aoa_o_M_months) 
+# 
+# 
+# # coverage
+# nrow(aoaDF) - sum(is.na(aoaDF$Grigoriev2013_M))   
+```
+
+### Imagine
+
+- @Riegel2015
+  - Range = ... 
+  - Coverage = 686
+
+```{r}
+imageData <- labData %>% 
+  filter(imagine == 1) 
+
+# no finnish image data 
+
+#Riegel2015 <- import_lab("Riegel2015")
+# Riegel2015 <- import("lab_data/Riegel2015.csv")
+# 
+# # join together
+# imageDF <- DF %>%
+#    left_join(Riegel2015 %>%
+#                select(word_polish, imagine_M_all),
+#              by = c("word" = "word_polish")) %>%
+#    dplyr::rename(Riegel2015_M = imagine_M_all)
+# 
+# # coverage
+# nrow(imageDF) - sum(is.na(imageDF$Riegel2015_M))
+```
+
+### Concrete
+
+- @Eilola2010  
+  - Range = ... 
+  - Coverage =  210
+
+```{r}
+concreteData <- labData %>% 
+  filter(concrete == 1)
+
+#Imbir2015$word_polish <- tolower(Imbir2015$word_polish)
+Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv")
+
+
+# join together 
+concreteDF <- Eilola2010 %>%
+  select(word_finnish, concrete_M_finnish) %>%
+  dplyr::rename(Eilola2010_M = concrete_M_finnish)
+
+# coverage
+nrow(concreteDF) - sum(is.na(concreteDF$Eilola2010_M))
+```
+
+
+
+### Valence
+
+- @Eilola2010: 
+  - Range = 
+  - Coverage = 210
+
+```{r}
+valData <- labData %>% 
+  filter(valence == 1)
+
+#no russian valance data 
+
+#Imbir2015$word_polish <- tolower(Imbir2015$word_polish)
+#Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv")
+
+# join together
+valDF <- Eilola2010 %>%
+  select(word_finnish, valence_M_finnish) %>%
+  dplyr::rename(Eilola2010_M = valence_M_finnish)
+
+# coverage
+nrow(valDF) - sum(is.na(valDF$Eilola2010_M))
+```
+
+### Arousal
+
+- @Imbir2015: 
+  - Range = 
+  - Coverage = 435
+  
+```{r}
+arouData <- labData %>% 
+  filter(arousal == 1)
+
+# no finnish arousal data 
+
+#Imbir2015$word_polish <- tolower(Imbir2015$word_polish)
+#Imbir2015 <- import_lab("Imbir2015")
+# Imbir2015 <- import("lab_data/Imbir2015.csv")
+
+# # join together 
+# arouDF <- DF %>%
+#   left_join(Imbir2015 %>%
+#               select(word_polish, arousal_M),
+#             by = c("word" = "word_polish")) %>%
+#   dplyr::rename(Imbir2015_M = arousal_M)%>%
+#   left_join(Riegel2015 %>%
+#               select(word_polish, arousal_M_all),
+#             by = c("word" = "word_polish")) %>%
+#   dplyr::rename(Riegel2015_M = arousal_M_all)
+#  
+# # coverage
+# nrow(arouDF) - sum(is.na(arouDF$Imbir2015_M))
+# nrow(arouDF) - sum(is.na(arouDF$Riegel2015_M))
+```
+
+
+
+  
+### Familiar
+
+- @Eilola2010 
+  - Range = ... 
+  - Coverage =  210
+
+```{r}
+familiarData <- labData %>% 
+  filter(familiar == 1)
+
+#no polish familiar data 
+
+# #Imbir2015$word_polish <- tolower(Imbir2015$word_polish)
+# Eilola2010 <- import_lab("Eilola2010")
+Eilola2010 <- import("lab_data/Eilola2010.csv")
+
+# join together
+familiarDF <- Eilola2010 %>%
+  select(word_finnish, familiar_M_finnish) %>%
+  dplyr::rename(Eilola2010_M = familiar_M_finnish)
+
+
+# coverage
+nrow(familiarDF) - sum(is.na(familiarDF$Eilola2010_M))
+```
+
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
+```{r}
+data("primeData")
+# filter to just finnish
+primeData <- primeData %>% 
+  filter(language == "fi") 
+
+nl_prime <- import_prime("fi_prime_summary.csv")
+nl_prime <- import("priming_data/fi/fi_prime_summary.csv")
+
+nl_matched <- import_prime("fi_trial_unique.csv")
+```
+
+### BERT Priming
+
+## Embeddings
+
+## Combine
+
+```{r}
+
+```

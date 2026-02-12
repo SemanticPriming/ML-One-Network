@@ -1,0 +1,359 @@
+---
+title: "Spanish Data Combination"
+author: "Erin M. Buchanan - Addie Clark"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Goals
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(rio)
+```
+
+## Item Data
+
+```{r}
+data("primeData")
+# filter to just spanish
+primeData <- primeData %>% 
+  filter(language == "es") %>% 
+  filter(type == "item_data")
+
+# only need this line if you don't have the dataset yet 
+#DF <- import_prime("es_item_data.csv")
+DF <- import("item_data/es/es_item_data.csv") %>% 
+  filter(class == "word") %>% 
+  select(word)
+```
+
+
+## Lexical Data
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
+
+```{r}
+data("labData")
+labData <- labData %>% 
+  filter(language == "Spanish" | language == "Multiple") %>% 
+  filter(type1 == "Words" | type1 == "Word Pairs")
+```
+
+### AOA 
+
+- here take a note if they say which version 
+- mostly want the subjective ones
+
+- @Alonso2015
+  - Range = ... 
+  - Coverage =  1509
+  
+ - @Alonso2016
+  - Range = ... 
+  - Coverage =  231 
+
+ - @DiezAlamo2018
+  - Range = ... 
+  - Coverage =  1252
+
+ - @Izura2005
+  - Range = ... 
+  - Coverage =  133  
+
+ - @MorenoMartinez2014
+  - Range = ... 
+  - Coverage =  147    
+
+```{r}
+aoaData <- labData %>% 
+  filter(aoa == 1)
+
+#Alonso2015 <- import_lab("Alonso2015")
+Alonso2015 <- import("lab_data/Alonso2015.csv")
+Alonso2015$word_spanish <- tolower(Alonso2015$word_spanish)
+#Alonso2016 <- import_lab("Alonso2016")
+Alonso2016 <- import("lab_data/Alonso2016.csv")
+Alonso2016$word_spanish <- tolower(Alonso2016$word_spanish)
+#DiezAlamo2018 <- import_lab("Diez-Alamo2018")
+DiezAlamo2018 <- import("lab_data/Diez-Alamo2018.csv")
+DiezAlamo2018$word_spanish <- tolower(DiezAlamo2018$word_spanish)
+#Izura2005 <- import_lab("Izura2005")
+Izura2005 <- import("lab_data/Izura2005.csv")
+#MorenoMartinez2014 <- import_lab("Moreno-Martinez2014")
+MorenoMartinez2014 <- import("lab_data/Moreno-Martinez2014.csv")
+
+
+
+# join together 
+aoaDF <- DF %>% 
+  left_join(Alonso2015 %>% 
+              select(word_spanish, aoa_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Alonso2015_M = aoa_M) %>%
+  left_join(Alonso2016 %>% 
+              select(word_spanish, aoa_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Alonso2016_M = aoa_M) %>%
+  left_join(DiezAlamo2018 %>% 
+              select(word_spanish, aoa_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(DiezAlamo2018_M = aoa_M) %>%
+  left_join(Izura2005 %>% 
+              select(word_spanish, aoa_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Izura2005_M = aoa_M) %>%
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, aoa_s_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = aoa_s_M) ##Got Many-to-Many error 
+
+nrow(aoaDF) - sum(is.na(aoaDF$Alonso2015_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Alonso2016_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$DiezAlamo2018_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$Izura2005_M))  
+nrow(aoaDF) - sum(is.na(aoaDF$MorenoMartinez2014_M))  
+
+```
+
+### Imagine
+
+- @Guasch2016
+  - Range = ... 
+  - Coverage = 399
+
+- @Izura2005
+  - Range = ... 
+  - Coverage = 133
+
+```{r}
+imageData <- labData %>% 
+  filter(imagine == 1) 
+
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#Izura2005 <- import_lab("Izura2005")
+Izura2005 <- import("lab_data/Izura2005.csv")
+
+
+# join together 
+imageDF <- DF %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, imagine_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = imagine_M) %>% 
+  left_join(Izura2005 %>% 
+              select(word_spanish, imagine_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Izura2005_M = imagine_M) 
+
+# coverage
+nrow(imageDF) - sum(is.na(imageDF$Guasch2016_M))
+nrow(imageDF) - sum(is.na(imageDF$Izura2005_M))
+
+```
+
+### Concrete
+
+- @Guasch2016  
+  - Range = ... 
+  - Coverage =  380
+
+```{r}
+concreteData <- labData %>% 
+  filter(concrete == 1)
+
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+
+# join together 
+concreteDF <- DF %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, concrete_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = concrete_M) 
+
+# coverage
+nrow(concreteData) - sum(is.na(concreteDF$Guasch2016_M))
+
+```
+
+
+
+### Valence
+
+- @Ferre2012: 
+  - Range = 
+  - Coverage = 94
+
+- @Guasch2016: 
+  - Range = 
+  - Coverage = 399
+
+- @StadthagenGonzalez2017: 
+  - Range = 
+  - Coverage = 1402
+
+```{r}
+valData <- labData %>% 
+  filter(valence == 1)
+
+#Ferre2012 <- import_lab("Ferre2012")
+Ferre2012 <- import("lab_data/Ferre2012.csv")
+Ferre2012$word_spanish <- tolower(Ferre2012$word_spanish)
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#StadthagenGonzalez2017 <- import_lab("Stadthagen-Gonzalez2017")
+StadthagenGonzalez2017 <- import("lab_data/Stadthagen-Gonzalez2017.csv")
+
+# join together 
+valDF <- DF %>% 
+  left_join(Ferre2012 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Ferre2012_M = valence_M) %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = valence_M) %>% 
+  left_join(StadthagenGonzalez2017 %>% 
+              select(word_spanish, valence_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(StadthagenGonzalez2017_M = valence_M) 
+
+
+# coverage
+nrow(valDF) - sum(is.na(valDF$Ferre2012_M))
+nrow(valDF) - sum(is.na(valDF$Guasch2016_M))
+nrow(valDF) - sum(is.na(valDF$StadthagenGonzalez2017_M))
+
+```
+
+### Arousal
+
+- @Guasch2016
+  - Range = ... 
+  - Coverage =  399
+
+- @StadthagenGonzalez2017
+  - Range = ... 
+  - Coverage =  1402  
+
+```{r}
+arouData <- labData %>% 
+  filter(arousal == 1)
+
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#StadthagenGonzalez2017 <- import_lab("Stadthagen-Gonzalez2017")
+StadthagenGonzalez2017 <- import("lab_data/Stadthagen-Gonzalez2017.csv")
+
+# join together 
+arouDF <- DF %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, arousal_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = arousal_M) %>% 
+  left_join(StadthagenGonzalez2017 %>% 
+              select(word_spanish, arousal_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(StadthagenGonzalez2017_M = arousal_M) 
+
+# coverage
+nrow(arouDF) - sum(is.na(arouDF$Guasch2016))
+nrow(arouDF) - sum(is.na(arouDF$StadthagenGonzalez2017_M))
+
+```
+
+
+
+  
+### Familiar
+
+- @Guasch2016  
+  - Range = ... 
+  - Coverage =  403
+
+- @Izura2005  
+  - Range = ... 
+  - Coverage =  134
+  
+- @MorenoMartinez2014  
+  - Range = ... 
+  - Coverage =  147  
+
+```{r}
+familiarData <- labData %>% 
+  filter(familiar == 1)
+
+#Guasch2016 <- import_lab("Guasch2016")
+Guasch2016 <- import("lab_data/Guasch2016.csv")
+#Izura2005 <- import_lab("Izura2005")
+Izura2005 <- import("lab_data/Izura2005.csv")
+#MorenoMartinez2014 <- import_lab("Moreno-Martinez2014")
+MorenoMartinez2014 <- import("lab_data/Moreno-Martinez2014.csv")
+
+
+# join together 
+familiarDF <- DF %>% 
+  left_join(Guasch2016 %>% 
+              select(word_spanish, familiar_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Guasch2016_M = familiar_M) %>% 
+  left_join(Izura2005 %>% 
+              select(word_spanish, familiarity),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(Izura2005_M = familiarity) %>% 
+  left_join(MorenoMartinez2014 %>% 
+              select(word_spanish, familiar_M),
+            by = c("word" = "word_spanish")) %>% 
+  dplyr::rename(MorenoMartinez2014_M = familiar_M)
+
+nrow(familiarDF) - sum(is.na(familiarDF$Guasch2016_M))
+nrow(familiarDF) - sum(is.na(familiarDF$Izura2005_M))
+nrow(familiarDF) - sum(is.na(familiarDF$MorenoMartinez2014_M))
+
+```
+
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
+```{r}
+data("primeData")
+# filter to just spanish
+primeData <- primeData %>% 
+  filter(language == "es") 
+
+#en_prime <- import_prime("en_prime_summary.csv")
+es_prime <- import("priming_data/es/es_prime_summary.csv")
+
+es_matched <- import_prime("es_trial_unique.csv")
+```
+
+### BERT Priming
+
+## Embeddings
+
+## Combine
+
+```{r}
+
+```

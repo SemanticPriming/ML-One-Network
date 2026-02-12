@@ -6,6 +6,8 @@
 */open_subs
 */540Project_AC_environment.RData
 */outputs/all_model_context_embeddings.rds
+*/.ipynb_checkpoints
+*/*/.ipynb_checkpoints
 
 # History files
 .Rhistory
