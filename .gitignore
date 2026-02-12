@@ -1,6 +1,11 @@
-# files for dataa
-01-Data-Collation/item_data
-01-Data-Collation/lab_data
+# files for data
+*/item_data
+*/lab_data
+*/matched_stimuli
+*/priming_data
+*/open_subs
+*/540Project_AC_environment.RData
+*/outputs/all_model_context_embeddings.rds
 
 # History files
 .Rhistory
@@ -52,8 +57,3 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .DS_Store
-/01-Data-Collation/matched_stimuli
-/01-Data-Collation/priming_data
-/01-Data-Collation/open_subs
-01-Data-Collation/540Project_AC_environment.RData
-01-Data-Collation/outputs/all_model_context_embeddings.rds
