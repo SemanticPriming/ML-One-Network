@@ -131,8 +131,8 @@
               name: "education",
               title: "Please tell us your highest education level:",
               choices: [
-                "Less than high school",
-                "High school",
+                "Less than high school diploma",
+                "High school diploma",
                 "Associate's degree or two-year degree",
                 "Bachelor's degree or four-year degree",
                 "Master's degree or equivalent",
@@ -164,13 +164,10 @@
               type: "html",
               name: "familiar_instructions",
               html: `
-                <p>Please rate the following words for <strong>familiarity</strong> that is, how often you personally come <strong>into contact</strong> with each word.</p>
-                <p>Think about how often you encounter the word in <strong>any form</strong>, including printed text (books, articles, websites, social media, signs, messages) and spoken language (conversations, TV, radio, podcasts, lectures).</p>
-                <p>Use the following scale:</p>
-                <p><strong>1</strong> = never<br/>
-                <strong>7</strong> = very often</p>
-                <p>Please enter a number from <strong>1</strong> to <strong>7</strong> for each word, making the best judgment you can.</p>
-                <p>If you do <strong>not know</strong> what a word means, please enter the letter <strong>X</strong>.</p>
+                <p>This is an experiment to find out how often you have come in contact with certain words. You will be given a list of words and you are to rate each one as to the number of times that you experienced it by simply writing down a number according to a 1 to 9 scale. In this scale, 1 represents “NEVER,” that is, you have never seen or heard or used the word in your life; the number 2 represents “RARELY,” that is you have seen or heard or used the word at least once before, but only rarely; and so on until 9, which represents “VERY OFTEN,” that is, you have seen or heard or used the word nearly every day of your life.</p>
+                <p>Do not be bothered if you are unable to give a definition of some of the words. Simply rate each one as to the number of times you have come in contact with it regardless of its meaning. There may be some words which you have used or heard more often than you have seen them. Or there may be other words which you have seen more often than you have used or heard them. In such cases, always give the word in the highest rating of the three. For example, you probably use or hear the word “cheers” often, but you may never have seen it in print. In this case, you would rate “cheers” as “OFTEN” and write down the number 6.</p>
+                <p>Go to the list of words and begin rating them at your own speed. This is not a “speed” experiment, each participant will be given plenty of time to finish. On the other hand, do not spend too much time on each word. The important thing is for you to be as accurate as possible. Be as honest in your ratings as you can. Many of the words in this experiment are very rare, so you are not expected to have come in contact with all of them. Just make the best estimates you are capable of. </p>
+                <p>If you do not know what a word means, please enter the letter X.</p>
               `,
             },
           ],
@@ -228,7 +225,7 @@
                 type: "multipletext",
                 name: `familiar_block_${blockIndex}`,
                 title:
-                  "For each word, rate how unfamiliar (1) or familiar (7) based on how often you personally come into contact with each word.",
+                  "For each word, rate how unfamiliar (1) or familiar (9) based on how often you personally come into contact with each word.",
                 items: words.map(function (w) {
                   return {
                     name: w,
@@ -238,7 +235,7 @@
                     validators: [
                       {
                         type: "regex",
-                        text: "Enter a number between 1 and 5",
+                        text: "Enter a number between 1 and 9",
                         regex: "^(X|x|[1-9][0-9]?$|100)$",
                       },
                     ],

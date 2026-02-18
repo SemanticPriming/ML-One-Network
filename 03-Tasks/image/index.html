@@ -131,8 +131,8 @@
               name: "education",
               title: "Please tell us your highest education level:",
               choices: [
-                "Less than high school",
-                "High school",
+                "Less than high school diploma",
+                "High school diploma",
                 "Associate's degree or two-year degree",
                 "Bachelor's degree or four-year degree",
                 "Master's degree or equivalent",
@@ -164,13 +164,9 @@
               type: "html",
               name: "image_instructions",
               html: `
-                <p>Please rate the following words for <strong>imageability</strong> that is, how easy or difficult it is for you to form a clear mental picture of what the word refers to.</p>
-                <p>Words that refer to concrete objects or things you can easily “see” in your mind tend to have <strong>high imageability</strong> (e.g., <em>apple</em>). Words that refer to abstract ideas that are harder to picture tend to have <strong>low imageability</strong> (e.g., <em>fact</em>).</p>
-                <p>Use the following scale:</p>
-                <p><strong>1</strong> (high imageability) = difficult to imagine a mental picture<br/>
-                <strong>7</strong> (low imageability) = easy to imagine a mental picture</p>
-                <p>Please enter a number from <strong>1</strong> to <strong>7</strong> for each word, based on your first impression.</p>
-                <p>If you do <strong>not know</strong> the word, please enter the letter <strong>X</strong>.</p>
+                <p>This is an experiment to find out how easy or difficult it is to imagine a mental picture of the word presented to you. You will be given a list of words and you are to rate each one from how easy it is to picture the word (apple; high imagery) to words that may not be imagined easily (fact; low imagery).</p> 
+                <p>In this scale, 9 represents “easy to imagine,” there is no issue picturing intricate details of the word; while 1 represents “difficult to image,” that is, the word is more abstract and harder to picture.</p> 
+                <p>If you do not know the word presented, please enter “X”. </p>
               `,
             },
           ],
@@ -228,7 +224,7 @@
                 type: "multipletext",
                 name: `image_block_${blockIndex}`,
                 title:
-                  "For each word, rate how difficult (1) or easy (7) it is to imagine a mental picture of the object.",
+                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object.",
                 items: words.map(function (w) {
                   return {
                     name: w,
@@ -238,7 +234,7 @@
                     validators: [
                       {
                         type: "regex",
-                        text: "Enter a number between 1 and 7",
+                        text: "Enter a number between 1 and 9",
                         regex: "^(X|x|[1-9][0-9]?$|100)$",
                       },
                     ],
