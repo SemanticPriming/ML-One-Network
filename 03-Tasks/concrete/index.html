@@ -4,22 +4,24 @@
     <title>Concreteness Study</title>
 
     <!-- Load jsPsych -->
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jspsych/plugin-survey/dist/index.browser.js"></script>
+    <script src="unpkg_jspsych.js"></script>
+    <script src="unpkg_jspych_plugin_html_button_response.js"></script>
+    <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
     <link
-      href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css"
+      href="jspsych_css_jspsych.css"
       rel="stylesheet"
     />
 
     <!-- Load SurveyJS -->
-    <script src="https://unpkg.com/survey-core@1.12.2/survey.core.min.js"></script>
-    <script src="https://unpkg.com/survey-js-ui@1.12.2/survey-js-ui.min.js"></script>
+    <script src="survey_core_1.12.1_min.js"></script>
+    <script src="survey_js_ui_min.js"></script>
     <link
-      href="https://unpkg.com/survey-core@1.12.2/defaultV2.min.css"
+      href="survey_core_defaultv2_min.css"
       rel="stylesheet"
     />
 
+    <!-- Load JATOS -->
+    <script src="jatos.js"></script>
     <style>
       /* Widen the jsPsych + SurveyJS container */
       .jspsych-survey-container {
@@ -38,6 +40,7 @@
         margin-bottom: 1.25rem;
         width: 100%;
       }
+      
       /* Remove extra spacing created by SurveyJS completed-page pseudo-elements */
       .sd-body.sd-completedpage::before,
       .sd-body.sd-completedpage::after {
@@ -55,10 +58,9 @@
 
   <script>
     // 1) Initialize jsPsych
-    const jsPsych = initJsPsych({
-      on_finish: function () {
-        jsPsych.data.displayData();
-      },
+    var jsPsych = initJsPsych({
+      //on_trial_start: jatos.addAbortButton,
+      on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
     });
 
     // 2b) Screen shown if participant does NOT consent
@@ -288,20 +290,29 @@
       },
     };
 
+    const task_timeline = {
+      timeline: [...concrete_trials, final_thankyou],
+      conditional_function: function () {
+        const last = jsPsych.data.get().last(1).values()[0];
+        return last.response && last.response.consent_choice === "I Consent";
+      },
+    };
+
     const timeline = [
       pretask_survey,
       {
         timeline: [no_consent],
         conditional_function: function () {
           const last = jsPsych.data.get().last(1).values()[0];
-          return last.consent_choice === "I Do Not Consent";
+          return last.response && last.response.consent_choice === "I Do Not Consent";
         },
       },
-      ...concrete_trials,
-      final_thankyou,
+      task_timeline,
     ];
 
     // 4) Run the study
-    jsPsych.run(timeline);
+    jatos.onLoad(() => {
+      jsPsych.run(timeline);
+    });
   </script>
 </html>
