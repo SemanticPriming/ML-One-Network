@@ -49,6 +49,70 @@
         max-height: 0 !important;
         display: block;
       }
+
+      .aoa-word-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+
+      .aoa-word-row {
+        display: grid;
+        grid-template-columns: minmax(140px, 220px) 180px auto;
+        align-items: center;
+        column-gap: 0.9rem;
+        row-gap: 0.2rem;
+        padding: 0.35rem 0;
+      }
+
+      .aoa-word-label {
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      .aoa-word-age {
+        width: 100%;
+        max-width: 180px;
+        padding: 0.45rem 0.6rem;
+        border: 1px solid #bdbdbd;
+        border-radius: 6px;
+        font: inherit;
+        box-sizing: border-box;
+      }
+
+      .aoa-word-age.aoa-word-age--invalid {
+        border-color: #c62828;
+      }
+
+      .aoa-word-unknown {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        white-space: nowrap;
+        font-size: 1rem;
+      }
+
+      .aoa-word-unknown input {
+        margin: 0;
+      }
+
+      .aoa-word-error {
+        grid-column: 2 / 4;
+        color: #c62828;
+        font-size: 0.85rem;
+        min-height: 1rem;
+      }
+
+      @media (max-width: 700px) {
+        .aoa-word-row {
+          grid-template-columns: minmax(110px, 1fr) 120px auto;
+          column-gap: 0.65rem;
+        }
+
+        .aoa-word-label {
+          font-size: 0.98rem;
+        }
+      }
     </style>
   </head>
 
@@ -202,6 +266,7 @@
 
     // 1) Shuffle words once per participant
     const shuffledWords = jsPsych.randomization.shuffle(sampleWords);
+    const UNKNOWN_WORD_CHOICE = "X";
 
     // 2) Split into small blocks (6 words per page for the demo)
     const BLOCK_SIZE = 6;
@@ -210,38 +275,106 @@
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
     }
 
-    // 3) Helper: build one SurveyJS matrix page for a block of words
+    function slugifyWord(word) {
+      const slug = word.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      return slug || "word";
+    }
+
+    function makeWordFieldNames(blockIndex, word, wordIndex) {
+      const baseName = `aoa_block_${blockIndex}_${slugifyWord(word)}_${wordIndex}`;
+      return {
+        ageName: `${baseName}_age`,
+        unknownName: `${baseName}_unknown`,
+      };
+    }
+
+    function hasValue(value) {
+      return value !== null && value !== undefined && value !== "";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function clearRowError(row, ageInput) {
+      row.querySelector(".aoa-word-error").textContent = "";
+      ageInput.classList.remove("aoa-word-age--invalid");
+    }
+
+    function setRowError(row, ageInput, message) {
+      row.querySelector(".aoa-word-error").textContent = message;
+      ageInput.classList.add("aoa-word-age--invalid");
+    }
+
+    function makeAoaInlineHtml(wordFields) {
+      return `
+        <div class="aoa-word-list">
+          ${wordFields
+            .map(function (field) {
+              return `
+                <div class="aoa-word-row" data-field-base="${field.ageName}">
+                  <label class="aoa-word-label" for="${field.ageName}_input">${escapeHtml(field.word)}:</label>
+                  <input
+                    class="aoa-word-age"
+                    id="${field.ageName}_input"
+                    type="number"
+                    min="1"
+                    max="100"
+                    inputmode="numeric"
+                    placeholder="Age"
+                    data-age-name="${field.ageName}"
+                  />
+                  <label class="aoa-word-unknown">
+                    <input
+                      type="radio"
+                      name="${field.unknownName}_choice"
+                      value="${UNKNOWN_WORD_CHOICE}"
+                      data-unknown-name="${field.unknownName}"
+                    />
+                    <span>${UNKNOWN_WORD_CHOICE}</span>
+                  </label>
+                  <div class="aoa-word-error" aria-live="polite"></div>
+                </div>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+    }
+
+    // 3) Helper: build one SurveyJS page for a block of words
     function makeAoaMatrixSurvey(words, blockIndex) {
+      const wordFields = words.map(function (word, wordIndex) {
+        return {
+          word: word,
+          ...makeWordFieldNames(blockIndex, word, wordIndex),
+        };
+      });
+      const htmlQuestionName = `aoa_block_${blockIndex}_rows`;
+      let renderedQuestionElement = null;
+
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
         completedHtml: "",
         completeText: "Next",
+        showQuestionNumbers: "off",
         pages: [
           {
             name: `aoa_block_${blockIndex}`,
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
+            description:
+              "For each word, enter the age (in years) when you think you learned it, or select X if unknown.",
             elements: [
               {
-                type: "multipletext",
-                name: `aoa_block_${blockIndex}`,
-                title:
-                  "For each word, enter the age (in years) when you think you learned it, or X if unknown.",
-                items: words.map(function (w) {
-                  return {
-                    name: w,
-                    title: w,
-                    inputType: "text",
-                    isRequired: true,
-                    validators: [
-                      {
-                        type: "regex",
-                        text: "Enter a number between 1 and 100, or X if unknown",
-                        regex: "^(X|x|[1-9][0-9]?$|100)$",
-                      },
-                    ],
-                  };
-                }),
+                type: "html",
+                name: htmlQuestionName,
+                html: makeAoaInlineHtml(wordFields),
               },
             ],
           },
@@ -251,6 +384,80 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        survey_function: function (survey) {
+          survey.onAfterRenderQuestion.add(function (_, options) {
+            if (options.question.name !== htmlQuestionName) {
+              return;
+            }
+
+            renderedQuestionElement = options.htmlElement;
+            const rows = renderedQuestionElement.querySelectorAll(".aoa-word-row");
+            rows.forEach(function (row) {
+              const ageInput = row.querySelector(".aoa-word-age");
+              const unknownInput = row.querySelector('input[type="radio"]');
+
+              ageInput.addEventListener("input", function () {
+                if (ageInput.value !== "") {
+                  unknownInput.checked = false;
+                }
+                clearRowError(row, ageInput);
+              });
+
+              unknownInput.addEventListener("change", function () {
+                if (unknownInput.checked) {
+                  ageInput.value = "";
+                }
+                clearRowError(row, ageInput);
+              });
+            });
+          });
+
+          survey.onCompleting.add(function (sender, options) {
+            if (!renderedQuestionElement) {
+              return;
+            }
+
+            let hasErrors = false;
+            wordFields.forEach(function (field) {
+              const row = renderedQuestionElement.querySelector(`[data-field-base="${field.ageName}"]`);
+              const ageInput = row.querySelector(".aoa-word-age");
+              const unknownInput = row.querySelector('input[type="radio"]');
+              const ageValue = ageInput.value.trim();
+
+              clearRowError(row, ageInput);
+
+              if (unknownInput.checked) {
+                sender.setValue(field.ageName, null);
+                sender.setValue(field.unknownName, UNKNOWN_WORD_CHOICE);
+                return;
+              }
+
+              if (!ageValue) {
+                hasErrors = true;
+                sender.setValue(field.ageName, null);
+                sender.setValue(field.unknownName, null);
+                setRowError(row, ageInput, "Enter an age or select X.");
+                return;
+              }
+
+              const numericAge = Number(ageValue);
+              if (!Number.isInteger(numericAge) || numericAge < 1 || numericAge > 100) {
+                hasErrors = true;
+                sender.setValue(field.ageName, null);
+                sender.setValue(field.unknownName, null);
+                setRowError(row, ageInput, "Enter a whole number from 1 to 100.");
+                return;
+              }
+
+              sender.setValue(field.ageName, numericAge);
+              sender.setValue(field.unknownName, null);
+            });
+
+            if (hasErrors) {
+              options.allowComplete = false;
+            }
+          });
+        },
       };
     }
 
