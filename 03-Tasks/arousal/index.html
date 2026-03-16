@@ -1,24 +1,18 @@
 <!doctype html>
 <html>
-<head>
-  <title>Arousal Study</title>
+  <head>
+    <title>Arousal Study</title>
 
     <!-- Load jsPsych -->
     <script src="unpkg_jspsych.js"></script>
     <script src="unpkg_jspych_plugin_html_button_response.js"></script>
     <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
-    <link
-      href="jspsych_css_jspsych.css"
-      rel="stylesheet"
-    />
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
 
     <!-- Load SurveyJS -->
     <script src="survey_core_1.12.1_min.js"></script>
     <script src="survey_js_ui_min.js"></script>
-    <link
-      href="survey_core_defaultv2_min.css"
-      rel="stylesheet"
-    />
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
 
     <!-- Load JATOS -->
     <script src="jatos.js"></script>
@@ -26,9 +20,9 @@
       /* Widen the jsPsych + SurveyJS container */
       .jspsych-survey-container {
         max-width: 80vw; /* 80% of viewport width */
-       width: 80vw;
+        width: 80vw;
         margin: 0 auto; /* center horizontally */
-     }
+      }
       /* Override SurveyJS internal max-width that was squishing content */
       .sd-body.sd-body--static {
         max-width: 100% !important; /* allow it to fill the wider container */
@@ -251,10 +245,10 @@
             name: `arousal_page_${blockIndex}`,
             title: `Arousal ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
             elements: [
-              { type: "html", name: `sam_arousal_${blockIndex}`, html: samHtml },
+              { type: "html", name: `sam_arousal`, html: samHtml },
               {
                 type: "matrix",
-                name: `arousal_block_${blockIndex}`,
+                name: `arousal_block`,
                 title:
                   "For each word, rate AROUSAL (1 = very calm/relaxed, 9 = very excited/activated). If you do not know the word, choose X.",
                 isAllRowRequired: true,
@@ -274,7 +268,7 @@
 
     // 4) Create one jsPsych trial per block
     const arousal_trials = wordBlocks.map((block, i) =>
-      makeArousalMatrixSurvey(block, i)
+      makeArousalMatrixSurvey(block, i),
     );
 
     // Final thank-you screen shown AFTER all word-rating blocks (SurveyJS style)
@@ -321,7 +315,9 @@
         timeline: [no_consent],
         conditional_function: function () {
           const last = jsPsych.data.get().last(1).values()[0];
-          return last.response && last.response.consent_choice === "I Do Not Consent";
+          return (
+            last.response && last.response.consent_choice === "I Do Not Consent"
+          );
         },
       },
       task_timeline,
