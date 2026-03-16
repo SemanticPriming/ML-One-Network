@@ -49,6 +49,22 @@
         max-height: 0 !important;
         display: block;
       }
+      /* Tighter spacing between SurveyJS matrix radio columns */
+      .sv_matrix {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+      }
+      .sv_matrix th,
+      .sv_matrix td {
+        padding: 0.2rem 0.35rem;
+        text-align: center;
+      }
+      .sv_matrix .sv_matrix_cell {
+        min-width: 2.4rem;
+      }
+      .sv_matrix .sv-radio-control {
+        margin: 0;
+      }
     </style>
   </head>
 
@@ -87,45 +103,15 @@
        // ----- PAGE 1: CONSENT -----
         {
           name: "consent",
-          title: "CONSENT FORM",
+          title: "Consent to Participate",
           elements: [
             {
               type: "html",
               name: "consent_text",
               html: `
-                <center><b>Understanding Word Processing and Meaning</center></b>
-                <p>You are invited to be in a research study about how you read and process words, along with their meaning. We ask that you read this form and ask any questions you may have before agreeing to be in the study.</p>
-                <p>This study is being conducted by Dr. Erin M. Buchanan, Professor of Cognitive Analytics at Harrisburg University of Science and Technology.</p>
-                <p><b><u>Background Information:</u></b></p>
-                In this study, you will be asked to complete different questions about word concepts. For example, you may be asked to define a word’s characteristics, rate how familiar you are with a word, or simply judge if a string of letters is a real word. 
-                
-                <p><b><u>Procedures:</u></b></p>
-                You will take this study entirely online from a desktop or laptop computer with a keyboard. You will be given instructions about the experiment sections which are randomly selected for each person. After you complete the experiment, you can learn more about the study and goals of the research. The entire study should take less than thirty minutes to complete. 
-                
-                <p><b><u>Risks and Benefits of being in the Study:</u></b></p>
-                No identifying information will be collected from you, and therefore, your responses should be anonymous. The current study is similar to an online game, which may cause some fatigue or boredom based on the task you are asked to complete. 
-                There is no direct benefit to you for participating in this study. However, your responses will contribute to our understanding of language and cognitive memory processes.
-
-                <p><b><u>Compensation:</u></b></p>
-                You may be compensated when taking part in this study through your local researcher. 
-
-                <p><b><u>Confidentiality and Data Sharing:</u></b></p>
-                Measures are taken to ensure that all information you provide will be anonymous. The data from this project will be posted publicly for other researchers to use; however, no data will be directly linked to you. Your name or other identifying information will not be entered into the dataset and no references will be made in verbal or written reports that could link you to the study. In any publication, information will be provided in such a way that you cannot be identified.
-                Before your data are shared outside the research team, any potentially identifying information will be removed. The anonymous data may be used by the research team or shared with other researchers, for both related and unrelated research purposes in the future. Your anonymous data may also be made available in online data repositories such as the Open Science Framework (which are free data repositories that require registration to have access), which allow other researchers and interested parties to access the data for further analysis.
-                
-                <p><b>Please note that your data will be anonymous, which means you cannot ask for it to be removed once you have completed the study.</b></p>
-
-                <p><b><u>Voluntary Nature of the Study:</u></b></p>
-                <b>Participation in this study is voluntary:</b>
-                Your decision whether to participate will not affect your current or future relations with Harrisburg University of Science and Technology or your local institution. If you decide to participate, you are free to not answer any question or withdraw at any time without affecting those relationships.
-
-                <p><b><u>Contacts and Questions:</u></b></p>
-                The researchers conducting this study are Dr. Erin M. Buchanan in partnership with the Psychological Science Accelerator. You may ask any questions you have now. If you have questions later, you are encouraged to contact Dr. Erin M. Buchanan at ebuchanan@harrisburgu.edu. 
- 
-                <p><b><u>Questions or Concerns:</u></b></p>
-                This study has been reviewed by Harrisburg University of Science and Technology’s Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
-
-                <p><a href="LINK"><b>A copy of this information to keep for your records will be provided upon request. </b></a></p>
+                <p>Please read the following carefully before continuing:</p>
+                <p>This study involves completing brief questions and/or tasks about language and cognition. Your participation is voluntary. You may stop at any time without penalty. Your responses will be recorded for research purposes but will be kept confidential and analyzed in anonymized form.</p>
+                <p>By proceeding you indicate that you are at least 18 years old.</p>
               `,
             },
             {

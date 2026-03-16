@@ -49,6 +49,22 @@
         max-height: 0 !important;
         display: block;
       }
+      /* Tighter spacing between SurveyJS matrix radio columns */
+      .sv_matrix {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+      }
+      .sv_matrix th,
+      .sv_matrix td {
+        padding: 0.2rem 0.35rem;
+        text-align: center;
+      }
+      .sv_matrix .sv_matrix_cell {
+        min-width: 2.4rem;
+      }
+      .sv_matrix .sv-radio-control {
+        margin: 0;
+      }
     </style>
   </head>
 
@@ -244,6 +260,8 @@
 
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeConcreteMatrixSurvey(words, blockIndex) {
+      const rows = words.map((w) => ({ value: w, text: w }));
+      const unknownColumns = [{ value: "X", text: "X" }];
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
@@ -258,22 +276,33 @@
                 type: "multipletext",
                 name: `concrete_block_${blockIndex}`,
                 title:
-                  "For each word, rate how abstract (1) or concrete (9) based on your first impression of the object and entering 'X' when you do not know a word.",
-                items: words.map(function (w) {
+                  "For each word, rate how abstract (1) or concrete (9) based on your first impression. If you do not know a word, leave the rating blank and mark X below.",
+                items: rows.map(function (row) {
                   return {
-                    name: w,
-                    title: w,
-                    inputType: "text",
-                    isRequired: true,
+                    name: row.value,
+                    title: row.text,
+                    inputType: "number",
+                    isRequired: false,
                     validators: [
                       {
-                        type: "regex",
+                        type: "numeric",
                         text: "Enter a number between 1 and 9",
-                        regex: "^(X|x|[1-9][0-9]?$|100)$",
+                        minValue: 1,
+                        maxValue: 9,
+                        integerOnly: true,
                       },
                     ],
                   };
                 }),
+              },
+              {
+                type: "matrix",
+                name: `concrete_unknown_block_${blockIndex}`,
+                title:
+                  "If you do not recognize a word, select X below; otherwise leave this blank.",
+                rows: rows,
+                columns: unknownColumns,
+                isAllRowRequired: false,
               },
             ],
           },

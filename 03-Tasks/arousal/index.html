@@ -43,6 +43,22 @@
         max-height: 0 !important;
         display: block;
       }
+      /* Tighter spacing between SurveyJS matrix radio columns */
+      .sv_matrix {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+      }
+      .sv_matrix th,
+      .sv_matrix td {
+        padding: 0.2rem 0.35rem;
+        text-align: center;
+      }
+      .sv_matrix .sv_matrix_cell {
+        min-width: 2.4rem;
+      }
+      .sv_matrix .sv-radio-control {
+        margin: 0;
+      }
     </style>
   </head>
 
@@ -261,9 +277,10 @@
         </figure>
       `;
 
-      const samChoices = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "X"];
+      const samChoices = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
       const rows = words.map((w) => ({ value: w, text: w }));
       const columns = samChoices.map((c) => ({ value: c, text: c }));
+      const unknownColumns = [{ value: "X", text: "X" }];
 
       const surveyJson = {
         showCompletedPage: false,
@@ -280,10 +297,19 @@
                 type: "matrix",
                 name: `arousal_block`,
                 title:
-                  "For each word, rate AROUSAL (1 = very calm/relaxed, 9 = very excited/activated). If you do not know the word, choose X.",
-                isAllRowRequired: true,
+                  "For each word, rate AROUSAL (1 = very calm/relaxed, 9 = very excited/activated). If you do not know the word, leave the rating blank and mark X below.",
+                isAllRowRequired: false,
                 rows: rows,
                 columns: columns,
+              },
+              {
+                type: "matrix",
+                name: `arousal_unknown_block`,
+                title:
+                  "If you do not recognize a word, select X below; otherwise leave this blank.",
+                rows: rows,
+                columns: unknownColumns,
+                isAllRowRequired: false,
               },
             ],
           },
