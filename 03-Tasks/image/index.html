@@ -65,6 +65,21 @@
       .sv_matrix .sv-radio-control {
         margin: 0;
       }
+      .rating-column-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
+        line-height: 1;
+      }
+      .rating-column-value {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .rating-column-scale {
+        font-size: 0.65rem;
+        color: #666;
+      }
     </style>
   </head>
 
@@ -91,6 +106,25 @@
       window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
+
+    function buildNumberColumns(ratingColumns, scaleDescriptions = {}) {
+      return ratingColumns.map((value) => {
+        const scaleText = scaleDescriptions[value];
+        const label = scaleText
+          ? `<span class="rating-column-scale">${scaleText}</span>`
+          : "";
+        return {
+          value,
+          text: `
+            <div class="rating-column-label">
+              <span class="rating-column-value">${value}</span>
+              ${label}
+            </div>
+          `,
+          width: label ? "2.7rem" : "2.1rem",
+        };
+      });
+    }
 
     // Combined multi-page SurveyJS survey (consent + demographics + instructions)
     const combinedSurveyJson = {
@@ -228,6 +262,14 @@
 
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeImageMatrixSurvey(words, blockIndex) {
+      const rows = words.map((w) => ({ value: w, text: w }));
+      const ratingColumns = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const numberColumns = ratingColumns.map((c) => ({
+        value: c,
+        text: c,
+        width: "2.1rem",
+      }));
+      const unknownColumns = [{ value: "X", text: "X", width: "2.9rem" }];
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
@@ -239,25 +281,22 @@
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
             elements: [
               {
-                type: "multipletext",
+                type: "matrix",
                 name: `image_block_${blockIndex}`,
                 title:
-                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object.",
-                items: words.map(function (w) {
-                  return {
-                    name: w,
-                    title: w,
-                    inputType: "text",
-                    isRequired: true,
-                    validators: [
-                      {
-                        type: "regex",
-                        text: "Enter a number between 1 and 9",
-                        regex: "^(X|x|[1-9][0-9]?$|100)$",
-                      },
-                    ],
-                  };
-                }),
+                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, leave the rating blank and mark X below.",
+                rows: rows,
+                columns: numberColumns,
+                isAllRowRequired: false,
+              },
+              {
+                type: "matrix",
+                name: `image_unknown_block_${blockIndex}`,
+                title:
+                  "If you do not recognize a word, select X here; otherwise leave this blank.",
+                rows: rows,
+                columns: unknownColumns,
+                isAllRowRequired: false,
               },
             ],
           },
