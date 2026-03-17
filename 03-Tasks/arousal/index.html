@@ -108,10 +108,6 @@
         flex: 0 0 auto;
         min-width: 3rem;
       }
-      .sd-table.sd-table--columnsautowidth .sd-table__cell {
-        width: auto !important;
-        max-width: none !important;
-      }
 
       .matrix-pair {
         display: grid;
@@ -133,6 +129,14 @@
         align-items: center;
         gap: 0.75rem;
         margin-bottom: 0.5rem;
+      }
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
       }
     </style>
   </head>
