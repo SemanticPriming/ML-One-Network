@@ -370,6 +370,19 @@
         value: word,
         text: word,
       }));
+      const ratingColumnName = "rating";
+      const unknownColumnName = "unknown";
+
+      function hasCheckboxSelection(value) {
+        if (Array.isArray(value)) {
+          return value.length > 0;
+        }
+        return value !== undefined && value !== null && value !== "";
+      }
+
+      function hasValue(value) {
+        return value !== undefined && value !== null && value !== "";
+      }
 
       const surveyJson = {
         showCompletedPage: false,
@@ -419,6 +432,55 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        survey_function: function (survey) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            console.log("EVENT:", options);
+            if (syncing || !options) return;
+
+            const question = options.question;
+            console.log("QUESTION NAME:", question && question.name);
+            if (!question || question.name !== `arousal_table_${blockIndex}`)
+              return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            console.log("CURRENT VALUE:", tableValue);
+            const rowValue = { ...(tableValue[rowName] || {}) };
+            let changed = false;
+
+            // If user clicked Unknown → always clear rating
+            if (columnName === unknownColumnName) {
+              if (hasCheckboxSelection(options.value)) {
+                rowValue[ratingColumnName] = undefined;
+                changed = true;
+              }
+            }
+
+            // If user clicked rating → always clear unknown
+            if (columnName === ratingColumnName) {
+              if (hasValue(options.value)) {
+                rowValue[unknownColumnName] = undefined;
+                changed = true;
+              }
+            }
+
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
+            }
+          });
+        },
       };
     }
 
