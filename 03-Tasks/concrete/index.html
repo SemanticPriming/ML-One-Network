@@ -7,18 +7,12 @@
     <script src="unpkg_jspsych.js"></script>
     <script src="unpkg_jspych_plugin_html_button_response.js"></script>
     <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
-    <link
-      href="jspsych_css_jspsych.css"
-      rel="stylesheet"
-    />
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
 
     <!-- Load SurveyJS -->
     <script src="survey_core_1.12.1_min.js"></script>
     <script src="survey_js_ui_min.js"></script>
-    <link
-      href="survey_core_defaultv2_min.css"
-      rel="stylesheet"
-    />
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
 
     <!-- Load JATOS -->
     <script src="jatos.js"></script>
@@ -40,7 +34,7 @@
         margin-bottom: 1.25rem;
         width: 100%;
       }
-      
+
       /* Remove extra spacing created by SurveyJS completed-page pseudo-elements */
       .sd-body.sd-completedpage::before,
       .sd-body.sd-completedpage::after {
@@ -49,36 +43,41 @@
         max-height: 0 !important;
         display: block;
       }
-      /* Tighter spacing between SurveyJS matrix radio columns */
       .sv_matrix {
         border-collapse: separate;
         border-spacing: 0 0.25rem;
       }
       .sv_matrix th,
       .sv_matrix td {
-        padding: 0.2rem 0.35rem;
+        padding: 0.2rem 0.15rem;
         text-align: center;
+        white-space: pre-line;
       }
       .sv_matrix .sv_matrix_cell {
-        min-width: 2.4rem;
+        min-width: 2.1rem;
       }
       .sv_matrix .sv-radio-control {
         margin: 0;
       }
-      .rating-column-label {
+      .arousal-rating-column .sd-question {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.15rem;
-        line-height: 1;
+        justify-content: center;
+        padding-right: 1rem;
+        min-width: 500px;
       }
-      .rating-column-value {
-        font-weight: 600;
-        font-size: 1rem;
+      .arousal-unknown-column .sd-question {
+        text-align: center;
+        min-width: 100px;
       }
-      .rating-column-scale {
-        font-size: 0.65rem;
-        color: #666;
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
       }
     </style>
   </head>
@@ -106,25 +105,6 @@
       window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
-
-    function buildNumberColumns(ratingColumns, scaleDescriptions = {}) {
-      return ratingColumns.map((value) => {
-        const scaleText = scaleDescriptions[value];
-        const label = scaleText
-          ? `<span class="rating-column-scale">${scaleText}</span>`
-          : "";
-        return {
-          value,
-          text: `
-            <div class="rating-column-label">
-              <span class="rating-column-value">${value}</span>
-              ${label}
-            </div>
-          `,
-          width: label ? "2.7rem" : "2.1rem",
-        };
-      });
-    }
 
     // Combined multi-page SurveyJS survey (consent + demographics + instructions)
     const combinedSurveyJson = {
@@ -246,11 +226,9 @@
               type: "html",
               name: "concrete_instructions",
               html: `
-                <p>Some words refer to things or actions in reality, which you can experience directly through one of the five senses. We call these words concrete words. Other words refer to meanings that cannot be experienced directly but which we know because the meanings can be defined by other words. These are abstract words. Still other words fall in-between the two extremes, because we can experience them to some extent and in addition we rely on language to understand them. </p>
-                <p>We want you to indicate how concrete the meaning of each word is for you by using a 9-point rating scale going from abstract to concrete. A concrete word comes with a higher rating and refers to something that exists in reality; you can have immediate experience of it through your senses (smelling, tasting, touching, hearing, seeing) and the actions you do. The easiest way to explain a word is by pointing to it or by demonstrating it (e.g. To explain 'sweet' you could have someone eat sugar; To explain 'jump' you could simply jump up and down or show people a movie clip about someone jumping up and down; To explain 'couch', you could point to a couch or show a picture of a couch). </p>
-                <p>An abstract word comes with a lower rating and refers to something you cannot experience directly through your senses or actions. Its meaning depends on language. The easiest way to explain it is by using other words (e.g. There is no simple way to demonstrate 'justice'; but we can explain the meaning of the word by using other words that capture parts of its meaning).</p>
-                <p>Because we are collecting values for all the words in a dictionary (over 60 thousand in total), you will see that there are various types of words, even single letters. Always think of how concrete (experience based) the meaning of the word is to you. In all likelihood, you will encounter several words you do not know well enough to give a useful rating. This is informative to us too, as in our research we only want to use words known to people. We may also include one or two fake words which cannot be known by you. Please indicate when you don't know a word by using the letter X (or x).Because we are collecting values for all the words in a dictionary (over 60 thousand in total), you will see that there are various types of words, even single letters. Always think of how concrete (experience based) the meaning of the word is to you. In all likelihood, you will encounter several words you do not know well enough to give a useful rating. This is informative to us too, as in our research we only want to use words known to people. We may also include one or two fake words which cannot be known by you. Please indicate when you don't know a word by using the letter X (or x).</p>
-                <p>For each word, rate how abstract (1) or concrete (9) based on your first impression of the object and entering 'X' when you do not know a word.</p>
+                <p>Some words refer to things or actions in reality, which you can experience directly through one of the five senses. We call these words concrete words. Other words refer to meanings that cannot be experienced directly but which we know because the meanings can be defined by other words. These are abstract words. Still other words fall in-between the two extremes, because we can experience them to some extent; and in addition, we rely on language to understand them. We want you to indicate how concrete the meaning of each word is for you by using a 9-point rating scale going from abstract to concrete. A concrete word comes with a higher rating and refers to something that exists in reality; you can have immediate experience of it through your senses (smelling, tasting, touching, hearing, seeing) and the actions you do. </p>
+                <p>The easiest way to explain a word is by pointing to it or by demonstrating it (e.g. To explain 'sweet' you could have someone eat sugar; To explain 'jump' you could simply jump up and down or show people a movie clip about someone jumping up and down; To explain 'couch', you could point to a couch or show a picture of a couch). An abstract word comes with a lower rating and refers to something you cannot experience directly through your senses or actions. Its meaning depends on language. The easiest way to explain it is by using other words (e.g. There is no simple way to demonstrate 'justice'; but we can explain the meaning of the word by using other words that capture parts of its meaning). </p>
+                <p>Always think of how concrete (experience based) the meaning of the word is to you. In all likelihood, you will encounter several words you do not know well enough to give a useful rating. This is informative to us too, as in our research we only want to use words known to people. We may also include one or two fake words which cannot be known by you. Please indicate when you don't know a word by using the letter X.</p>
               `,
             },
           ],
@@ -294,14 +272,10 @@
 
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeConcreteMatrixSurvey(words, blockIndex) {
-      const rows = words.map((w) => ({ value: w, text: w }));
-      const ratingColumns = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      const numberColumns = ratingColumns.map((c) => ({
-        value: c,
-        text: c,
-        width: "2.1rem",
+      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
+        value: i + 1,
+        text: (i + 1).toString(),
       }));
-      const unknownColumns = [{ value: "X", text: "X", width: "2.9rem" }];
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
@@ -309,26 +283,36 @@
         completeText: "Next",
         pages: [
           {
-            name: `concrete_block_${blockIndex}`,
+            name: `concrete_page_${blockIndex}`,
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
             elements: [
               {
-                type: "matrix",
-                name: `concrete_block_${blockIndex}`,
+                type: "matrixdropdown",
+                name: `concrete_table_${blockIndex}`,
                 title:
-                  "For each word, rate how abstract (1) or concrete (9) based on your first impression. If you do not know a word, leave the rating blank and mark X below.",
-                rows: rows,
-                columns: numberColumns,
-                isAllRowRequired: false,
-              },
-              {
-                type: "matrix",
-                name: `concrete_unknown_block_${blockIndex}`,
-                title:
-                  "If you do not recognize a word, select X here; otherwise leave this blank.",
-                rows: rows,
-                columns: unknownColumns,
-                isAllRowRequired: false,
+                  "For each word, rate how abstract (1) or concrete (9) it feels. If you do not know the word, leave the rating blank and mark X below.",
+                rows: words,
+                columns: [
+                  {
+                    name: "rating",
+                    title: "Rating (1 = very abstract, 9 = very concrete)",
+                    cellType: "radiogroup",
+                    choices: sliderChoices,
+                    cssClasses: "arousal-rating-column",
+                    minWidth: "500px",
+                  },
+                  {
+                    name: "unknown",
+                    title: "Unknown",
+                    cellType: "checkbox",
+                    choices: ["X"],
+                    colCount: 1,
+                    cssClasses: "arousal-unknown-column",
+                    minWidth: "100px",
+                  },
+                ],
+                allowAddRows: false,
+                allowRemoveRows: false,
               },
             ],
           },
@@ -389,7 +373,9 @@
         timeline: [no_consent],
         conditional_function: function () {
           const last = jsPsych.data.get().last(1).values()[0];
-          return last.response && last.response.consent_choice === "I Do Not Consent";
+          return (
+            last.response && last.response.consent_choice === "I Do Not Consent"
+          );
         },
       },
       task_timeline,
