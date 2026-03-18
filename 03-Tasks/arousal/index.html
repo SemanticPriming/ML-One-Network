@@ -385,16 +385,18 @@
               {
                 type: "matrixdropdown",
                 name: `arousal_table_${blockIndex}`,
-                title: "Word | rating scale | check X if you do not know it.",
+                title:
+                  "For each word, rate AROUSAL (1 = very calm/relaxed, 9 = very excited/activated). If you do not know the word, leave the rating blank and mark X below.",
                 rows: words,
                 columns: [
                   {
                     name: "rating",
-                    title: "Rating (1–9)",
+                    title:
+                      "Rating (1 = very calm/relaxed, 9 = very excited/activated)",
                     cellType: "radiogroup",
                     choices: sliderChoices,
                     cssClasses: "arousal-rating-column",
-                    minWidth: "420px",
+                    minWidth: "500px",
                   },
                   {
                     name: "unknown",
@@ -403,7 +405,7 @@
                     choices: ["X"],
                     colCount: 1,
                     cssClasses: "arousal-unknown-column",
-                    minWidth: "140px",
+                    minWidth: "100px",
                   },
                 ],
                 allowAddRows: false,
