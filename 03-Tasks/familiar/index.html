@@ -7,18 +7,12 @@
     <script src="unpkg_jspsych.js"></script>
     <script src="unpkg_jspych_plugin_html_button_response.js"></script>
     <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
-    <link
-      href="jspsych_css_jspsych.css"
-      rel="stylesheet"
-    />
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
 
     <!-- Load SurveyJS -->
     <script src="survey_core_1.12.1_min.js"></script>
     <script src="survey_js_ui_min.js"></script>
-    <link
-      href="survey_core_defaultv2_min.css"
-      rel="stylesheet"
-    />
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
 
     <!-- Load JATOS -->
     <script src="jatos.js"></script>
@@ -49,36 +43,41 @@
         max-height: 0 !important;
         display: block;
       }
-      /* Tighter spacing between SurveyJS matrix radio columns */
       .sv_matrix {
         border-collapse: separate;
         border-spacing: 0 0.25rem;
       }
       .sv_matrix th,
       .sv_matrix td {
-        padding: 0.2rem 0.35rem;
+        padding: 0.2rem 0.15rem;
         text-align: center;
+        white-space: pre-line;
       }
       .sv_matrix .sv_matrix_cell {
-        min-width: 2.4rem;
+        min-width: 2.1rem;
       }
       .sv_matrix .sv-radio-control {
         margin: 0;
       }
-      .rating-column-label {
+      .arousal-rating-column .sd-question {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.15rem;
-        line-height: 1;
+        justify-content: center;
+        padding-right: 1rem;
+        min-width: 500px;
       }
-      .rating-column-value {
-        font-weight: 600;
-        font-size: 1rem;
+      .arousal-unknown-column .sd-question {
+        text-align: center;
+        min-width: 100px;
       }
-      .rating-column-scale {
-        font-size: 0.65rem;
-        color: #666;
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
       }
     </style>
   </head>
@@ -106,25 +105,6 @@
       window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
-
-    function buildNumberColumns(ratingColumns, scaleDescriptions = {}) {
-      return ratingColumns.map((value) => {
-        const scaleText = scaleDescriptions[value];
-        const label = scaleText
-          ? `<span class="rating-column-scale">${scaleText}</span>`
-          : "";
-        return {
-          value,
-          text: `
-            <div class="rating-column-label">
-              <span class="rating-column-value">${value}</span>
-              ${label}
-            </div>
-          `,
-          width: label ? "2.7rem" : "2.1rem",
-        };
-      });
-    }
 
     // Combined multi-page SurveyJS survey (consent + demographics + instructions)
     const combinedSurveyJson = {
@@ -175,7 +155,7 @@
                 <p><b><u>Questions or Concerns:</u></b></p>
                 This study has been reviewed by Harrisburg University of Science and Technology’s Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
 
-                <p><a href="LINK"><b>A copy of this information to keep for your records will be provided upon request. </b></a></p>
+                <p><a href="consent.html" target="_blank"><b>A copy of this information to keep for your records will be provided upon request. </b></a></p>
               `,
             },
             {
@@ -246,10 +226,8 @@
               type: "html",
               name: "familiar_instructions",
               html: `
-                <p>This is an experiment to find out how often you have come in contact with certain words. You will be given a list of words and you are to rate each one as to the number of times that you experienced it by simply writing down a number according to a 1 to 9 scale. In this scale, 1 represents “NEVER,” that is, you have never seen or heard or used the word in your life; the number 2 represents “RARELY,” that is you have seen or heard or used the word at least once before, but only rarely; and so on until 9, which represents “VERY OFTEN,” that is, you have seen or heard or used the word nearly every day of your life.</p>
-                <p>Do not be bothered if you are unable to give a definition of some of the words. Simply rate each one as to the number of times you have come in contact with it regardless of its meaning. There may be some words which you have used or heard more often than you have seen them. Or there may be other words which you have seen more often than you have used or heard them. In such cases, always give the word in the highest rating of the three. For example, you probably use or hear the word “cheers” often, but you may never have seen it in print. In this case, you would rate “cheers” as “OFTEN” and write down the number 6.</p>
-                <p>Go to the list of words and begin rating them at your own speed. This is not a “speed” experiment, each participant will be given plenty of time to finish. On the other hand, do not spend too much time on each word. The important thing is for you to be as accurate as possible. Be as honest in your ratings as you can. Many of the words in this experiment are very rare, so you are not expected to have come in contact with all of them. Just make the best estimates you are capable of. </p>
-                <p>If you do not know what a word means, please enter the letter X.</p>
+                <p>In the following pages, you will see a series of target words. Your task is to rate how familiar each word is to you. If a word feels very familiar, select 9 on the scale; if it feels hardly familiar, select 1. The numbers from 1 to 9 represent increasing levels of familiarity. Please choose the number that best reflects your experience with each word, and if you do not know a word, select X.</p>
+                
               `,
             },
           ],
@@ -293,15 +271,10 @@
 
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeFamiliarMatrixSurvey(words, blockIndex) {
-      const rows = words.map((w) => ({ value: w, text: w }));
-      const ratingColumns = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      const numberColumns = ratingColumns.map((c) => ({
-        value: c,
-        text: c,
-        width: "2.1rem",
+      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
+        value: i + 1,
+        text: (i + 1).toString(),
       }));
-      const unknownColumns = [{ value: "X", text: "X", width: "2.9rem" }];
-
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
@@ -309,26 +282,36 @@
         completeText: "Next",
         pages: [
           {
-            name: `familiar_block_${blockIndex}`,
+            name: `familiar_page_${blockIndex}`,
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
             elements: [
               {
-                type: "matrix",
-                name: `familiar_block_${blockIndex}`,
+                type: "matrixdropdown",
+                name: `familiar_table_${blockIndex}`,
                 title:
-                  "For each word, rate how unfamiliar (1) or familiar (9) based on how often you personally come into contact with each word. If you do not know a word, leave the rating blank and mark X below.",
-                rows: rows,
-                columns: numberColumns,
-                isAllRowRequired: false,
-              },
-              {
-                type: "matrix",
-                name: `familiar_unknown_block_${blockIndex}`,
-                title:
-                  "If you do not recognize a word, select X here; otherwise leave this blank.",
-                rows: rows,
-                columns: unknownColumns,
-                isAllRowRequired: false,
+                  "For each word, rate how unfamiliar (1) or familiar (9) it feels based on how often you have come across the word. If you do not know a word, leave the rating blank and mark X below.",
+                rows: words,
+                columns: [
+                  {
+                    name: "rating",
+                    title: "Rating (1 = very unfamiliar, 9 = very familiar)",
+                    cellType: "radiogroup",
+                    choices: sliderChoices,
+                    cssClasses: "arousal-rating-column",
+                    minWidth: "500px",
+                  },
+                  {
+                    name: "unknown",
+                    title: "Unknown",
+                    cellType: "checkbox",
+                    choices: ["X"],
+                    colCount: 1,
+                    cssClasses: "arousal-unknown-column",
+                    minWidth: "100px",
+                  },
+                ],
+                allowAddRows: false,
+                allowRemoveRows: false,
               },
             ],
           },
@@ -338,6 +321,57 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        survey_function: function (survey) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            if (syncing || !options) return;
+
+            const question = options.question;
+            if (!question || question.name !== `familiar_table_${blockIndex}`)
+              return;
+
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            const rowValue = { ...(tableValue[rowName] || {}) };
+
+            let changed = false;
+
+            // If Unknown clicked → clear rating
+            if (columnName === "unknown") {
+              const val = options.value;
+              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
+              if (hasVal) {
+                rowValue["rating"] = undefined;
+                changed = true;
+              }
+            }
+
+            // If rating clicked → clear Unknown
+            if (columnName === "rating") {
+              const val = options.value;
+              if (val !== undefined && val !== null && val !== "") {
+                rowValue["unknown"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
+            }
+          });
+        },
       };
     }
 
@@ -389,7 +423,9 @@
         timeline: [no_consent],
         conditional_function: function () {
           const last = jsPsych.data.get().last(1).values()[0];
-          return last.response && last.response.consent_choice === "I Do Not Consent";
+          return (
+            last.response && last.response.consent_choice === "I Do Not Consent"
+          );
         },
       },
       task_timeline,

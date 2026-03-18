@@ -3,22 +3,16 @@
   <head>
     <title>Imageability Study</title>
 
-<!-- Load jsPsych -->
+    <!-- Load jsPsych -->
     <script src="unpkg_jspsych.js"></script>
     <script src="unpkg_jspych_plugin_html_button_response.js"></script>
     <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
-    <link
-      href="jspsych_css_jspsych.css"
-      rel="stylesheet"
-    />
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
 
     <!-- Load SurveyJS -->
     <script src="survey_core_1.12.1_min.js"></script>
     <script src="survey_js_ui_min.js"></script>
-    <link
-      href="survey_core_defaultv2_min.css"
-      rel="stylesheet"
-    />
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
 
     <!-- Load JATOS -->
     <script src="jatos.js"></script>
@@ -40,7 +34,7 @@
         margin-bottom: 1.25rem;
         width: 100%;
       }
-      
+
       /* Remove extra spacing created by SurveyJS completed-page pseudo-elements */
       .sd-body.sd-completedpage::before,
       .sd-body.sd-completedpage::after {
@@ -49,36 +43,41 @@
         max-height: 0 !important;
         display: block;
       }
-      /* Tighter spacing between SurveyJS matrix radio columns */
       .sv_matrix {
         border-collapse: separate;
         border-spacing: 0 0.25rem;
       }
       .sv_matrix th,
       .sv_matrix td {
-        padding: 0.2rem 0.35rem;
+        padding: 0.2rem 0.15rem;
         text-align: center;
+        white-space: pre-line;
       }
       .sv_matrix .sv_matrix_cell {
-        min-width: 2.4rem;
+        min-width: 2.1rem;
       }
       .sv_matrix .sv-radio-control {
         margin: 0;
       }
-      .rating-column-label {
+      .arousal-rating-column .sd-question {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.15rem;
-        line-height: 1;
+        justify-content: center;
+        padding-right: 1rem;
+        min-width: 500px;
       }
-      .rating-column-value {
-        font-weight: 600;
-        font-size: 1rem;
+      .arousal-unknown-column .sd-question {
+        text-align: center;
+        min-width: 100px;
       }
-      .rating-column-scale {
-        font-size: 0.65rem;
-        color: #666;
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
       }
     </style>
   </head>
@@ -107,25 +106,6 @@
         ? window.crypto.randomUUID()
         : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
 
-    function buildNumberColumns(ratingColumns, scaleDescriptions = {}) {
-      return ratingColumns.map((value) => {
-        const scaleText = scaleDescriptions[value];
-        const label = scaleText
-          ? `<span class="rating-column-scale">${scaleText}</span>`
-          : "";
-        return {
-          value,
-          text: `
-            <div class="rating-column-label">
-              <span class="rating-column-value">${value}</span>
-              ${label}
-            </div>
-          `,
-          width: label ? "2.7rem" : "2.1rem",
-        };
-      });
-    }
-
     // Combined multi-page SurveyJS survey (consent + demographics + instructions)
     const combinedSurveyJson = {
       completedHtml: "",
@@ -137,15 +117,45 @@
         // ----- PAGE 1: CONSENT -----
         {
           name: "consent",
-          title: "Consent to Participate",
+          title: "CONSENT FORM",
           elements: [
             {
               type: "html",
               name: "consent_text",
               html: `
-                <p>Please read the following carefully before continuing:</p>
-                <p>This study involves completing brief questions and/or tasks about language and cognition. Your participation is voluntary. You may stop at any time without penalty. Your responses will be recorded for research purposes but will be kept confidential and analyzed in anonymized form.</p>
-                <p>By proceeding you indicate that you are at least 18 years old.</p>
+                <center><b>Understanding Word Processing and Meaning</center></b>
+                <p>You are invited to be in a research study about how you read and process words, along with their meaning. We ask that you read this form and ask any questions you may have before agreeing to be in the study.</p>
+                <p>This study is being conducted by Dr. Erin M. Buchanan, Professor of Cognitive Analytics at Harrisburg University of Science and Technology.</p>
+                <p><b><u>Background Information:</u></b></p>
+                In this study, you will be asked to complete different questions about word concepts. For example, you may be asked to define a word’s characteristics, rate how familiar you are with a word, or simply judge if a string of letters is a real word. 
+                
+                <p><b><u>Procedures:</u></b></p>
+                You will take this study entirely online from a desktop or laptop computer with a keyboard. You will be given instructions about the experiment sections which are randomly selected for each person. After you complete the experiment, you can learn more about the study and goals of the research. The entire study should take less than thirty minutes to complete. 
+                
+                <p><b><u>Risks and Benefits of being in the Study:</u></b></p>
+                No identifying information will be collected from you, and therefore, your responses should be anonymous. The current study is similar to an online game, which may cause some fatigue or boredom based on the task you are asked to complete. 
+                There is no direct benefit to you for participating in this study. However, your responses will contribute to our understanding of language and cognitive memory processes.
+
+                <p><b><u>Compensation:</u></b></p>
+                You may be compensated when taking part in this study through your local researcher. 
+
+                <p><b><u>Confidentiality and Data Sharing:</u></b></p>
+                Measures are taken to ensure that all information you provide will be anonymous. The data from this project will be posted publicly for other researchers to use; however, no data will be directly linked to you. Your name or other identifying information will not be entered into the dataset and no references will be made in verbal or written reports that could link you to the study. In any publication, information will be provided in such a way that you cannot be identified.
+                Before your data are shared outside the research team, any potentially identifying information will be removed. The anonymous data may be used by the research team or shared with other researchers, for both related and unrelated research purposes in the future. Your anonymous data may also be made available in online data repositories such as the Open Science Framework (which are free data repositories that require registration to have access), which allow other researchers and interested parties to access the data for further analysis.
+                
+                <p><b>Please note that your data will be anonymous, which means you cannot ask for it to be removed once you have completed the study.</b></p>
+
+                <p><b><u>Voluntary Nature of the Study:</u></b></p>
+                <b>Participation in this study is voluntary:</b>
+                Your decision whether to participate will not affect your current or future relations with Harrisburg University of Science and Technology or your local institution. If you decide to participate, you are free to not answer any question or withdraw at any time without affecting those relationships.
+
+                <p><b><u>Contacts and Questions:</u></b></p>
+                The researchers conducting this study are Dr. Erin M. Buchanan in partnership with the Psychological Science Accelerator. You may ask any questions you have now. If you have questions later, you are encouraged to contact Dr. Erin M. Buchanan at ebuchanan@harrisburgu.edu. 
+ 
+                <p><b><u>Questions or Concerns:</u></b></p>
+                This study has been reviewed by Harrisburg University of Science and Technology’s Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
+
+                <p><a href="consent.html" target="_blank"><b>A copy of this information to keep for your records will be provided upon request. </b></a></p>
               `,
             },
             {
@@ -216,9 +226,9 @@
               type: "html",
               name: "image_instructions",
               html: `
-                <p>This is an experiment to find out how easy or difficult it is to imagine a mental picture of the word presented to you. You will be given a list of words and you are to rate each one from how easy it is to picture the word (apple; high imagery) to words that may not be imagined easily (fact; low imagery).</p> 
+                <p>This is an experiment to find out how easy or difficult it is to imagine a mental picture of the word presented to you. You will be given a list of words, and you are to rate each one from how easy it is to picture the word (apple; high imagery) to words that may not be imagined easily (fact; low imagery).</p> 
                 <p>In this scale, 9 represents “easy to imagine,” there is no issue picturing intricate details of the word; while 1 represents “difficult to image,” that is, the word is more abstract and harder to picture.</p> 
-                <p>If you do not know the word presented, please enter “X”. </p>
+                <p>If you do not know the word presented, please select X. </p>
               `,
             },
           ],
@@ -262,14 +272,10 @@
 
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeImageMatrixSurvey(words, blockIndex) {
-      const rows = words.map((w) => ({ value: w, text: w }));
-      const ratingColumns = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      const numberColumns = ratingColumns.map((c) => ({
-        value: c,
-        text: c,
-        width: "2.1rem",
+      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
+        value: i + 1,
+        text: (i + 1).toString(),
       }));
-      const unknownColumns = [{ value: "X", text: "X", width: "2.9rem" }];
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
@@ -277,26 +283,36 @@
         completeText: "Next",
         pages: [
           {
-            name: `image_block_${blockIndex}`,
+            name: `image_page_${blockIndex}`,
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
             elements: [
               {
-                type: "matrix",
-                name: `image_block_${blockIndex}`,
+                type: "matrixdropdown",
+                name: `image_table_${blockIndex}`,
                 title:
                   "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, leave the rating blank and mark X below.",
-                rows: rows,
-                columns: numberColumns,
-                isAllRowRequired: false,
-              },
-              {
-                type: "matrix",
-                name: `image_unknown_block_${blockIndex}`,
-                title:
-                  "If you do not recognize a word, select X here; otherwise leave this blank.",
-                rows: rows,
-                columns: unknownColumns,
-                isAllRowRequired: false,
+                rows: words,
+                columns: [
+                  {
+                    name: "rating",
+                    title: "Rating (1 = very difficult, 9 = very easy)",
+                    cellType: "radiogroup",
+                    choices: sliderChoices,
+                    cssClasses: "arousal-rating-column",
+                    minWidth: "500px",
+                  },
+                  {
+                    name: "unknown",
+                    title: "Unknown",
+                    cellType: "checkbox",
+                    choices: ["X"],
+                    colCount: 1,
+                    cssClasses: "arousal-unknown-column",
+                    minWidth: "100px",
+                  },
+                ],
+                allowAddRows: false,
+                allowRemoveRows: false,
               },
             ],
           },
@@ -306,6 +322,55 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        survey_function: function (survey) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            if (syncing || !options) return;
+
+            const question = options.question;
+            if (!question || question.name !== `image_table_${blockIndex}`)
+              return;
+
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            const rowValue = { ...(tableValue[rowName] || {}) };
+
+            let changed = false;
+
+            if (columnName === "unknown") {
+              const val = options.value;
+              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
+              if (hasVal) {
+                rowValue["rating"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (columnName === "rating") {
+              const val = options.value;
+              if (val !== undefined && val !== null && val !== "") {
+                rowValue["unknown"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
+            }
+          });
+        },
       };
     }
 
@@ -343,7 +408,7 @@
       },
     };
 
-        const task_timeline = {
+    const task_timeline = {
       timeline: [...image_trials, final_thankyou],
       conditional_function: function () {
         const last = jsPsych.data.get().last(1).values()[0];
@@ -357,7 +422,9 @@
         timeline: [no_consent],
         conditional_function: function () {
           const last = jsPsych.data.get().last(1).values()[0];
-          return last.response && last.response.consent_choice === "I Do Not Consent";
+          return (
+            last.response && last.response.consent_choice === "I Do Not Consent"
+          );
         },
       },
       task_timeline,
