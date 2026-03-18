@@ -319,6 +319,14 @@
                     choices: sliderChoices,
                     cssClasses: "arousal-rating-column",
                     minWidth: "500px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark Unknown",
+                      },
+                    ],
                   },
                   {
                     name: "unknown",
@@ -328,6 +336,14 @@
                     colCount: 1,
                     cssClasses: "arousal-unknown-column",
                     minWidth: "100px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark Unknown",
+                      },
+                    ],
                   },
                 ],
                 allowAddRows: false,
