@@ -322,6 +322,57 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        survey_function: function (survey) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            if (syncing || !options) return;
+
+            const question = options.question;
+            if (!question || question.name !== `concrete_table_${blockIndex}`)
+              return;
+
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            const rowValue = { ...(tableValue[rowName] || {}) };
+
+            let changed = false;
+
+            // If Unknown clicked → clear rating
+            if (columnName === "unknown") {
+              const val = options.value;
+              const hasValue = Array.isArray(val) ? val.length > 0 : !!val;
+              if (hasValue) {
+                rowValue["rating"] = undefined;
+                changed = true;
+              }
+            }
+
+            // If rating clicked → clear Unknown
+            if (columnName === "rating") {
+              const val = options.value;
+              if (val !== undefined && val !== null && val !== "") {
+                rowValue["unknown"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
+            }
+          });
+        },
       };
     }
 
