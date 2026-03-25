@@ -1,0 +1,117 @@
+---
+title: "Ukrainian Data Combination"
+author: "Erin M. Buchanan - Addie Clark"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r}
+library(dplyr)
+library(semanticprimeR)
+library(reticulate)
+library(rio)
+source("../functions.R")
+```
+
+# Stimuli Requirements
+
+First, the lexical level variables for each item pair (prime and target frequency, etc.) will be included in the regression equation (see Goal 1 description). Next, the subjective level variables for each item pair will be added to the equation, followed by the similarity statistics. Last, the LLM embeddings for each target will be included in the regression equation.
+
+## Item Data
+
+```{r}
+# load translation - this was not done in round 1
+# convert to item data format
+DF <- rio::import("ukr_word_pairs_update.csv") %>% 
+  select(final_ukr_cue, ukr_target) %>% 
+  pivot_longer(cols = everything(),
+               names_to = "type",
+               values_to = "word") %>% 
+  select(word)
+```
+
+## Lexical Data - TO DO 
+
+frequency open sub
+word length
+
+1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+
+## Subjective Data
+
+```{r}
+labData <- rio::import("../labData_variables.csv") %>% 
+  filter(grepl("ukran", word_column))
+```
+
+### AOA 
+
+```{r}
+DF$aoa <- NA
+```
+
+### Imageability 
+
+```{r}
+DF$image <- NA
+```
+
+### Concrete
+
+```{r}
+DF$concrete <- NA
+```
+
+### Valence
+
+```{r}
+DF$valence <- NA
+```
+
+### Arousal
+
+```{r}
+DF$arousal <- NA
+```
+  
+### Familiar
+
+```{r}
+DF$familiar <- NA
+```
+
+## Similarity Statistics
+
+## Priming
+
+### Human Prime
+
+```{r}
+# not ready yet 
+```
+
+### BERT Priming
+
+## Embeddings
+
+## Combine
+
+```{r}
+
+```
+
+## Output Variable Match
+
+```{r}
+DF_var_match <- DF %>% 
+  select(word, aoa, image, concrete, valence, arousal, familiar) %>% 
+  mutate(across(-word, ~replace_na(.x, FALSE)))
+
+rio::export(DF_var_match, "ukr_variables_normed.csv", row.names = F)
+```

@@ -14,11 +14,18 @@
 
 `02-Stimuli`:
 
-- folders for each language using two letter codes from ISO
+- folders for each language using the same three letter language codes
     - `{lang}_word_pairs_update.csv`: stimuli file updated after investigating for cue-target matches and other weird words from the translation file
     - `{lang}_variables_normed.csv`: a true/false file that indicates which words should be normed for each task based on previous data available 
     - `{lang}.Rmd`: the file used to create the norming file before the study and the final combined dataset for each language after the study 
+- create_stimuli.ipynb:
+    - uses the variables normed and pairs update file to create the stimuli sets 
+    - they are separated into 400 word buckets for giving out links to the experiment
+    - they are first selected from words we don't have normed already and the filled in when we need to complete a set 
 
 `03-Tasks`:
 
 - Includes folders for each study as templates in JATOS format to create the language specific versions
+- translate_build_experiment.ipynb:
+    - uses the `01-Translation` folder experiment files to build the html files for each experiment
+    - uses the `02-Stimuli` folder 
