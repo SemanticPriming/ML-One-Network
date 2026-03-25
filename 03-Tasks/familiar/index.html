@@ -67,10 +67,6 @@
         padding-right: 1rem;
         min-width: 500px;
       }
-      .arousal-unknown-column .sd-question {
-        text-align: center;
-        min-width: 100px;
-      }
       .sd-table.sd-table--columnsautowidth .sd-table__cell {
         width: auto !important;
         max-width: none !important;
@@ -227,7 +223,7 @@
               type: "html",
               name: "familiar_instructions",
               html: `
-                <p>In the following pages, you will see a series of target words. Your task is to rate how familiar each word is to you. If a word feels very familiar, select 9 on the scale; if it feels hardly familiar, select 1. The numbers from 1 to 9 represent increasing levels of familiarity. Please choose the number that best reflects your experience with each word, and if you do not know a word, select X.</p>
+                <p>In the following pages, you will see a series of target words. Your task is to rate how familiar or known each word is to you. If a word feels very familiar or well known, select 9 on the scale; if it feels hardly familiar or unknown, select 1. The numbers from 1 to 9 represent increasing levels of familiarity. Please choose the number that best reflects your experience with each word.</p>
                 
               `,
             },
@@ -290,7 +286,7 @@
                 type: "matrixdropdown",
                 name: `familiar_table_${blockIndex}`,
                 title:
-                  "For each word, rate how unfamiliar (1) or familiar (9) it feels based on how often you have come across the word. If you do not know a word, leave the rating blank and mark X below.",
+                  "Please rate the familarity of each word from 1 (unknown, very unfamiliar) to 9 (well known, very familiar). Please choose the number that best reflects your experience with each word.",
                 rows: words,
                 columns: [
                   {
@@ -303,26 +299,8 @@
                     validators: [
                       {
                         type: "expression",
-                        expression:
-                          "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark Unknown",
-                      },
-                    ],
-                  },
-                  {
-                    name: "unknown",
-                    title: "Unknown",
-                    cellType: "checkbox",
-                    choices: ["X"],
-                    colCount: 1,
-                    cssClasses: "arousal-unknown-column",
-                    minWidth: "100px",
-                    validators: [
-                      {
-                        type: "expression",
-                        expression:
-                          "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark Unknown",
+                        expression: "{row.rating} notempty",
+                        text: "Please select a rating for every word",
                       },
                     ],
                   },
@@ -338,57 +316,6 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
-        survey_function: function (survey) {
-          let syncing = false;
-
-          survey.onMatrixCellValueChanged.add(function (_, options) {
-            if (syncing || !options) return;
-
-            const question = options.question;
-            if (!question || question.name !== `familiar_table_${blockIndex}`)
-              return;
-
-            const columnName =
-              options.columnName ||
-              (options.column ? options.column.name : null);
-
-            if (!columnName) return;
-
-            const rowIndex = options.row && options.row.visibleIndex;
-            const rowName = words[rowIndex];
-
-            const tableValue = { ...(survey.getValue(question.name) || {}) };
-            const rowValue = { ...(tableValue[rowName] || {}) };
-
-            let changed = false;
-
-            // If Unknown clicked → clear rating
-            if (columnName === "unknown") {
-              const val = options.value;
-              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
-              if (hasVal) {
-                rowValue["rating"] = undefined;
-                changed = true;
-              }
-            }
-
-            // If rating clicked → clear Unknown
-            if (columnName === "rating") {
-              const val = options.value;
-              if (val !== undefined && val !== null && val !== "") {
-                rowValue["unknown"] = undefined;
-                changed = true;
-              }
-            }
-
-            if (changed) {
-              syncing = true;
-              tableValue[rowName] = rowValue;
-              survey.setValue(question.name, tableValue);
-              syncing = false;
-            }
-          });
-        },
       };
     }
 
