@@ -8,7 +8,9 @@
     - these files are then copied over to the `02-Stimuli` folder
 
 - translate_experiment.ipynb:
-    - 
+    - uses `task_translation_template.xlsx` to go from English to the target language (which includes all the rating tasks, semantic priming is a separate set of files)
+    - outputs into `translation/{lang}/` for the translated instructions - both forward and backward
+    - these are checked for consistency before being using to build jzip versions  
 
 `02-Stimuli`:
 
