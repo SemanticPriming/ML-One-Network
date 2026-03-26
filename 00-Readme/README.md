@@ -28,4 +28,6 @@
 - Includes folders for each study as templates in JATOS format to create the language specific versions
 - translate_build_experiment.ipynb:
     - uses the `01-Translation` folder experiment files to build the html files for each experiment
-    - uses the `02-Stimuli` folder 
+    - uses the `02-Stimuli` folder to grab the stimuli lists for each task 
+    - creates the separate .jas files for each experiment
+    - creates the .jzip for importing 

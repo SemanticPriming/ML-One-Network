@@ -9,6 +9,8 @@
 */.ipynb_checkpoints
 */*/.ipynb_checkpoints
 
+*/builds
+
 # History files
 .Rhistory
 .Rapp.history

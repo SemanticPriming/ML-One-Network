@@ -155,7 +155,7 @@
                 <p><b><u>Questions or Concerns:</u></b></p>
                 This study has been reviewed by Harrisburg University of Science and Technology's Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
 
-                <p><a href="consent.html" target="_blank"><b>A copy of this information to keep for your records will be provided upon request. </b></a></p>
+                <p><a href="consent.html" target="_blank"><b>A copy of this information to keep for your records will be provided upon request.</b></a></p>
               `,
             },
             {
@@ -228,8 +228,8 @@
               name: "image_instructions",
               html: `
                 <p>This is an experiment to find out how easy or difficult it is to imagine a mental picture of the word presented to you. You will be given a list of words, and you are to rate each one from how easy it is to picture the word (apple; high imagery) to words that may not be imagined easily (fact; low imagery).</p> 
-                <p>In this scale, 9 represents “easy to imagine,” there is no issue picturing intricate details of the word; while 1 represents “difficult to image,” that is, the word is more abstract and harder to picture.</p> 
-                <p>If you do not know the word, please select the letter X. </p>
+                <p>In this scale, 9 represents 'easy to imagine,' there is no issue picturing intricate details of the word; while 1 represents 'difficult to image,' that is, the word is more abstract and harder to picture.</p> 
+                <p>If you do not know the word, please select the letter X.</p>
               `,
             },
           ],
@@ -265,7 +265,7 @@
     const shuffledWords = jsPsych.randomization.shuffle(sampleWords);
 
     // 2) Split into small blocks (6 words per page for the demo)
-    const BLOCK_SIZE = 6;
+    const BLOCK_SIZE = 20;
     const wordBlocks = [];
     for (let i = 0; i < shuffledWords.length; i += BLOCK_SIZE) {
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
@@ -306,7 +306,7 @@
                         type: "expression",
                         expression:
                           "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark Unknown",
+                        text: "Please select a rating or mark unknown",
                       },
                     ],
                   },
@@ -323,7 +323,7 @@
                         type: "expression",
                         expression:
                           "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark Unknown",
+                        text: "Please select a rating or mark unknown",
                       },
                     ],
                   },
