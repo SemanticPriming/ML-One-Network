@@ -146,6 +146,7 @@
   </body>
 
   <script>
+    let completion_code = null;
     // 1) Initialize jsPsych
     var jsPsych = initJsPsych({
       //on_trial_start: jatos.addAbortButton,
@@ -524,13 +525,15 @@
               {
                 type: "html",
                 name: "thank_you_text",
-                html: `
-                      <p>You have completed the word ratings.</p>
-                      <p>Your participant number is:</p>
-                      <p><strong>${participant_uuid}</strong></p>
-                      <p>Please keep or copy this number if you are asked for it.</p>
-                      <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
-                    `,
+                html: function () {
+                  return `
+                    <p>You have completed the word ratings.</p>
+                    <p>Your participant number is:</p>
+                    <p><strong>${completion_code}</strong></p>
+                    <p>Please keep or copy this number if you are asked for it.</p>
+                    <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
+                  `;
+                },
               },
             ],
           },
@@ -563,11 +566,31 @@
 
     // 6) Run the study
     jatos.onLoad(() => {
-      // Get labID from URL query parameters AFTER JATOS initializes
-      const labID = jatos.urlQueryParameters.labID || null;
+      // Extract Besample parameters from URL query parameters AFTER JATOS initializes
+      const params = jatos.urlQueryParameters || {};
 
-      // Add labID to all jsPsych data
-      jsPsych.data.addProperties({ labID });
+      const labID = params.labID || null;
+      const tc = params.tc || null;
+      const tg = params.tg || null;
+      const bpid = params.bpid || null;
+      const battempt = params.battempt || null;
+      const bnum = params.bnum || null;
+      const bkey = params.bkey || null;
+      const completion_code = params.completion_code || null;
+
+      console.log("JATOS query params:", params);
+
+      // Add all Besample params to jsPsych data
+      jsPsych.data.addProperties({
+        labID,
+        tc,
+        tg,
+        bpid,
+        battempt,
+        bnum,
+        bkey,
+        completion_code,
+      });
 
       jsPsych.run(timeline);
     });

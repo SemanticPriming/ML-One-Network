@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Age of Acquisition Study</title>
+    <title>Imageability Study</title>
 
     <!-- Load jsPsych -->
     <script src="unpkg_jspsych.js"></script>
@@ -43,69 +43,41 @@
         max-height: 0 !important;
         display: block;
       }
-
-      .aoa-word-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
+      .sv_matrix {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
       }
-
-      .aoa-word-row {
-        display: grid;
-        grid-template-columns: minmax(140px, 220px) 180px auto;
-        align-items: center;
-        column-gap: 0.9rem;
-        row-gap: 0.2rem;
-        padding: 0.35rem 0;
+      .sv_matrix th,
+      .sv_matrix td {
+        padding: 0.2rem 0.15rem;
+        text-align: center;
+        white-space: pre-line;
       }
-
-      .aoa-word-label {
-        font-size: 1.05rem;
-        font-weight: 600;
+      .sv_matrix .sv_matrix_cell {
+        min-width: 2.1rem;
       }
-
-      .aoa-word-age {
-        width: 100%;
-        max-width: 180px;
-        padding: 0.45rem 0.6rem;
-        border: 1px solid #bdbdbd;
-        border-radius: 6px;
-        font: inherit;
-        box-sizing: border-box;
-      }
-
-      .aoa-word-age.aoa-word-age--invalid {
-        border-color: #c62828;
-      }
-
-      .aoa-word-unknown {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        white-space: nowrap;
-        font-size: 1rem;
-      }
-
-      .aoa-word-unknown input {
+      .sv_matrix .sv-radio-control {
         margin: 0;
       }
-
-      .aoa-word-error {
-        grid-column: 2 / 4;
-        color: #c62828;
-        font-size: 0.85rem;
-        min-height: 1rem;
+      .arousal-rating-column .sd-question {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-right: 1rem;
+        min-width: 500px;
       }
-
-      @media (max-width: 700px) {
-        .aoa-word-row {
-          grid-template-columns: minmax(110px, 1fr) 120px auto;
-          column-gap: 0.65rem;
-        }
-
-        .aoa-word-label {
-          font-size: 0.98rem;
-        }
+      .arousal-unknown-column .sd-question {
+        text-align: center;
+        min-width: 100px;
+      }
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
       }
     </style>
   </head>
@@ -115,6 +87,7 @@
   </body>
 
   <script>
+    let completion_code = null;
     // 1) Initialize jsPsych
     var jsPsych = initJsPsych({
       //on_trial_start: jatos.addAbortButton,
@@ -183,9 +156,7 @@
                 <p><b><u>Questions or Concerns:</u></b></p>
                 This study has been reviewed by Harrisburg University of Science and Technology's Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
 
-                <p><a href="consent.html" target="_blank">
-                  <b>A copy of this information to keep for your records will be provided upon request.</b>
-                  </a></p>
+                <p><a href="consent.html" target="_blank"><b>A copy of this information to keep for your records will be provided upon request.</b></a></p>
               `,
             },
             {
@@ -201,7 +172,7 @@
         // ----- PAGE 2: DEMOGRAPHICS (only visible if they consent) -----
         {
           name: "demographics",
-          title: "Please tell us a little bit about yourself.",
+          title: "Demographic Information",
           visibleIf: "{consent_choice} = 'I Consent'",
           elements: [
             {
@@ -255,10 +226,10 @@
           elements: [
             {
               type: "html",
-              name: "aoa_instructions",
+              name: "image_instructions",
               html: `
-                <p>Please rate the following words by entering the age in years at which you think you learned the word. An approximate age is good enough for this rating</p>
-                <p>By 'learning a word', we mean the age at which you would have understood the word if somebody had used it in front of you, <strong>EVEN IF YOU DID NOT</strong> use, read, or write it at the time.</p>
+                <p>This is an experiment to find out how easy or difficult it is to imagine a mental picture of the word presented to you. You will be given a list of words, and you are to rate each one from how easy it is to picture the word (apple; high imagery) to words that may not be imagined easily (fact; low imagery).</p> 
+                <p>In this scale, 9 represents 'easy to imagine,' there is no issue picturing intricate details of the word; while 1 represents 'difficult to image,' that is, the word is more abstract and harder to picture.</p> 
                 <p>If you do not know the word, please select the letter X.</p>
               `,
             },
@@ -273,7 +244,7 @@
     };
 
     // -----------------------------
-    // DEMO AOA TASK (SHORT LIST)
+    // DEMO IMAGE TASK (SHORT LIST)
     // Replace `sampleWords` with your 400 words later
     // -----------------------------
     const sampleWords = [
@@ -293,7 +264,6 @@
 
     // 1) Shuffle words once per participant
     const shuffledWords = jsPsych.randomization.shuffle(sampleWords);
-    const UNKNOWN_WORD_CHOICE = "X";
 
     // 2) Split into small blocks (6 words per page for the demo)
     const BLOCK_SIZE = 20;
@@ -302,114 +272,65 @@
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
     }
 
-    function slugifyWord(word) {
-      const slug = word
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "_")
-        .replace(/^_+|_+$/g, "");
-      return slug || "word";
-    }
-
-    const slugUsage = {};
-
-    function makeWordFieldNames(word) {
-      const slug = slugifyWord(word);
-      const occurrence = slugUsage[slug] || 0;
-      slugUsage[slug] = occurrence + 1;
-      const uniqueSlug = occurrence === 0 ? slug : `${slug}_${occurrence + 1}`;
-      return {
-        ageName: `${uniqueSlug}_age`,
-        unknownName: `${uniqueSlug}_unknown`,
-      };
-    }
-
-    function hasValue(value) {
-      return value !== null && value !== undefined && value !== "";
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function clearRowError(row, ageInput) {
-      row.querySelector(".aoa-word-error").textContent = "";
-      ageInput.classList.remove("aoa-word-age--invalid");
-    }
-
-    function setRowError(row, ageInput, message) {
-      row.querySelector(".aoa-word-error").textContent = message;
-      ageInput.classList.add("aoa-word-age--invalid");
-    }
-
-    function makeAoaInlineHtml(wordFields) {
-      return `
-        <div class="aoa-word-list">
-          ${wordFields
-            .map(function (field) {
-              return `
-                <div class="aoa-word-row" data-field-base="${field.ageName}">
-                  <label class="aoa-word-label" for="${field.ageName}_input">${escapeHtml(field.word)}:</label>
-                  <input
-                    class="aoa-word-age"
-                    id="${field.ageName}_input"
-                    type="number"
-                    min="1"
-                    max="100"
-                    inputmode="numeric"
-                    placeholder="Age"
-                    data-age-name="${field.ageName}"
-                  />
-                  <label class="aoa-word-unknown">
-                    <input
-                      type="radio"
-                      name="${field.unknownName}_choice"
-                      value="${UNKNOWN_WORD_CHOICE}"
-                      data-unknown-name="${field.unknownName}"
-                    />
-                    <span>${UNKNOWN_WORD_CHOICE}</span>
-                  </label>
-                  <div class="aoa-word-error" aria-live="polite"></div>
-                </div>
-              `;
-            })
-            .join("")}
-        </div>
-      `;
-    }
-
-    // 3) Helper: build one SurveyJS page for a block of words
-    function makeAoaMatrixSurvey(words, blockIndex) {
-      const wordFields = words.map(function (word) {
-        return {
-          word: word,
-          ...makeWordFieldNames(word),
-        };
-      });
-      const htmlQuestionName = `aoa_block_${blockIndex}_rows`;
-      let renderedQuestionElement = null;
-
+    // 3) Helper: build one SurveyJS matrix page for a block of words
+    function makeImageMatrixSurvey(words, blockIndex) {
+      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
+        value: i + 1,
+        text: (i + 1).toString(),
+      }));
       const surveyJson = {
         showCompletedPage: false,
         showHeaderOnCompletePage: false,
         completedHtml: "",
         completeText: "Next",
-        showQuestionNumbers: "off",
         pages: [
           {
-            name: `aoa_block_${blockIndex}`,
+            name: `image_page_${blockIndex}`,
             title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
-            description:
-              "For each word, enter the age (in years) when you think you learned it, or select X if unknown.",
             elements: [
               {
-                type: "html",
-                name: htmlQuestionName,
-                html: makeAoaInlineHtml(wordFields),
+                type: "matrixdropdown",
+                name: `image_table_${blockIndex}`,
+                title:
+                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, leave the rating blank and mark X below.",
+                rows: words,
+                columns: [
+                  {
+                    name: "rating",
+                    title: "Rating (1 = very difficult, 9 = very easy)",
+                    cellType: "radiogroup",
+                    choices: sliderChoices,
+                    cssClasses: "arousal-rating-column",
+                    minWidth: "500px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark unknown",
+                      },
+                    ],
+                  },
+                  {
+                    name: "unknown",
+                    title: "Unknown",
+                    cellType: "checkbox",
+                    choices: ["X"],
+                    colCount: 1,
+                    cssClasses: "arousal-unknown-column",
+                    minWidth: "100px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark unknown",
+                      },
+                    ],
+                  },
+                ],
+                allowAddRows: false,
+                allowRemoveRows: false,
               },
             ],
           },
@@ -420,87 +341,51 @@
         type: jsPsychSurvey,
         survey_json: surveyJson,
         survey_function: function (survey) {
-          survey.onAfterRenderQuestion.add(function (_, options) {
-            if (options.question.name !== htmlQuestionName) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            if (syncing || !options) return;
+
+            const question = options.question;
+            if (!question || question.name !== `image_table_${blockIndex}`)
               return;
+
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            const rowValue = { ...(tableValue[rowName] || {}) };
+
+            let changed = false;
+
+            if (columnName === "unknown") {
+              const val = options.value;
+              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
+              if (hasVal) {
+                rowValue["rating"] = undefined;
+                changed = true;
+              }
             }
 
-            renderedQuestionElement = options.htmlElement;
-            const rows =
-              renderedQuestionElement.querySelectorAll(".aoa-word-row");
-            rows.forEach(function (row) {
-              const ageInput = row.querySelector(".aoa-word-age");
-              const unknownInput = row.querySelector('input[type="radio"]');
-
-              ageInput.addEventListener("input", function () {
-                if (ageInput.value !== "") {
-                  unknownInput.checked = false;
-                }
-                clearRowError(row, ageInput);
-              });
-
-              unknownInput.addEventListener("change", function () {
-                if (unknownInput.checked) {
-                  ageInput.value = "";
-                }
-                clearRowError(row, ageInput);
-              });
-            });
-          });
-
-          survey.onCompleting.add(function (sender, options) {
-            if (!renderedQuestionElement) {
-              return;
+            if (columnName === "rating") {
+              const val = options.value;
+              if (val !== undefined && val !== null && val !== "") {
+                rowValue["unknown"] = undefined;
+                changed = true;
+              }
             }
 
-            let hasErrors = false;
-            wordFields.forEach(function (field) {
-              const row = renderedQuestionElement.querySelector(
-                `[data-field-base="${field.ageName}"]`,
-              );
-              const ageInput = row.querySelector(".aoa-word-age");
-              const unknownInput = row.querySelector('input[type="radio"]');
-              const ageValue = ageInput.value.trim();
-
-              clearRowError(row, ageInput);
-
-              if (unknownInput.checked) {
-                sender.setValue(field.ageName, null);
-                sender.setValue(field.unknownName, UNKNOWN_WORD_CHOICE);
-                return;
-              }
-
-              if (!ageValue) {
-                hasErrors = true;
-                sender.setValue(field.ageName, null);
-                sender.setValue(field.unknownName, null);
-                setRowError(row, ageInput, "Enter an age or select X.");
-                return;
-              }
-
-              const numericAge = Number(ageValue);
-              if (
-                !Number.isInteger(numericAge) ||
-                numericAge < 1 ||
-                numericAge > 100
-              ) {
-                hasErrors = true;
-                sender.setValue(field.ageName, null);
-                sender.setValue(field.unknownName, null);
-                setRowError(
-                  row,
-                  ageInput,
-                  "Enter a whole number from 1 to 100.",
-                );
-                return;
-              }
-
-              sender.setValue(field.ageName, numericAge);
-              sender.setValue(field.unknownName, null);
-            });
-
-            if (hasErrors) {
-              options.allowComplete = false;
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
             }
           });
         },
@@ -508,8 +393,8 @@
     }
 
     // 4) Create one jsPsych trial per block
-    const aoa_trials = wordBlocks.map((block, i) =>
-      makeAoaMatrixSurvey(block, i),
+    const image_trials = wordBlocks.map((block, i) =>
+      makeImageMatrixSurvey(block, i),
     );
 
     // Final thank-you screen shown AFTER all word-rating blocks (SurveyJS style)
@@ -528,13 +413,15 @@
               {
                 type: "html",
                 name: "thank_you_text",
-                html: `
-                  <p>You have completed the word ratings.</p>
-                  <p>Your participant number is:</p>
-                  <p><strong>${participant_uuid}</strong></p>
-                  <p>Please keep or copy this number if you are asked for it.</p>
-                  <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
-                `,
+                html: function () {
+                  return `
+                    <p>You have completed the word ratings.</p>
+                    <p>Your participant number is:</p>
+                    <p><strong>${completion_code}</strong></p>
+                    <p>Please keep or copy this number if you are asked for it.</p>
+                    <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
+                  `;
+                },
               },
             ],
           },
@@ -543,7 +430,7 @@
     };
 
     const task_timeline = {
-      timeline: [...aoa_trials, final_thankyou],
+      timeline: [...image_trials, final_thankyou],
       conditional_function: function () {
         const last = jsPsych.data.get().last(1).values()[0];
         return last.response && last.response.consent_choice === "I Consent";
@@ -566,14 +453,31 @@
 
     // 4) Run the study
     jatos.onLoad(() => {
-      // Get labID from URL query parameters AFTER JATOS initializes
-      const labID = jatos.urlQueryParameters.labID || null;
+      // Extract Besample parameters from URL query parameters AFTER JATOS initializes
+      const params = jatos.urlQueryParameters || {};
 
-      // Add labID to all jsPsych data
-      jsPsych.data.addProperties({ labID });
+      const labID = params.labID || null;
+      const tc = params.tc || null;
+      const tg = params.tg || null;
+      const bpid = params.bpid || null;
+      const battempt = params.battempt || null;
+      const bnum = params.bnum || null;
+      const bkey = params.bkey || null;
+      const completion_code = params.completion_code || null;
 
-      // Optional: debug to confirm it worked
-      //console.log("JATOS query params:", jatos.urlQueryParameters);
+      console.log("JATOS query params:", params);
+
+      // Add all Besample params to jsPsych data
+      jsPsych.data.addProperties({
+        labID,
+        tc,
+        tg,
+        bpid,
+        battempt,
+        bnum,
+        bkey,
+        completion_code,
+      });
 
       jsPsych.run(timeline);
     });
