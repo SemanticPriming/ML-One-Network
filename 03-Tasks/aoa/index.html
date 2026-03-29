@@ -302,7 +302,7 @@
     const UNKNOWN_WORD_CHOICE = "X";
 
     // 2) Split into small blocks (6 words per page for the demo)
-    const BLOCK_SIZE = 6;
+    const BLOCK_SIZE = 20;
     const wordBlocks = [];
     for (let i = 0; i < shuffledWords.length; i += BLOCK_SIZE) {
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
