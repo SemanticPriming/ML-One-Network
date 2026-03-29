@@ -379,6 +379,12 @@
 
     // 4) Run the study
     jatos.onLoad(() => {
+      // Get labID from URL query parameters AFTER JATOS initializes
+      const labID = jatos.urlQueryParameters.labID || null;
+
+      // Add labID to all jsPsych data
+      jsPsych.data.addProperties({ labID });
+
       jsPsych.run(timeline);
     });
   </script>
