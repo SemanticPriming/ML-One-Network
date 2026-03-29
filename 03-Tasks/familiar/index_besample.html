@@ -238,6 +238,12 @@
     const pretask_survey = {
       type: jsPsychSurvey,
       survey_json: combinedSurveyJson,
+      on_finish: function (data) {
+        jatos.appendResultData({
+          stage: "pretask",
+          data: data.response,
+        });
+      },
     };
 
     // -----------------------------
@@ -319,6 +325,13 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        on_finish: function (data) {
+          jatos.appendResultData({
+            stage: "familiar_block",
+            block: blockIndex,
+            data: data.response,
+          });
+        },
       };
     }
 

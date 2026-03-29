@@ -270,6 +270,12 @@
     const pretask_survey = {
       type: jsPsychSurvey,
       survey_json: combinedSurveyJson,
+      on_finish: function (data) {
+        jatos.appendResultData({
+          stage: "pretask",
+          data: data.response,
+        });
+      },
     };
 
     // -----------------------------
@@ -296,7 +302,7 @@
     const UNKNOWN_WORD_CHOICE = "X";
 
     // 2) Split into small blocks (6 words per page for the demo)
-    const BLOCK_SIZE = 20;
+    const BLOCK_SIZE = 6;
     const wordBlocks = [];
     for (let i = 0; i < shuffledWords.length; i += BLOCK_SIZE) {
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
@@ -419,6 +425,13 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        on_finish: function (data) {
+          jatos.appendResultData({
+            stage: "aoa_block",
+            block: blockIndex,
+            data: data.response,
+          });
+        },
         survey_function: function (survey) {
           survey.onAfterRenderQuestion.add(function (_, options) {
             if (options.question.name !== htmlQuestionName) {

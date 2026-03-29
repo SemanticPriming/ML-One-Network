@@ -323,6 +323,12 @@
     const pretask_survey = {
       type: jsPsychSurvey,
       survey_json: combinedSurveyJson,
+      on_finish: function (data) {
+        jatos.appendResultData({
+          stage: "pretask",
+          data: data.response,
+        });
+      },
     };
 
     // -----------------------------
@@ -452,6 +458,13 @@
       return {
         type: jsPsychSurvey,
         survey_json: surveyJson,
+        on_finish: function (data) {
+          jatos.appendResultData({
+            stage: "arousal_block",
+            block: blockIndex,
+            data: data.response,
+          });
+        },
         survey_function: function (survey) {
           let syncing = false;
 
