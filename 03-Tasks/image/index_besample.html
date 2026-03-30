@@ -278,11 +278,32 @@
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
     }
 
+    function slugifyWord(word) {
+      const normalized = String(word || "")
+        .toLowerCase()
+        .normalize("NFKD");
+      const slug = normalized
+        .replace(/[^\p{L}\p{N}]+/gu, "_")
+        .replace(/^_+|_+$/g, "");
+      if (slug) {
+        return slug;
+      }
+      const fallback = normalized
+        .replace(/\s+/g, "_")
+        .replace(/[^\p{L}\p{N}_]+/gu, "")
+        .replace(/^_+|_+$/g, "");
+      return fallback || "word";
+    }
+
     // 3) Helper: build one SurveyJS matrix page for a block of words
     function makeImageMatrixSurvey(words, blockIndex) {
       const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
         value: i + 1,
         text: (i + 1).toString(),
+      }));
+      const rows = words.map((word) => ({
+        value: slugifyWord(word),
+        text: word,
       }));
       const surveyJson = {
         showCompletedPage: false,
@@ -299,7 +320,7 @@
                 name: `image_table_${blockIndex}`,
                 title:
                   "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, leave the rating blank and mark X below.",
-                rows: words,
+                rows: rows,
                 columns: [
                   {
                     name: "rating",

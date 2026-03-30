@@ -309,11 +309,20 @@
     }
 
     function slugifyWord(word) {
-      const slug = word
+      const normalized = String(word || "")
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "_")
+        .normalize("NFKD");
+      const slug = normalized
+        .replace(/[^\p{L}\p{N}]+/gu, "_")
         .replace(/^_+|_+$/g, "");
-      return slug || "word";
+      if (slug) {
+        return slug;
+      }
+      const fallback = normalized
+        .replace(/\s+/g, "_")
+        .replace(/[^\p{L}\p{N}_]+/gu, "")
+        .replace(/^_+|_+$/g, "");
+      return fallback || "word";
     }
 
     const slugUsage = {};

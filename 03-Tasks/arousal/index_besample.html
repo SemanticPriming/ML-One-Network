@@ -360,6 +360,23 @@
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
     }
 
+    function slugifyWord(word) {
+      const normalized = String(word || "")
+        .toLowerCase()
+        .normalize("NFKD");
+      const slug = normalized
+        .replace(/[^\p{L}\p{N}]+/gu, "_")
+        .replace(/^_+|_+$/g, "");
+      if (slug) {
+        return slug;
+      }
+      const fallback = normalized
+        .replace(/\s+/g, "_")
+        .replace(/[^\p{L}\p{N}_]+/gu, "")
+        .replace(/^_+|_+$/g, "");
+      return fallback || "word";
+    }
+
     // 3) Helper: build ONE SurveyJS page per block (AROUSAL only) using slider + checkbox
     function makeArousalMatrixSurvey(words, blockIndex) {
       const samHtml = `
@@ -377,7 +394,7 @@
         text: (i + 1).toString(),
       }));
       const rows = words.map((word) => ({
-        value: word,
+        value: slugifyWord(word),
         text: word,
       }));
       const ratingColumnName = "rating";
