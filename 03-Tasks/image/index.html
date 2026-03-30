@@ -468,6 +468,10 @@
 
       // Add labID to all jsPsych data
       jsPsych.data.addProperties({ labID });
+      jatos.appendResultData({
+        stage: "image_labid",
+        labID,
+      });
 
       jsPsych.run(timeline);
     });

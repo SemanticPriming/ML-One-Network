@@ -472,6 +472,10 @@
 
       // Add labID to all jsPsych data
       jsPsych.data.addProperties({ labID });
+      jatos.appendResultData({
+        stage: "concrete_labid",
+        labID,
+      });
 
       jsPsych.run(timeline);
     });

@@ -495,6 +495,17 @@
         bkey,
         completion_code,
       });
+      jatos.appendResultData({
+        stage: "concrete_besample_params",
+        labID,
+        tc,
+        tg,
+        bpid,
+        battempt,
+        bnum,
+        bkey,
+        completion_code,
+      });
 
       jsPsych.run(timeline);
     });

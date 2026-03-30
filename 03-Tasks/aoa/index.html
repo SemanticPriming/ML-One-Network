@@ -584,6 +584,10 @@
 
       // Add labID to all jsPsych data
       jsPsych.data.addProperties({ labID });
+      jatos.appendResultData({
+        stage: "aoa_labid",
+        labID,
+      });
 
       // Optional: debug to confirm it worked
       //console.log("JATOS query params:", jatos.urlQueryParameters);

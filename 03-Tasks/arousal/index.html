@@ -581,6 +581,10 @@
 
       // Add labID to all jsPsych data
       jsPsych.data.addProperties({ labID });
+      jatos.appendResultData({
+        stage: "arousal_labid",
+        labID,
+      });
 
       jsPsych.run(timeline);
     });
