@@ -518,7 +518,12 @@
       const battempt = params.battempt || null;
       const bnum = params.bnum || null;
       const bkey = params.bkey || null;
-      const completion_code = params.completion_code || null;
+      const response_id = params.response_id || null;
+      const assignment_id = params.assignment_id || null;
+      completion_code = params.completion_code || null;
+      if (completion_code === null && response_id !== null) {
+        completion_code = response_id * 98063;
+      }
 
       console.log("JATOS query params:", params);
 
@@ -532,9 +537,11 @@
         bnum,
         bkey,
         completion_code,
-      });
-      jatos.appendResultData({
-        stage: "valence_besample_params",
+        response_id,
+        assignment_id,
+     });
+     jatos.appendResultData({
+       stage: "valence_besample_params",
         labID,
         tc,
         tg,
@@ -543,7 +550,9 @@
         bnum,
         bkey,
         completion_code,
-      });
+        response_id,
+        assignment_id,
+     });
 
       jsPsych.run(timeline);
     });
