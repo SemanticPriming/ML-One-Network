@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Imageability Study</title>
+
+    <!-- Load jsPsych -->
+    <script src="unpkg_jspsych.js"></script>
+    <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
+
+    <!-- Load SurveyJS -->
+    <script src="survey_core_1.12.1_min.js"></script>
+    <script src="survey_js_ui_min.js"></script>
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
+
+    <!-- Load JATOS -->
+    <script src="jatos.js"></script>
+    <style>
+      .jspsych-survey-container {
+        max-width: 80vw;
+        width: 80vw;
+        margin: 0 auto;
+      }
+      .sd-body.sd-body--static {
+        max-width: 100% !important;
+      }
+      .sd-page__title {
+        border-bottom: 2px solid #000;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.25rem;
+        width: 100%;
+      }
+      .sd-body.sd-completedpage::before,
+      .sd-body.sd-completedpage::after {
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        display: block;
+      }
+      .sv_matrix {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+      }
+      .sv_matrix th,
+      .sv_matrix td {
+        padding: 0.2rem 0.15rem;
+        text-align: center;
+        white-space: pre-line;
+      }
+      .sv_matrix .sv_matrix_cell {
+        min-width: 2.1rem;
+      }
+      .sv_matrix .sv-radio-control {
+        margin: 0;
+      }
+      .image-rating-column .sd-question {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-right: 1rem;
+        min-width: 500px;
+      }
+      .image-unknown-column .sd-question {
+        text-align: center;
+        min-width: 100px;
+      }
+      .sd-table.sd-table--columnsautowidth .sd-table__cell {
+        width: auto !important;
+        max-width: none !important;
+      }
+      .sd-matrix__question-wrapper {
+        display: flex !important;
+        justify-content: center !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+
+  <script>
+    // ---- PAGE CONFIGURATION ----
+    const PAGE_INDEX = 7;
+    const TOTAL_TASK_PAGES = 10;
+    const WORDS_PER_PAGE = 20;
+    // ----------------------------
+
+    var jsPsych = initJsPsych({
+      on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
+    });
+
+    const FULL_WORD_LIST = [
+      "dog",
+      "bicycle",
+      "apple",
+      "school",
+      "mountain",
+      "telephone",
+      "democracy",
+      "hospital",
+      "garden",
+      "computer",
+      "river",
+      "window",
+      // Add all your words here...
+    ];
+
+    const slugUsage = {};
+
+    function slugifyWord(word) {
+      const normalized = String(word || "")
+        .toLowerCase()
+        .normalize("NFKD");
+      const slug = normalized
+        .replace(/[^\p{L}\p{N}]+/gu, "_")
+        .replace(/^_+|_+$/g, "");
+      if (slug) return slug;
+      const fallback = normalized
+        .replace(/\s+/g, "_")
+        .replace(/[^\p{L}\p{N}_]+/gu, "")
+        .replace(/^_+|_+$/g, "");
+      return fallback || "word";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function makeImageInlineHtml(rows) {
+      return `
+        <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #444;">
+          1 = very difficult to imagine &nbsp;&middot;&nbsp; 9 = very easy to imagine &nbsp;&middot;&nbsp; X = do not know the word
+        </p>
+        <div class="image-word-list">
+          ${rows
+            .map(function (row) {
+              return `
+                <div class="image-word-row" data-row-name="${row.value}">
+                  <span class="image-word-label">${escapeHtml(row.text)}:</span>
+                </div>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+    }
+
+    function makeImageMatrixSurvey(words) {
+      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
+        value: i + 1,
+        text: (i + 1).toString(),
+      }));
+      const rows = words.map((word) => ({
+        value: slugifyWord(word),
+        text: word,
+      }));
+      const surveyJson = {
+        showCompletedPage: false,
+        showHeaderOnCompletePage: false,
+        completedHtml: "",
+        completeText: "Next",
+        pages: [
+          {
+            name: `image_page_${PAGE_INDEX}`,
+            title: `Word ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
+            elements: [
+              {
+                type: "matrixdropdown",
+                name: `image_table_${PAGE_INDEX}`,
+                title:
+                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, mark X in the unknown column.",
+                rows: rows,
+                columns: [
+                  {
+                    name: "rating",
+                    title: "Rating (1 = very difficult, 9 = very easy)",
+                    cellType: "radiogroup",
+                    choices: sliderChoices,
+                    cssClasses: "image-rating-column",
+                    minWidth: "500px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark unknown",
+                      },
+                    ],
+                  },
+                  {
+                    name: "unknown",
+                    title: "Unknown",
+                    cellType: "checkbox",
+                    choices: ["X"],
+                    colCount: 1,
+                    cssClasses: "image-unknown-column",
+                    minWidth: "100px",
+                    validators: [
+                      {
+                        type: "expression",
+                        expression:
+                          "{row.rating} notempty or {row.unknown} notempty",
+                        text: "Please select a rating or mark unknown",
+                      },
+                    ],
+                  },
+                ],
+                allowAddRows: false,
+                allowRemoveRows: false,
+              },
+            ],
+          },
+        ],
+      };
+
+      return {
+        type: jsPsychSurvey,
+        survey_json: surveyJson,
+        on_finish: function (data) {
+          jatos.appendResultData({
+            stage: "image_block",
+            block: PAGE_INDEX,
+            data: data.response,
+          });
+        },
+        survey_function: function (survey) {
+          let syncing = false;
+
+          survey.onMatrixCellValueChanged.add(function (_, options) {
+            if (syncing || !options) return;
+
+            const question = options.question;
+            if (!question || question.name !== `image_table_${PAGE_INDEX}`)
+              return;
+
+            const columnName =
+              options.columnName ||
+              (options.column ? options.column.name : null);
+
+            if (!columnName) return;
+
+            const rowIndex = options.row && options.row.visibleIndex;
+            const rowName = words[rowIndex];
+
+            const tableValue = { ...(survey.getValue(question.name) || {}) };
+            const rowValue = { ...(tableValue[rowName] || {}) };
+
+            let changed = false;
+
+            if (columnName === "unknown") {
+              const val = options.value;
+              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
+              if (hasVal) {
+                rowValue["rating"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (columnName === "rating") {
+              const val = options.value;
+              if (val !== undefined && val !== null && val !== "") {
+                rowValue["unknown"] = undefined;
+                changed = true;
+              }
+            }
+
+            if (changed) {
+              syncing = true;
+              tableValue[rowName] = rowValue;
+              survey.setValue(question.name, tableValue);
+              syncing = false;
+            }
+          });
+        },
+      };
+    }
+
+    jatos.onLoad(() => {
+      const labID =
+        jatos.studySessionData.labID || jatos.urlQueryParameters.labID || null;
+      const participant_uuid = jatos.studySessionData.participantUUID || "N/A";
+      jsPsych.data.addProperties({
+        labID,
+        participant_uuid,
+        image_page: PAGE_INDEX + 1,
+      });
+
+      const WORDS_PER_PAGE = jatos.studySessionData.wordsPerPage || 20;
+      const allWords = jatos.studySessionData.shuffledWords || [];
+      const startIdx = PAGE_INDEX * WORDS_PER_PAGE;
+      const pageWords = allWords.slice(startIdx, startIdx + WORDS_PER_PAGE);
+      jsPsych.run([makeImageMatrixSurvey(pageWords)]);
+    });
+  </script>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Imageability Study</title>
+
+    <!-- Load jsPsych -->
+    <script src="unpkg_jspsych.js"></script>
+    <script src="jspsych_plugin_survey_dist_index_browser.js"></script>
+    <link href="jspsych_css_jspsych.css" rel="stylesheet" />
+
+    <!-- Load SurveyJS -->
+    <script src="survey_core_1.12.1_min.js"></script>
+    <script src="survey_js_ui_min.js"></script>
+    <link href="survey_core_defaultv2_min.css" rel="stylesheet" />
+
+    <!-- Load JATOS -->
+    <script src="jatos.js"></script>
+    <style>
+      .jspsych-survey-container {
+        max-width: 80vw;
+        width: 80vw;
+        margin: 0 auto;
+      }
+      .sd-body.sd-body--static {
+        max-width: 100% !important;
+      }
+      .sd-page__title {
+        border-bottom: 2px solid #000;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.25rem;
+        width: 100%;
+      }
+      .sd-body.sd-completedpage::before,
+      .sd-body.sd-completedpage::after {
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="jspsych-target"></div>
+  </body>
+
+  <script>
+    var jsPsych = initJsPsych({
+      on_finish: () => jatos.endStudy(jsPsych.data.get().json()),
+    });
+
+    jatos.onLoad(() => {
+      const labID =
+        jatos.studySessionData.labID ||
+        jatos.urlQueryParameters.labID ||
+        null;
+      const completion_code = jatos.studySessionData.completion_code || null;
+      const participantUUID = jatos.studySessionData.participantUUID || "N/A";
+      const displayCode = completion_code || participantUUID;
+      jsPsych.data.addProperties({ labID });
+
+      const thankyou_trial = {
+        type: jsPsychSurvey,
+        survey_json: {
+          showCompletedPage: false,
+          showHeaderOnCompletePage: false,
+          completedHtml: "",
+          completeText: "Finish",
+          pages: [
+            {
+              name: "thank_you",
+              title: "Thank you for participating",
+              elements: [
+                {
+                  type: "html",
+                  name: "thank_you_text",
+                  html: `
+                    <p>You have completed the word ratings.</p>
+                    <p>Your participant number is:</p>
+                    <p><strong>${displayCode}</strong></p>
+                    <p>Please keep or copy this number if you are asked for it.</p>
+                    <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
+                  `,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      jsPsych.run([thankyou_trial]);
+    });
+  </script>
+</html>
