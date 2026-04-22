@@ -17,25 +17,20 @@
     <!-- Load JATOS -->
     <script src="jatos.js"></script>
     <style>
-      /* Widen the jsPsych + SurveyJS container */
       .jspsych-survey-container {
-        max-width: 80vw; /* 80% of viewport width */
+        max-width: 80vw;
         width: 80vw;
-        margin: 0 auto; /* center horizontally */
+        margin: 0 auto;
       }
-      /* Override SurveyJS internal max-width that was squishing content */
       .sd-body.sd-body--static {
-        max-width: 100% !important; /* allow it to fill the wider container */
+        max-width: 100% !important;
       }
-      /* Black full-width divider under each SurveyJS page title */
       .sd-page__title {
-        border-bottom: 2px solid #000; /* solid black line */
+        border-bottom: 2px solid #000;
         padding-bottom: 0.75rem;
         margin-bottom: 1.25rem;
         width: 100%;
       }
-
-      /* Remove extra spacing created by SurveyJS completed-page pseudo-elements */
       .sd-body.sd-completedpage::before,
       .sd-body.sd-completedpage::after {
         height: 0 !important;
@@ -43,37 +38,52 @@
         max-height: 0 !important;
         display: block;
       }
-      .sv_matrix {
-        border-collapse: separate;
-        border-spacing: 0 0.25rem;
+      .familiar-word-list {
+        display: flex;
+        flex-direction: column;
       }
-      .sv_matrix th,
-      .sv_matrix td {
-        padding: 0.2rem 0.15rem;
-        text-align: center;
-        white-space: pre-line;
+      .familiar-word-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
       }
-      .sv_matrix .sv_matrix_cell {
-        min-width: 2.1rem;
+      .familiar-word-label {
+        font-size: 1.05rem;
+        font-weight: 600;
       }
-      .sv_matrix .sv-radio-control {
-        margin: 0;
+      .familiar-options {
+        display: flex;
+        gap: 0.4rem;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
       }
-      .arousal-rating-column .sd-question {
+      .familiar-option {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding-right: 1rem;
-        min-width: 500px;
+        gap: 0.1rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        min-width: 26px;
       }
-      .sd-table.sd-table--columnsautowidth .sd-table__cell {
-        width: auto !important;
-        max-width: none !important;
+      .familiar-option input {
+        margin: 0;
+        cursor: pointer;
       }
-      .sd-matrix__question-wrapper {
-        display: flex !important;
-        justify-content: center !important;
+      .familiar-sep {
+        width: 1px;
+        height: 32px;
+        background: #ccc;
+        margin: 0 0.2rem;
+        align-self: center;
+      }
+      .familiar-word-error {
+        color: #c62828;
+        font-size: 0.85rem;
+        min-height: 1rem;
       }
     </style>
   </head>
@@ -83,7 +93,6 @@
   </body>
 
   <script>
-    let completion_code = null;
     // 1) Initialize jsPsych
     var jsPsych = initJsPsych({
       //on_trial_start: jatos.addAbortButton,
@@ -246,10 +255,6 @@
       },
     };
 
-    // -----------------------------
-    // DEMO FAMILIAR TASK (SHORT LIST)
-    // Replace `sampleWords` with your 400 words later
-    // -----------------------------
     const sampleWords = [
       "dog",
       "bicycle",
@@ -265,15 +270,14 @@
       "window",
     ];
 
-    // 1) Shuffle words once per participant
-    const shuffledWords = jsPsych.randomization.shuffle(sampleWords);
-
-    // 2) Split into small blocks (6 words per page for the demo)
+    const shuffledWords = jsPsych.randomization.shuffle([...sampleWords]);
     const BLOCK_SIZE = 20;
     const wordBlocks = [];
     for (let i = 0; i < shuffledWords.length; i += BLOCK_SIZE) {
       wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
     }
+
+    const slugUsage = {};
 
     function slugifyWord(word) {
       const normalized = String(word || "")
@@ -282,9 +286,7 @@
       const slug = normalized
         .replace(/[^\p{L}\p{N}]+/gu, "_")
         .replace(/^_+|_+$/g, "");
-      if (slug) {
-        return slug;
-      }
+      if (slug) return slug;
       const fallback = normalized
         .replace(/\s+/g, "_")
         .replace(/[^\p{L}\p{N}_]+/gu, "")
@@ -292,60 +294,128 @@
       return fallback || "word";
     }
 
-    // 3) Helper: build one SurveyJS matrix page for a block of words
-    function makeFamiliarMatrixSurvey(words, blockIndex) {
-      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
-        value: i + 1,
-        text: (i + 1).toString(),
-      }));
-      const rows = words.map((word) => ({
-        value: slugifyWord(word),
-        text: word,
-      }));
-      const surveyJson = {
-        showCompletedPage: false,
-        showHeaderOnCompletePage: false,
-        completedHtml: "",
-        completeText: "Next",
-        pages: [
-          {
-            name: `familiar_page_${blockIndex}`,
-            title: `Word ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
-            elements: [
-              {
-                type: "matrixdropdown",
-                name: `familiar_table_${blockIndex}`,
-                title:
-                  "Please rate the familiarity of each word from 1 (unknown, very unfamiliar) to 9 (well known, very familiar).",
-                rows: rows,
-                columns: [
-                  {
-                    name: "rating",
-                    title: "Rating (1 = very unfamiliar, 9 = very familiar)",
-                    cellType: "radiogroup",
-                    choices: sliderChoices,
-                    cssClasses: "arousal-rating-column",
-                    minWidth: "500px",
-                    validators: [
-                      {
-                        type: "expression",
-                        expression: "{row.rating} notempty",
-                        text: "Please select a rating for every word",
-                      },
-                    ],
-                  },
-                ],
-                allowAddRows: false,
-                allowRemoveRows: false,
-              },
-            ],
-          },
-        ],
+    function makeWordFieldNames(word) {
+      const slug = slugifyWord(word);
+      const occurrence = slugUsage[slug] || 0;
+      slugUsage[slug] = occurrence + 1;
+      const uniqueSlug = occurrence === 0 ? slug : `${slug}_${occurrence + 1}`;
+      return {
+        ratingName: `${uniqueSlug}_rating`,
+        unknownName: `${uniqueSlug}_unknown`,
       };
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function makeFamiliarInlineHtml(wordFields) {
+      return `
+        <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #444;">
+          1 = very unfamiliar &nbsp;&middot;&nbsp; 9 = very familiar &nbsp;&middot;&nbsp; X = do not know the word
+        </p>
+        <div class="familiar-word-list">
+          ${wordFields
+            .map(function (field) {
+              return `
+                <div class="familiar-word-row" data-field-base="${field.ratingName}">
+                  <span class="familiar-word-label">${escapeHtml(field.word)}:</span>
+                  <div class="familiar-options">
+                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9]
+                      .map(
+                        (n) => `
+                      <label class="familiar-option">
+                        <span>${n}</span>
+                        <input type="radio" name="${field.ratingName}_choice" value="${n}" />
+                      </label>
+                    `,
+                      )
+                      .join("")}
+                    <div class="familiar-sep"></div>
+                    <label class="familiar-option">
+                      <span>X</span>
+                      <input type="radio" name="${field.ratingName}_choice" value="X" />
+                    </label>
+                  </div>
+                  <div class="familiar-word-error" aria-live="polite"></div>
+                </div>
+              `;
+            })
+            .join("")}
+        </div>
+      `;
+    }
+
+    function makeFamiliarMatrixSurvey(words, blockIndex) {
+      const wordFields = words.map(function (word) {
+        return { word, ...makeWordFieldNames(word) };
+      });
+      const htmlQuestionName = `familiar_block_${blockIndex}_rows`;
+      let renderedQuestionElement = null;
 
       return {
         type: jsPsychSurvey,
-        survey_json: surveyJson,
+        survey_json: {
+          showCompletedPage: false,
+          showHeaderOnCompletePage: false,
+          completedHtml: "",
+          completeText: "Next",
+          showQuestionNumbers: "off",
+          pages: [
+            {
+              name: `familiar_block_${blockIndex}`,
+              title: `Word familiarity ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
+              elements: [
+                {
+                  type: "html",
+                  name: htmlQuestionName,
+                  html: makeFamiliarInlineHtml(wordFields),
+                },
+              ],
+            },
+          ],
+        },
+        survey_function: function (survey) {
+          survey.onAfterRenderQuestion.add(function (_, options) {
+            if (options.question.name !== htmlQuestionName) return;
+            renderedQuestionElement = options.htmlElement;
+          });
+
+          survey.onCompleting.add(function (sender, options) {
+            if (!renderedQuestionElement) return;
+            let hasErrors = false;
+            wordFields.forEach(function (field) {
+              const row = renderedQuestionElement.querySelector(
+                `[data-field-base="${field.ratingName}"]`,
+              );
+              const errorEl = row.querySelector(".familiar-word-error");
+              const checked = row.querySelector('input[type="radio"]:checked');
+              errorEl.textContent = "";
+
+              if (!checked) {
+                hasErrors = true;
+                errorEl.textContent = "Please select a rating or X.";
+                sender.setValue(field.ratingName, null);
+                sender.setValue(field.unknownName, null);
+                return;
+              }
+
+              if (checked.value === "X") {
+                sender.setValue(field.ratingName, null);
+                sender.setValue(field.unknownName, "X");
+              } else {
+                sender.setValue(field.ratingName, Number(checked.value));
+                sender.setValue(field.unknownName, null);
+              }
+            });
+            if (hasErrors) options.allowComplete = false;
+          });
+        },
         on_finish: function (data) {
           jatos.appendResultData({
             stage: "familiar_block",
@@ -377,15 +447,13 @@
               {
                 type: "html",
                 name: "thank_you_text",
-                html: function () {
-                  return `
-                    <p>You have completed the word ratings.</p>
-                    <p>Your participant number is:</p>
-                    <p><strong>${completion_code}</strong></p>
-                    <p>Please keep or copy this number if you are asked for it.</p>
-                    <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
-                  `;
-                },
+                html: `
+                  <p>You have completed the word ratings.</p>
+                  <p>Your participant number is:</p>
+                  <p><strong>${participant_uuid}</strong></p>
+                  <p>Please keep or copy this number if you are asked for it.</p>
+                  <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
+                `,
               },
             ],
           },
@@ -417,51 +485,15 @@
 
     // 4) Run the study
     jatos.onLoad(() => {
-      // Extract Besample parameters from URL query parameters AFTER JATOS initializes
-      const params = jatos.urlQueryParameters || {};
+      // Get labID from URL query parameters AFTER JATOS initializes
+      const labID = jatos.urlQueryParameters.labID || null;
 
-      const labID = params.labID || null;
-      const tc = params.tc || null;
-      const tg = params.tg || null;
-      const bpid = params.bpid || null;
-      const battempt = params.battempt || null;
-      const bnum = params.bnum || null;
-      const bkey = params.bkey || null;
-      const response_id = params.response_id || null;
-      const assignment_id = params.assignment_id || null;
-      completion_code = params.completion_code || null;
-      if (completion_code === null && response_id !== null) {
-        completion_code = response_id * 98063;
-      }
-
-      console.log("JATOS query params:", params);
-
-      // Add all Besample params to jsPsych data
-      jsPsych.data.addProperties({
+      // Add labID to all jsPsych data
+      jsPsych.data.addProperties({ labID, participant_uuid });
+      jatos.appendResultData({
+        stage: "familiar_labid",
         labID,
-        tc,
-        tg,
-        bpid,
-        battempt,
-        bnum,
-        bkey,
-        completion_code,
-        response_id,
-        assignment_id,
-     });
-     jatos.appendResultData({
-       stage: "familiar_besample_params",
-        labID,
-        tc,
-        tg,
-        bpid,
-        battempt,
-        bnum,
-        bkey,
-        completion_code,
-        response_id,
-        assignment_id,
-     });
+      });
 
       jsPsych.run(timeline);
     });
