@@ -37,29 +37,29 @@
         max-height: 0 !important;
         display: block;
       }
-      .concrete-word-list {
+      .familiar-word-list {
         display: flex;
         flex-direction: column;
       }
-      .concrete-word-row {
+      .familiar-word-row {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
         padding: 0.5rem 0;
         border-bottom: 1px solid #eee;
       }
-      .concrete-word-label {
+      .familiar-word-label {
         font-size: 1.05rem;
         font-weight: 600;
       }
-      .concrete-options {
+      .familiar-options {
         display: flex;
         gap: 0.4rem;
         align-items: flex-start;
         flex-wrap: nowrap;
         overflow-x: auto;
       }
-      .concrete-option {
+      .familiar-option {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -68,18 +68,18 @@
         cursor: pointer;
         min-width: 26px;
       }
-      .concrete-option input {
+      .familiar-option input {
         margin: 0;
         cursor: pointer;
       }
-      .concrete-sep {
+      .familiar-sep {
         width: 1px;
         height: 32px;
         background: #ccc;
         margin: 0 0.2rem;
         align-self: center;
       }
-      .concrete-word-error {
+      .familiar-word-error {
         color: #c62828;
         font-size: 0.85rem;
         min-height: 1rem;
@@ -186,35 +186,35 @@
         .replace(/'/g, "&#39;");
     }
 
-    function makeConcreteInlineHtml(wordFields) {
+    function makefamiliarInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #444;">
           1 = very unfamiliar &nbsp;&middot;&nbsp; 9 = very familiar &nbsp;&middot;&nbsp; X = do not know the word
         </p>
-        <div class="concrete-word-list">
+        <div class="familiar-word-list">
           ${wordFields
             .map(function (field) {
               return `
-                <div class="concrete-word-row" data-field-base="${field.ratingName}">
-                  <span class="concrete-word-label">${escapeHtml(field.word)}:</span>
-                  <div class="concrete-options">
+                <div class="familiar-word-row" data-field-base="${field.ratingName}">
+                  <span class="familiar-word-label">${escapeHtml(field.word)}:</span>
+                  <div class="familiar-options">
                     ${[1, 2, 3, 4, 5, 6, 7, 8, 9]
                       .map(
                         (n) => `
-                      <label class="concrete-option">
+                      <label class="familiar-option">
                         <span>${n}</span>
                         <input type="radio" name="${field.ratingName}_choice" value="${n}" />
                       </label>
                     `,
                       )
                       .join("")}
-                    <div class="concrete-sep"></div>
-                    <label class="concrete-option">
+                    <div class="familiar-sep"></div>
+                    <label class="familiar-option">
                       <span>X</span>
                       <input type="radio" name="${field.ratingName}_choice" value="X" />
                     </label>
                   </div>
-                  <div class="concrete-word-error" aria-live="polite"></div>
+                  <div class="familiar-word-error" aria-live="polite"></div>
                 </div>
               `;
             })
@@ -223,7 +223,7 @@
       `;
     }
 
-    function makeConcreteMatrixSurvey(words) {
+    function makefamiliarMatrixSurvey(words) {
       const wordFields = words.map(function (word) {
         return { word, ...makeWordFieldNames(word) };
       });
@@ -246,7 +246,7 @@
                 {
                   type: "html",
                   name: htmlQuestionName,
-                  html: makeConcreteInlineHtml(wordFields),
+                  html: makefamiliarInlineHtml(wordFields),
                 },
               ],
             },
@@ -265,7 +265,7 @@
               const row = renderedQuestionElement.querySelector(
                 `[data-field-base="${field.ratingName}"]`,
               );
-              const errorEl = row.querySelector(".concrete-word-error");
+              const errorEl = row.querySelector(".familiar-word-error");
               const checked = row.querySelector('input[type="radio"]:checked');
               errorEl.textContent = "";
 
@@ -307,7 +307,7 @@
       jatos.studySessionData.wordsPerPage = WORDS_PER_PAGE;
 
       const pageWords = shuffledWords.slice(0, WORDS_PER_PAGE);
-      jsPsych.run([makeConcreteMatrixSurvey(pageWords)]);
+      jsPsych.run([makefamiliarMatrixSurvey(pageWords)]);
     });
   </script>
 </html>
