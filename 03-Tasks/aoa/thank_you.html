@@ -51,9 +51,7 @@
 
     jatos.onLoad(() => {
       const labID =
-        jatos.studySessionData.labID ||
-        jatos.urlQueryParameters.labID ||
-        null;
+        jatos.studySessionData.labID || jatos.urlQueryParameters.labID || null;
       const completion_code = jatos.studySessionData.completion_code || null;
       const participantUUID = jatos.studySessionData.participantUUID || "N/A";
       const displayCode = completion_code || participantUUID;
