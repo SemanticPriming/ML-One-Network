@@ -202,17 +202,51 @@
       },
     ];
 
-    // Run the study
     jatos.onLoad(() => {
-      // Get labID from URL query parameters AFTER JATOS initializes
-      const labID = jatos.urlQueryParameters.labID || null;
+      const params = jatos.urlQueryParameters || {};
+
+      const labID = params.labID || null;
+      const tc = params.tc || null;
+      const tg = params.tg || null;
+      const bpid = params.bpid || null;
+      const battempt = params.battempt || null;
+      const bnum = params.bnum || null;
+      const bkey = params.bkey || null;
+      const response_id = params.response_id || null;
+      const assignment_id = params.assignment_id || null;
+
+      let completion_code = params.completion_code || null;
+      if (completion_code === null && response_id !== null) {
+        completion_code = response_id * 98063;
+      }
 
       // Save to JATOS study session so all subsequent components can access them
       jatos.studySessionData.participantUUID = participant_uuid;
+      jatos.studySessionData.completion_code = completion_code;
       jatos.studySessionData.labID = labID;
+      jatos.studySessionData.tc = tc;
+      jatos.studySessionData.tg = tg;
+      jatos.studySessionData.bpid = bpid;
+      jatos.studySessionData.battempt = battempt;
+      jatos.studySessionData.bnum = bnum;
+      jatos.studySessionData.bkey = bkey;
+      jatos.studySessionData.response_id = response_id;
+      jatos.studySessionData.assignment_id = assignment_id;
 
-      // Add labID and participant_uuid to all jsPsych data
-      jsPsych.data.addProperties({ labID, participant_uuid });
+      jsPsych.data.addProperties({
+        labID,
+        participant_uuid,
+        tc,
+        tg,
+        bpid,
+        battempt,
+        bnum,
+        bkey,
+        completion_code,
+        response_id,
+        assignment_id,
+      });
+
       jsPsych.run(timeline);
     });
   </script>

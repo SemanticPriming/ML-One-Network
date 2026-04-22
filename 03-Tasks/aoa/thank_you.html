@@ -50,12 +50,13 @@
     });
 
     jatos.onLoad(() => {
-      const participantUUID =
-        jatos.studySessionData.participantUUID || "N/A";
       const labID =
         jatos.studySessionData.labID ||
         jatos.urlQueryParameters.labID ||
         null;
+      const completion_code = jatos.studySessionData.completion_code || null;
+      const participantUUID = jatos.studySessionData.participantUUID || "N/A";
+      const displayCode = completion_code || participantUUID;
       jsPsych.data.addProperties({ labID });
 
       const thankyou_trial = {
@@ -76,7 +77,7 @@
                   html: `
                     <p>You have completed the word ratings.</p>
                     <p>Your participant number is:</p>
-                    <p><strong>${participantUUID}</strong></p>
+                    <p><strong>${displayCode}</strong></p>
                     <p>Please keep or copy this number if you are asked for it.</p>
                     <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
                   `,
