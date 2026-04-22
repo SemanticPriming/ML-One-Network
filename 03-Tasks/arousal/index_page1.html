@@ -141,17 +141,18 @@
                 name: "arousal_instructions",
                 html: `
                   <figure style="margin: 0 0 1rem 0;">
-                    <img
-                      src="arousal_image.png"
-                      alt="Self-Assessment Manikin (SAM) scale for arousal"
-                      style="max-width: 100%; height: auto; display: block;"
-                    />
-                  </figure>
-                  <p>The study being conducted today is investigating emotion, and how people respond to different types of words.</p>
-                  <p>We call this set of figures SAM, and you will be using these figures to rate how you felt while reading each word. SAM shows different kinds of feelings: calm versus excited.</p>
-                  <p>At one extreme of this scale you would feel completely relaxed, calm, sluggish, dull, sleepy, or unaroused. Indicate feeling calm by selecting the <strong>1</strong> on the left. At the other end, you would feel stimulated, excited, frenzied, jittery, wide-awake, or aroused — select the <strong>9</strong> on the right. Select any number in between for intermediate feelings.</p>
-                  <p>Please work at a rapid pace and don't spend too much time thinking about each word. Make your ratings based on your first and immediate reaction. If you do not know the word, please select the letter <strong>X</strong>.</p>
-                `,
+                      <img
+                        src="arousal_image.png"
+                        alt="Self-Assessment Manikin (SAM) scale for arousal"
+                        style="max-width: 100%; height: auto; display: block;"
+                      />
+                    </figure>
+
+                    <p>The study being conducted today is investigating emotion, and how people respond to different types of words.</p>
+                    <p>We call this set of figures SAM, and you will be using these figures to rate how you felt while reading each word. SAM shows different kinds of feelings: calm versus excited.</p>
+                    <p>At one extreme of this scale you would feel completely relaxed, calm, sluggish, dull, sleepy, or unaroused. Indicate feeling calm by selecting the 1 on the left.  Now look at the other end of the calm-excited scale, which is the completely opposite feeling. You would feel stimulated, excited, frenzied, jittery, wide-awake, or aroused. When you feel completely aroused, select the 9 on the right. The figures also allow you to describe intermediate feelings of calmness or excitedness by selecting any other number. If you are not excited nor at all calm, select the 4 in the middle.</p>
+                    <p>Please work at a rapid place and don't spend too much time thinking about each word. Rather, make your ratings based on your first and immediate reaction as you read each word. If you do not know the word, please select the letter X.</p>
+                  `,
               },
             ],
           },
@@ -202,7 +203,8 @@
           <img src="arousal_image.png" alt="SAM arousal scale" style="max-width: 100%; height: auto; display: block;" />
         </figure>
         <p style="margin: 0 0 0.75rem;">
-          1 = very calm/relaxed &nbsp;&middot;&nbsp; 9 = very excited/activated &nbsp;&middot;&nbsp; X = do not know the word
+          Rating (1 = very calm/relaxed, 9 = very excited/activated) or X (Unknown)
+          <hr style="border: 0; border-bottom: 1px solid #eee; margin: 0.5rem 0; height: 0;" />
         </p>
         <div class="arousal-word-list">
           ${wordFields
