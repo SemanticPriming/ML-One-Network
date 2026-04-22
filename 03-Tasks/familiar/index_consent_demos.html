@@ -38,53 +38,6 @@
         max-height: 0 !important;
         display: block;
       }
-      .familiar-word-list {
-        display: flex;
-        flex-direction: column;
-      }
-      .familiar-word-row {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #eee;
-      }
-      .familiar-word-label {
-        font-size: 1.05rem;
-        font-weight: 600;
-      }
-      .familiar-options {
-        display: flex;
-        gap: 0.4rem;
-        align-items: flex-start;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-      }
-      .familiar-option {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.1rem;
-        font-size: 0.85rem;
-        cursor: pointer;
-        min-width: 26px;
-      }
-      .familiar-option input {
-        margin: 0;
-        cursor: pointer;
-      }
-      .familiar-sep {
-        width: 1px;
-        height: 32px;
-        background: #ccc;
-        margin: 0 0.2rem;
-        align-self: center;
-      }
-      .familiar-word-error {
-        color: #c62828;
-        font-size: 0.85rem;
-        min-height: 1rem;
-      }
     </style>
   </head>
 
@@ -93,26 +46,21 @@
   </body>
 
   <script>
-    // 1) Initialize jsPsych
     var jsPsych = initJsPsych({
-      //on_trial_start: jatos.addAbortButton,
       on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
     });
 
-    // 2b) Screen shown if participant does NOT consent
     const no_consent = {
       type: jsPsychHtmlButtonResponse,
       stimulus: `<h2>Thank you</h2><p>You have chosen not to participate. You may close this window.</p>`,
       choices: ["Close"],
     };
 
-    // Generate a participant UUID once per session
     const participant_uuid =
       window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
 
-    // Combined multi-page SurveyJS survey (consent + demographics + instructions)
     const combinedSurveyJson = {
       completedHtml: "",
       showHeaderOnCompletePage: false,
@@ -133,22 +81,22 @@
                 <p>You are invited to be in a research study about how you read and process words, along with their meaning. We ask that you read this form and ask any questions you may have before agreeing to be in the study.</p>
                 <p>This study is being conducted by Dr. Erin M. Buchanan, Professor of Cognitive Analytics at Harrisburg University of Science and Technology.</p>
                 <p><b><u>Background Information:</u></b></p>
-                In this study, you will be asked to complete different questions about word concepts. For example, you may be asked to define a word's characteristics, rate how familiar you are with a word, or simply judge if a string of letters is a real word. 
-                
+                In this study, you will be asked to complete different questions about word concepts. For example, you may be asked to define a word's characteristics, rate how familiar you are with a word, or simply judge if a string of letters is a real word.
+
                 <p><b><u>Procedures:</u></b></p>
-                You will take this study entirely online from a desktop or laptop computer with a keyboard. You will be given instructions about the experiment sections which are randomly selected for each person. After you complete the experiment, you can learn more about the study and goals of the research. The entire study should take less than thirty minutes to complete. 
-                
+                You will take this study entirely online from a desktop or laptop computer with a keyboard. You will be given instructions about the experiment sections which are randomly selected for each person. After you complete the experiment, you can learn more about the study and goals of the research. The entire study should take less than thirty minutes to complete.
+
                 <p><b><u>Risks and Benefits of being in the Study:</u></b></p>
-                No identifying information will be collected from you, and therefore, your responses should be anonymous. The current study is similar to an online game, which may cause some fatigue or boredom based on the task you are asked to complete. 
+                No identifying information will be collected from you, and therefore, your responses should be anonymous. The current study is similar to an online game, which may cause some fatigue or boredom based on the task you are asked to complete.
                 There is no direct benefit to you for participating in this study. However, your responses will contribute to our understanding of language and cognitive memory processes.
 
                 <p><b><u>Compensation:</u></b></p>
-                You may be compensated when taking part in this study through your local researcher. 
+                You may be compensated when taking part in this study through your local researcher.
 
                 <p><b><u>Confidentiality and Data Sharing:</u></b></p>
                 Measures are taken to ensure that all information you provide will be anonymous. The data from this project will be posted publicly for other researchers to use; however, no data will be directly linked to you. Your name or other identifying information will not be entered into the dataset and no references will be made in verbal or written reports that could link you to the study. In any publication, information will be provided in such a way that you cannot be identified.
                 Before your data are shared outside the research team, any potentially identifying information will be removed. The anonymous data may be used by the research team or shared with other researchers, for both related and unrelated research purposes in the future. Your anonymous data may also be made available in online data repositories such as the Open Science Framework (which are free data repositories that require registration to have access), which allow other researchers and interested parties to access the data for further analysis.
-                
+
                 <p><b>Please note that your data will be anonymous, which means you cannot ask for it to be removed once you have completed the study.</b></p>
 
                 <p><b><u>Voluntary Nature of the Study:</u></b></p>
@@ -156,10 +104,10 @@
                 Your decision whether to participate will not affect your current or future relations with Harrisburg University of Science and Technology or your local institution. If you decide to participate, you are free to not answer any question or withdraw at any time without affecting those relationships.
 
                 <p><b><u>Contacts and Questions:</u></b></p>
-                The researchers conducting this study are Dr. Erin M. Buchanan in partnership with the Psychological Science Accelerator. You may ask any questions you have now. If you have questions later, you are encouraged to contact Dr. Erin M. Buchanan at semanticpriming@harrisburgu.edu. 
- 
+                The researchers conducting this study are Dr. Erin M. Buchanan in partnership with the Psychological Science Accelerator. You may ask any questions you have now. If you have questions later, you are encouraged to contact Dr. Erin M. Buchanan at semanticpriming@harrisburgu.edu.
+
                 <p><b><u>Questions or Concerns:</u></b></p>
-                This study has been reviewed by Harrisburg University of Science and Technology's Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies. 
+                This study has been reviewed by Harrisburg University of Science and Technology's Institutional Review Board (IRB).  The IRB has determined that this study fulfills the human research subject protections obligations required by state and federal law and University policies.
 
                 <p><a href="consent.html" target="_blank">
                   <b>A copy of this information to keep for your records will be provided upon request.</b>
@@ -179,7 +127,7 @@
         // ----- PAGE 2: DEMOGRAPHICS (only visible if they consent) -----
         {
           name: "demographics",
-          title: "Demographic Information",
+          title: "Please tell us a little bit about yourself.",
           visibleIf: "{consent_choice} = 'I Consent'",
           elements: [
             {
@@ -224,35 +172,12 @@
             },
           ],
         },
-
-        // ----- PAGE 3: TASK INSTRUCTIONS (only visible if they consent) -----
-        {
-          name: "instructions",
-          title: "How to do this task",
-          visibleIf: "{consent_choice} = 'I Consent'",
-          elements: [
-            {
-              type: "html",
-              name: "familiar_instructions",
-              html: `
-                <p>In the following pages, you will see a series of target words. Your task is to rate how familiar or known each word is to you. If a word feels very familiar or well known, select 9 on the scale; if it feels hardly familiar or unknown, select 1. The numbers from 1 to 9 represent increasing levels of familiarity.</p>
-                
-              `,
-            },
-          ],
-        },
       ],
     };
 
     const pretask_survey = {
       type: jsPsychSurvey,
       survey_json: combinedSurveyJson,
-      on_finish: function (data) {
-        jatos.appendResultData({
-          stage: "pretask",
-          data: data.response,
-        });
-      },
     };
 
     const timeline = [
@@ -270,14 +195,46 @@
 
     jatos.onLoad(() => {
       const params = jatos.urlQueryParameters || {};
+
       const labID = params.labID || null;
+      const tc = params.tc || null;
+      const tg = params.tg || null;
+      const bpid = params.bpid || null;
+      const battempt = params.battempt || null;
+      const bnum = params.bnum || null;
+      const bkey = params.bkey || null;
+      const response_id = params.response_id || null;
+      const assignment_id = params.assignment_id || null;
+
+      let completion_code = params.completion_code || null;
+      if (completion_code === null && response_id !== null) {
+        completion_code = response_id * 98063;
+      }
 
       jatos.studySessionData.participantUUID = participant_uuid;
+      jatos.studySessionData.completion_code = completion_code;
       jatos.studySessionData.labID = labID;
+      jatos.studySessionData.tc = tc;
+      jatos.studySessionData.tg = tg;
+      jatos.studySessionData.bpid = bpid;
+      jatos.studySessionData.battempt = battempt;
+      jatos.studySessionData.bnum = bnum;
+      jatos.studySessionData.bkey = bkey;
+      jatos.studySessionData.response_id = response_id;
+      jatos.studySessionData.assignment_id = assignment_id;
 
       jsPsych.data.addProperties({
         labID,
         participant_uuid,
+        tc,
+        tg,
+        bpid,
+        battempt,
+        bnum,
+        bkey,
+        completion_code,
+        response_id,
+        assignment_id,
       });
 
       jsPsych.run(timeline);
