@@ -207,6 +207,10 @@
       // Get labID from URL query parameters AFTER JATOS initializes
       const labID = jatos.urlQueryParameters.labID || null;
 
+      // Save to JATOS study session so all subsequent components can access them
+      jatos.studySessionData.participantUUID = participant_uuid;
+      jatos.studySessionData.labID = labID;
+
       // Add labID and participant_uuid to all jsPsych data
       jsPsych.data.addProperties({ labID, participant_uuid });
       jsPsych.run(timeline);

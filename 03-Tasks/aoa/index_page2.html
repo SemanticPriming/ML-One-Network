@@ -297,7 +297,8 @@
         jatos.studySessionData.labID ||
         jatos.urlQueryParameters.labID ||
         null;
-      jsPsych.data.addProperties({ labID, aoa_page: PAGE_INDEX + 1 });
+      const participant_uuid = jatos.studySessionData.participantUUID || "N/A";
+      jsPsych.data.addProperties({ labID, participant_uuid, aoa_page: PAGE_INDEX + 1 });
 
       // Retrieve the shuffled word list stored by page 1.
       // Each task page shows WORDS_PER_PAGE words from its slice.

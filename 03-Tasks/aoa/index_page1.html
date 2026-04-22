@@ -136,11 +136,6 @@
     const WORDS_PER_PAGE = 2;
     // ----------------------------
 
-    // Generate participant UUID once; stored in JATOS session for thank_you.html
-    const participant_uuid =
-      window.crypto && window.crypto.randomUUID
-        ? window.crypto.randomUUID()
-        : Math.random().toString(36).substring(2, 10) + "-" + Date.now();
 
     var jsPsych = initJsPsych({
       on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
@@ -361,14 +356,14 @@
     }
 
     jatos.onLoad(() => {
-      const labID = jatos.urlQueryParameters.labID || null;
-      jsPsych.data.addProperties({ labID, aoa_page: PAGE_INDEX + 1 });
+      const labID = jatos.studySessionData.labID || jatos.urlQueryParameters.labID || null;
+      const participant_uuid = jatos.studySessionData.participantUUID || "N/A";
+      jsPsych.data.addProperties({ labID, participant_uuid, aoa_page: PAGE_INDEX + 1 });
 
       // Shuffle the full word list once and store in JATOS study session.
       // Pages 2–10 will read jatos.studySessionData.shuffledWords directly.
       const shuffledWords = jsPsych.randomization.shuffle([...FULL_WORD_LIST]);
       jatos.studySessionData.shuffledWords = shuffledWords;
-      jatos.studySessionData.participantUUID = participant_uuid;
       jatos.studySessionData.labID = labID;
       jatos.studySessionData.wordsPerPage = WORDS_PER_PAGE;
 
