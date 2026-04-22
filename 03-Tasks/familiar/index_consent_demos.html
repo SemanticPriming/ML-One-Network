@@ -255,220 +255,6 @@
       },
     };
 
-    const sampleWords = [
-      "dog",
-      "bicycle",
-      "apple",
-      "school",
-      "mountain",
-      "telephone",
-      "democracy",
-      "hospital",
-      "garden",
-      "computer",
-      "river",
-      "window",
-    ];
-
-    const shuffledWords = jsPsych.randomization.shuffle([...sampleWords]);
-    const BLOCK_SIZE = 20;
-    const wordBlocks = [];
-    for (let i = 0; i < shuffledWords.length; i += BLOCK_SIZE) {
-      wordBlocks.push(shuffledWords.slice(i, i + BLOCK_SIZE));
-    }
-
-    const slugUsage = {};
-
-    function slugifyWord(word) {
-      const normalized = String(word || "")
-        .toLowerCase()
-        .normalize("NFKD");
-      const slug = normalized
-        .replace(/[^\p{L}\p{N}]+/gu, "_")
-        .replace(/^_+|_+$/g, "");
-      if (slug) return slug;
-      const fallback = normalized
-        .replace(/\s+/g, "_")
-        .replace(/[^\p{L}\p{N}_]+/gu, "")
-        .replace(/^_+|_+$/g, "");
-      return fallback || "word";
-    }
-
-    function makeWordFieldNames(word) {
-      const slug = slugifyWord(word);
-      const occurrence = slugUsage[slug] || 0;
-      slugUsage[slug] = occurrence + 1;
-      const uniqueSlug = occurrence === 0 ? slug : `${slug}_${occurrence + 1}`;
-      return {
-        ratingName: `${uniqueSlug}_rating`,
-        unknownName: `${uniqueSlug}_unknown`,
-      };
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function makeFamiliarInlineHtml(wordFields) {
-      return `
-        <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #444;">
-          1 = very unfamiliar &nbsp;&middot;&nbsp; 9 = very familiar &nbsp;&middot;&nbsp; X = do not know the word
-        </p>
-        <div class="familiar-word-list">
-          ${wordFields
-            .map(function (field) {
-              return `
-                <div class="familiar-word-row" data-field-base="${field.ratingName}">
-                  <span class="familiar-word-label">${escapeHtml(field.word)}:</span>
-                  <div class="familiar-options">
-                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9]
-                      .map(
-                        (n) => `
-                      <label class="familiar-option">
-                        <span>${n}</span>
-                        <input type="radio" name="${field.ratingName}_choice" value="${n}" />
-                      </label>
-                    `,
-                      )
-                      .join("")}
-                    <div class="familiar-sep"></div>
-                    <label class="familiar-option">
-                      <span>X</span>
-                      <input type="radio" name="${field.ratingName}_choice" value="X" />
-                    </label>
-                  </div>
-                  <div class="familiar-word-error" aria-live="polite"></div>
-                </div>
-              `;
-            })
-            .join("")}
-        </div>
-      `;
-    }
-
-    function makeFamiliarMatrixSurvey(words, blockIndex) {
-      const wordFields = words.map(function (word) {
-        return { word, ...makeWordFieldNames(word) };
-      });
-      const htmlQuestionName = `familiar_block_${blockIndex}_rows`;
-      let renderedQuestionElement = null;
-
-      return {
-        type: jsPsychSurvey,
-        survey_json: {
-          showCompletedPage: false,
-          showHeaderOnCompletePage: false,
-          completedHtml: "",
-          completeText: "Next",
-          showQuestionNumbers: "off",
-          pages: [
-            {
-              name: `familiar_block_${blockIndex}`,
-              title: `Word familiarity ratings (Block ${blockIndex + 1} of ${wordBlocks.length})`,
-              elements: [
-                {
-                  type: "html",
-                  name: htmlQuestionName,
-                  html: makeFamiliarInlineHtml(wordFields),
-                },
-              ],
-            },
-          ],
-        },
-        survey_function: function (survey) {
-          survey.onAfterRenderQuestion.add(function (_, options) {
-            if (options.question.name !== htmlQuestionName) return;
-            renderedQuestionElement = options.htmlElement;
-          });
-
-          survey.onCompleting.add(function (sender, options) {
-            if (!renderedQuestionElement) return;
-            let hasErrors = false;
-            wordFields.forEach(function (field) {
-              const row = renderedQuestionElement.querySelector(
-                `[data-field-base="${field.ratingName}"]`,
-              );
-              const errorEl = row.querySelector(".familiar-word-error");
-              const checked = row.querySelector('input[type="radio"]:checked');
-              errorEl.textContent = "";
-
-              if (!checked) {
-                hasErrors = true;
-                errorEl.textContent = "Please select a rating or X.";
-                sender.setValue(field.ratingName, null);
-                sender.setValue(field.unknownName, null);
-                return;
-              }
-
-              if (checked.value === "X") {
-                sender.setValue(field.ratingName, null);
-                sender.setValue(field.unknownName, "X");
-              } else {
-                sender.setValue(field.ratingName, Number(checked.value));
-                sender.setValue(field.unknownName, null);
-              }
-            });
-            if (hasErrors) options.allowComplete = false;
-          });
-        },
-        on_finish: function (data) {
-          jatos.appendResultData({
-            stage: "familiar_block",
-            block: blockIndex,
-            data: data.response,
-          });
-        },
-      };
-    }
-
-    // 4) Create one jsPsych trial per block
-    const familiar_trials = wordBlocks.map((block, i) =>
-      makeFamiliarMatrixSurvey(block, i),
-    );
-
-    // Final thank-you screen shown AFTER all word-rating blocks (SurveyJS style)
-    const final_thankyou = {
-      type: jsPsychSurvey,
-      survey_json: {
-        showCompletedPage: false,
-        showHeaderOnCompletePage: false,
-        completedHtml: "",
-        completeText: "Finish",
-        pages: [
-          {
-            name: "thank_you",
-            title: "Thank you for participating",
-            elements: [
-              {
-                type: "html",
-                name: "thank_you_text",
-                html: `
-                  <p>You have completed the word ratings.</p>
-                  <p>Your participant number is:</p>
-                  <p><strong>${participant_uuid}</strong></p>
-                  <p>Please keep or copy this number if you are asked for it.</p>
-                  <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
-                `,
-              },
-            ],
-          },
-        ],
-      },
-    };
-
-    const task_timeline = {
-      timeline: [...familiar_trials, final_thankyou],
-      conditional_function: function () {
-        const last = jsPsych.data.get().last(1).values()[0];
-        return last.response && last.response.consent_choice === "I Consent";
-      },
-    };
-
     const timeline = [
       pretask_survey,
       {
@@ -480,19 +266,18 @@
           );
         },
       },
-      task_timeline,
     ];
 
-    // 4) Run the study
     jatos.onLoad(() => {
-      // Get labID from URL query parameters AFTER JATOS initializes
-      const labID = jatos.urlQueryParameters.labID || null;
+      const params = jatos.urlQueryParameters || {};
+      const labID = params.labID || null;
 
-      // Add labID to all jsPsych data
-      jsPsych.data.addProperties({ labID, participant_uuid });
-      jatos.appendResultData({
-        stage: "familiar_labid",
+      jatos.studySessionData.participantUUID = participant_uuid;
+      jatos.studySessionData.labID = labID;
+
+      jsPsych.data.addProperties({
         labID,
+        participant_uuid,
       });
 
       jsPsych.run(timeline);
