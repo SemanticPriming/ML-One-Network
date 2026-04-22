@@ -138,11 +138,9 @@
             elements: [
               {
                 type: "html",
-                name: "concrete_instructions",
+                name: "familiar_instructions",
                 html: `
-                  <p>Some words refer to things or actions in reality, which you can experience directly through one of the five senses. We call these words concrete words. Other words refer to meanings that cannot be experienced directly but which we know because the meanings can be defined by other words. These are abstract words. Still other words fall in-between the two extremes, because we can experience them to some extent; and in addition, we rely on language to understand them. We want you to indicate how concrete the meaning of each word is for you by using a 9-point rating scale going from abstract to concrete. A concrete word comes with a higher rating and refers to something that exists in reality; you can have immediate experience of it through your senses (smelling, tasting, touching, hearing, seeing) and the actions you do.</p>
-                  <p>The easiest way to explain a word is by pointing to it or by demonstrating it (e.g. To explain 'sweet' you could have someone eat sugar; To explain 'jump' you could simply jump up and down or show people a movie clip about someone jumping up and down; To explain 'couch', you could point to a couch or show a picture of a couch). An abstract word comes with a lower rating and refers to something you cannot experience directly through your senses or actions. Its meaning depends on language. The easiest way to explain it is by using other words (e.g. There is no simple way to demonstrate 'justice'; but we can explain the meaning of the word by using other words that capture parts of its meaning).</p>
-                  <p>Always think of how concrete (experience based) the meaning of the word is to you. In all likelihood, you will encounter several words you do not know well enough to give a useful rating. This is informative to us too, as in our research we only want to use words known to people. We may also include one or two fake words which cannot be known by you. Please indicate when you don't know a word by using the letter <strong>X</strong>.</p>
+                  <p>In the following pages, you will see a series of target words. Your task is to rate how familiar or known each word is to you. If a word feels very familiar or well known, select 9 on the scale; if it feels hardly familiar or unknown, select 1. The numbers from 1 to 9 represent increasing levels of familiarity. Please choose the number that best reflects your experience with each word.</p>
                 `,
               },
             ],
@@ -191,7 +189,7 @@
     function makeConcreteInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #444;">
-          1 = very abstract &nbsp;&middot;&nbsp; 9 = very concrete &nbsp;&middot;&nbsp; X = do not know the word
+          1 = very unfamiliar &nbsp;&middot;&nbsp; 9 = very familiar &nbsp;&middot;&nbsp; X = do not know the word
         </p>
         <div class="concrete-word-list">
           ${wordFields
