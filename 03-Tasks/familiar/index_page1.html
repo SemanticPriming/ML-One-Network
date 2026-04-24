@@ -297,7 +297,7 @@
       jatos.studySessionData.wordsPerPage = WORDS_PER_PAGE;
 
       const pageWords = shuffledWords.slice(0, WORDS_PER_PAGE);
-      jsPsych.run([makefamiliarMatrixSurvey(pageWords)]);
+      jsPsych.run([instructions_trial, makefamiliarMatrixSurvey(pageWords)]);
     });
   </script>
 </html>
