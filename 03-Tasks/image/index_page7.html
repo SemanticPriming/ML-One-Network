@@ -37,41 +37,52 @@
         max-height: 0 !important;
         display: block;
       }
-      .sv_matrix {
-        border-collapse: separate;
-        border-spacing: 0 0.25rem;
+      .image-word-list {
+        display: flex;
+        flex-direction: column;
       }
-      .sv_matrix th,
-      .sv_matrix td {
-        padding: 0.2rem 0.15rem;
-        text-align: center;
-        white-space: pre-line;
+      .image-word-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
       }
-      .sv_matrix .sv_matrix_cell {
-        min-width: 2.1rem;
+      .image-word-label {
+        font-size: 1.05rem;
+        font-weight: 600;
       }
-      .sv_matrix .sv-radio-control {
-        margin: 0;
+      .image-options {
+        display: flex;
+        gap: 0.4rem;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
       }
-      .image-rating-column .sd-question {
+      .image-option {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding-right: 1rem;
-        min-width: 500px;
+        gap: 0.1rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        min-width: 26px;
       }
-      .image-unknown-column .sd-question {
-        text-align: center;
-        min-width: 100px;
+      .image-option input {
+        margin: 0;
+        cursor: pointer;
       }
-      .sd-table.sd-table--columnsautowidth .sd-table__cell {
-        width: auto !important;
-        max-width: none !important;
+      .image-sep {
+        width: 1px;
+        height: 32px;
+        background: #ccc;
+        margin: 0 0.2rem;
+        align-self: center;
       }
-      .sd-matrix__question-wrapper {
-        display: flex !important;
-        justify-content: center !important;
+      .image-word-error {
+        color: #c62828;
+        font-size: 0.85rem;
+        min-height: 1rem;
       }
     </style>
   </head>
@@ -84,28 +95,11 @@
     // ---- PAGE CONFIGURATION ----
     const PAGE_INDEX = 6;
     const TOTAL_TASK_PAGES = 10;
-    const WORDS_PER_PAGE = 20;
     // ----------------------------
 
     var jsPsych = initJsPsych({
       on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
     });
-
-    const FULL_WORD_LIST = [
-      "dog",
-      "bicycle",
-      "apple",
-      "school",
-      "mountain",
-      "telephone",
-      "democracy",
-      "hospital",
-      "garden",
-      "computer",
-      "river",
-      "window",
-      // Add all your words here...
-    ];
 
     const slugUsage = {};
 
@@ -124,6 +118,17 @@
       return fallback || "word";
     }
 
+    function makeWordFieldNames(word) {
+      const slug = slugifyWord(word);
+      const occurrence = slugUsage[slug] || 0;
+      slugUsage[slug] = occurrence + 1;
+      const uniqueSlug = occurrence === 0 ? slug : `${slug}_${occurrence + 1}`;
+      return {
+        ratingName: `${uniqueSlug}_rating`,
+        unknownName: `${uniqueSlug}_unknown`,
+      };
+    }
+
     function escapeHtml(value) {
       return String(value)
         .replace(/&/g, "&amp;")
@@ -133,17 +138,35 @@
         .replace(/'/g, "&#39;");
     }
 
-    function makeImageInlineHtml(rows) {
+    function makeImageInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem;">
-          1 = very difficult to imagine &nbsp;&middot;&nbsp; 9 = very easy to imagine &nbsp;&middot;&nbsp; X = do not know the word
+          Rating (1 = very difficult to imagine, 9 = very easy to imagine) or X (Unknown)
         </p>
         <div class="image-word-list">
-          ${rows
-            .map(function (row) {
+          ${wordFields
+            .map(function (field) {
               return `
-                <div class="image-word-row" data-row-name="${row.value}">
-                  <span class="image-word-label">${escapeHtml(row.text)}:</span>
+                <div class="image-word-row" data-field-base="${field.ratingName}">
+                  <span class="image-word-label">${escapeHtml(field.word)}:</span>
+                  <div class="image-options">
+                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9]
+                      .map(
+                        (n) => `
+                      <label class="image-option">
+                        <span>${n}</span>
+                        <input type="radio" name="${field.ratingName}_choice" value="${n}" />
+                      </label>
+                    `,
+                      )
+                      .join("")}
+                    <div class="image-sep"></div>
+                    <label class="image-option">
+                      <span>X</span>
+                      <input type="radio" name="${field.ratingName}_choice" value="X" />
+                    </label>
+                  </div>
+                  <div class="image-word-error" aria-live="polite"></div>
                 </div>
               `;
             })
@@ -153,130 +176,68 @@
     }
 
     function makeImageMatrixSurvey(words) {
-      const sliderChoices = Array.from({ length: 9 }, (_, i) => ({
-        value: i + 1,
-        text: (i + 1).toString(),
-      }));
-      const rows = words.map((word) => ({
-        value: slugifyWord(word),
-        text: word,
-      }));
-      const surveyJson = {
-        showCompletedPage: false,
-        showHeaderOnCompletePage: false,
-        completedHtml: "",
-        completeText: "Next",
-        pages: [
-          {
-            name: `image_page_${PAGE_INDEX}`,
-            title: `Word ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
-            elements: [
-              {
-                type: "matrixdropdown",
-                name: `image_table_${PAGE_INDEX}`,
-                title:
-                  "For each word, rate how difficult (1) or easy (9) it is to imagine a mental picture of the object. If you do not know the word, mark X in the unknown column.",
-                rows: rows,
-                columns: [
-                  {
-                    name: "rating",
-                    title: "Rating (1 = very difficult, 9 = very easy)",
-                    cellType: "radiogroup",
-                    choices: sliderChoices,
-                    cssClasses: "image-rating-column",
-                    minWidth: "500px",
-                    validators: [
-                      {
-                        type: "expression",
-                        expression:
-                          "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark unknown",
-                      },
-                    ],
-                  },
-                  {
-                    name: "unknown",
-                    title: "Unknown",
-                    cellType: "checkbox",
-                    choices: ["X"],
-                    colCount: 1,
-                    cssClasses: "image-unknown-column",
-                    minWidth: "100px",
-                    validators: [
-                      {
-                        type: "expression",
-                        expression:
-                          "{row.rating} notempty or {row.unknown} notempty",
-                        text: "Please select a rating or mark unknown",
-                      },
-                    ],
-                  },
-                ],
-                allowAddRows: false,
-                allowRemoveRows: false,
-              },
-            ],
-          },
-        ],
-      };
+      const wordFields = words.map(function (word) {
+        return { word, ...makeWordFieldNames(word) };
+      });
+      const htmlQuestionName = `image_block_${PAGE_INDEX}_rows`;
+      let renderedQuestionElement = null;
 
       return {
         type: jsPsychSurvey,
-        survey_json: surveyJson,
-        on_finish: function (data) {
-          jatos.appendResultData({
-            stage: "image_block",
-            block: PAGE_INDEX,
-            data: data.response,
-          });
+        survey_json: {
+          showCompletedPage: false,
+          showHeaderOnCompletePage: false,
+          completedHtml: "",
+          completeText: "Next",
+          showQuestionNumbers: "off",
+          pages: [
+            {
+              name: `image_block_${PAGE_INDEX}`,
+              title: `Imagination ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
+              elements: [
+                {
+                  type: "html",
+                  name: htmlQuestionName,
+                  html: makeImageInlineHtml(wordFields),
+                },
+              ],
+            },
+          ],
         },
         survey_function: function (survey) {
-          let syncing = false;
+          survey.onAfterRenderQuestion.add(function (_, options) {
+            if (options.question.name !== htmlQuestionName) return;
+            renderedQuestionElement = options.htmlElement;
+          });
 
-          survey.onMatrixCellValueChanged.add(function (_, options) {
-            if (syncing || !options) return;
+          survey.onCompleting.add(function (sender, options) {
+            if (!renderedQuestionElement) return;
+            let hasErrors = false;
+            wordFields.forEach(function (field) {
+              const row = renderedQuestionElement.querySelector(
+                `[data-field-base="${field.ratingName}"]`,
+              );
+              const errorEl = row.querySelector(".image-word-error");
+              const checked = row.querySelector('input[type="radio"]:checked');
+              errorEl.textContent = "";
 
-            const question = options.question;
-            if (!question || question.name !== `image_table_${PAGE_INDEX}`)
-              return;
-
-            const columnName =
-              options.columnName ||
-              (options.column ? options.column.name : null);
-
-            if (!columnName) return;
-
-            const rowIndex = options.row && options.row.visibleIndex;
-            const rowName = words[rowIndex];
-
-            const tableValue = { ...(survey.getValue(question.name) || {}) };
-            const rowValue = { ...(tableValue[rowName] || {}) };
-
-            let changed = false;
-
-            if (columnName === "unknown") {
-              const val = options.value;
-              const hasVal = Array.isArray(val) ? val.length > 0 : !!val;
-              if (hasVal) {
-                rowValue["rating"] = undefined;
-                changed = true;
+              if (!checked) {
+                hasErrors = true;
+                errorEl.textContent = "Please select a rating or mark unknown.";
+                sender.setValue(field.ratingName, null);
+                sender.setValue(field.unknownName, null);
+                return;
               }
-            }
 
-            if (columnName === "rating") {
-              const val = options.value;
-              if (val !== undefined && val !== null && val !== "") {
-                rowValue["unknown"] = undefined;
-                changed = true;
+              if (checked.value === "X") {
+                sender.setValue(field.ratingName, null);
+                sender.setValue(field.unknownName, "X");
+              } else {
+                sender.setValue(field.ratingName, Number(checked.value));
+                sender.setValue(field.unknownName, null);
               }
-            }
-
-            if (changed) {
-              syncing = true;
-              tableValue[rowName] = rowValue;
-              survey.setValue(question.name, tableValue);
-              syncing = false;
-            }
+            });
+            if (hasErrors) options.allowComplete = false;
           });
         },
       };
