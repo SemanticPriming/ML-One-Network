@@ -147,10 +147,9 @@
                       style="max-width: 100%; height: auto; display: block;"
                     />
                   </figure>
-                  <p>The study being conducted today is investigating emotion, and how people respond to different types of words.</p>
-                  <p>We call this set of figures SAM, and you will be using these figures to rate how you feel while reading each word. The picture shows the unhappy-happy scale, which ranges from a frown to a smile. At one extreme of this scale, you feel completely unhappy, annoyed, unsatisfied, melancholic, despaired, or bored. You can indicate feeling completely unhappy by selecting the 1 on the left. The other end of the scale, you feel happy, pleased, satisfied, contented, or hopeful. When you feel completely happy you should indicate this by selecting the 9 on the right. The figures also allow you to describe intermediate feelings of pleasure, by selecting any values in the middle. If you feel completely neutral, neither happy nor sad, select the 4 in the middle.</p>
-                  <p>Please work at a rapid pace and don't spend too much time thinking about each word. Rather, make your ratings based on your first and immediate reaction as you read each word. If you do not know the word, please select the letter X.</p>
-                `,
+                <p>The study being conducted today is investigating emotion, and how people respond to different types of words.</p>
+                <p>We call this set of figures SAM, and you will be using these figures to rate how you feel while reading each word. The picture shows the unhappy-happy scale, which ranges from a frown to a smile. At one extreme of this scale, you feel completely unhappy, annoyed, unsatisfied, melancholic, despaired, or bored. You can indicate feeling completely unhappy by selecting the 1 on the left. The other end of the scale, you feel happy, pleased, satisfied, contented, or hopeful. When you feel completely happy you should indicate this by selecting the 9 on the right. The figures also allow you to describe intermediate feelings of pleasure, by selecting any values in the middle. If you feel completely neutral, neither happy nor sad, select the 4 in the middle.</p>
+                <p>Please work at a rapid place and don't spend too much time thinking about each word. Rather, make your ratings based on your first and immediate reaction as you read each word. If you do not know the word, please select the letter X for uknown.</p>`,
               },
             ],
           },
@@ -198,7 +197,7 @@
     function makeValenceInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem;">
-          1 = very unpleasant/unhappy &nbsp;&middot;&nbsp; 9 = very pleasant/happy &nbsp;&middot;&nbsp; X = do not know the word
+          Rating (1 = very unpleasant/unhappy, 9 = very pleasant/happy) or X (Unknown)
         </p>
         <div class="valence-word-list">
           ${wordFields
@@ -250,7 +249,7 @@
           pages: [
             {
               name: `valence_block_${PAGE_INDEX}`,
-              title: `Valence ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
+              title: `Emotion ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
               elements: [
                 {
                   type: "html",

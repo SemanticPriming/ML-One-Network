@@ -141,7 +141,7 @@
     function makeValenceInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem;">
-          1 = very unpleasant/unhappy &nbsp;&middot;&nbsp; 9 = very pleasant/happy &nbsp;&middot;&nbsp; X = do not know the word
+          Rating (1 = very unpleasant/unhappy, 9 = very pleasant/happy) or X (Unknown)
         </p>
         <div class="valence-word-list">
           ${wordFields
@@ -193,7 +193,7 @@
           pages: [
             {
               name: `valence_block_${PAGE_INDEX}`,
-              title: `Valence ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
+              title: `Emotion ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
               elements: [
                 {
                   type: "html",
