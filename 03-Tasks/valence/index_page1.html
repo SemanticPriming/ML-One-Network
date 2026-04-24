@@ -138,8 +138,8 @@
             elements: [
               {
                 type: "html",
-              name: "valence_instructions",
-              html: `
+                name: "valence_instructions",
+                html: `
                   <figure style="margin: 0 0 1rem 0;">
                     <img
                       src="valence_image.png"
@@ -271,7 +271,7 @@
             if (!renderedQuestionElement) return;
             let hasErrors = false;
             wordFields.forEach(function (field) {
-            const row = renderedQuestionElement.querySelector(
+              const row = renderedQuestionElement.querySelector(
                 `[data-field-base="${field.ratingName}"]`,
               );
               const errorEl = row.querySelector(".valence-word-error");
@@ -280,7 +280,7 @@
 
               if (!checked) {
                 hasErrors = true;
-                errorEl.textContent = "Please select a rating or X.";
+                errorEl.textContent = "Please select a rating or mark unknown.";
                 sender.setValue(field.ratingName, null);
                 sender.setValue(field.unknownName, null);
                 return;
