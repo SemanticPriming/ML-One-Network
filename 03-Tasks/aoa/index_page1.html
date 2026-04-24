@@ -136,7 +136,6 @@
     const WORDS_PER_PAGE = 2;
     // ----------------------------
 
-
     var jsPsych = initJsPsych({
       on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
     });
@@ -269,7 +268,7 @@
         pages: [
           {
             name: `aoa_block_${PAGE_INDEX}`,
-            title: `Word ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
+            title: `Age ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
             description:
               "For each word, enter the age (in years) when you think you learned it, or select X if unknown.",
             elements: [
@@ -327,7 +326,7 @@
                 hasErrors = true;
                 sender.setValue(field.ageName, null);
                 sender.setValue(field.unknownName, null);
-                setRowError(row, ageInput, "Enter an age or select X.");
+                setRowError(row, ageInput, "Enter an age or select unknown.");
                 return;
               }
               const numericAge = Number(ageValue);
@@ -356,9 +355,14 @@
     }
 
     jatos.onLoad(() => {
-      const labID = jatos.studySessionData.labID || jatos.urlQueryParameters.labID || null;
+      const labID =
+        jatos.studySessionData.labID || jatos.urlQueryParameters.labID || null;
       const participant_uuid = jatos.studySessionData.participantUUID || "N/A";
-      jsPsych.data.addProperties({ labID, participant_uuid, aoa_page: PAGE_INDEX + 1 });
+      jsPsych.data.addProperties({
+        labID,
+        participant_uuid,
+        aoa_page: PAGE_INDEX + 1,
+      });
 
       // Shuffle the full word list once and store in JATOS study session.
       // Pages 2–10 will read jatos.studySessionData.shuffledWords directly.
