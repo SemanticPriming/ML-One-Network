@@ -141,7 +141,7 @@
     function makefamiliarInlineHtml(wordFields) {
       return `
         <p style="margin: 0 0 0.75rem;">
-          1 = very unfamiliar &nbsp;&middot;&nbsp; 9 = very familiar &nbsp;&middot;&nbsp; X = do not know the word
+          Rating (1 = very unfamiliar/unknown, 9 = very familiar/known)
         </p>
         <div class="familiar-word-list">
           ${wordFields
@@ -160,11 +160,6 @@
                     `,
                       )
                       .join("")}
-                    <div class="familiar-sep"></div>
-                    <label class="familiar-option">
-                      <span>X</span>
-                      <input type="radio" name="${field.ratingName}_choice" value="X" />
-                    </label>
                   </div>
                   <div class="familiar-word-error" aria-live="polite"></div>
                 </div>
@@ -223,19 +218,14 @@
 
               if (!checked) {
                 hasErrors = true;
-                errorEl.textContent = "Please select a rating or X.";
+                errorEl.textContent = "Please select a rating.";
                 sender.setValue(field.ratingName, null);
                 sender.setValue(field.unknownName, null);
                 return;
               }
 
-              if (checked.value === "X") {
-                sender.setValue(field.ratingName, null);
-                sender.setValue(field.unknownName, "X");
-              } else {
-                sender.setValue(field.ratingName, Number(checked.value));
-                sender.setValue(field.unknownName, null);
-              }
+              sender.setValue(field.ratingName, Number(checked.value));
+              sender.setValue(field.unknownName, null);
             });
             if (hasErrors) options.allowComplete = false;
           });
