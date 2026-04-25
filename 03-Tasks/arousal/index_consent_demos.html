@@ -202,13 +202,16 @@
       const bpid = params.bpid || null;
       const battempt = params.battempt || null;
       const bnum = params.bnum || null;
-      const bkey = params.bkey || null;
+      const bkey = params.bkey || 98063;
       const response_id = params.response_id || null;
       const assignment_id = params.assignment_id || null;
 
       let completion_code = params.completion_code || null;
+      if (completion_code === null && bnum !== null && bkey !== null) {
+        completion_code = bnum * bkey;
+      }
       if (completion_code === null && response_id !== null) {
-        completion_code = response_id * 98063;
+        completion_code = response_id * bkey;
       }
 
       jatos.studySessionData.participantUUID = participant_uuid;
