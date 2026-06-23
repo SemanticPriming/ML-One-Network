@@ -1,1001 +1,1001 @@
-en_cue,en_target,ukr_cue,ukr_target,needs_review,suggested_ukr_cue,final_ukr_cue
-leave,abandon,піти,залишити,False,,піти
-spinal,abdominal,спинальний,живота,False,,спинальний
-kidnap,abduct,викрасти,викрадення,False,,викрасти
-capacity,ability,потужність,здатність,False,,потужність
-out,about,вийшов,про,False,,вийшов
-presence,absence,присутність,відсутність,False,,присутність
-ridiculous,absurd,нелепо,абсурдно,False,,нелепо
-voice,accent,голос,акцент,False,,голос
-refuse,accept,відмовитись,прийняти,False,,відмовитись
-incident,accident,інцидент,аварія,False,,інцидент
-escort,accompany,ескорт,супроводжувати,False,,ескорт
-complaint,accusation,скарга,звинувачення,False,,скарга
-gesture,act,жест,акт,False,,жест
-trigger,activate,спусковий механізм,активувати,False,,спусковий механізм
-active,activity,активний,діяльність,False,,активний
-author,actor,автор,актор,False,,автор
-extra,additional,додатково,додаткові,False,,додатково
-number,address,номер,адреса,False,,номер
-management,administrative,управління,адміністративний,False,,управління
-hormone,adrenaline,гормон,адреналін,False,,гормон
-advice,advise,поради,порадити,False,,поради
-firm,agency,тверда,агентство,False,,тверда
-contract,agreement,контракт,угода,False,,контракт
-terminal,airport,термінал,аеропорт,False,,термінал
-alert,alarm,попередження,тривожна сигналізація,False,,попередження
-motive,alibi,мотив,алібі,False,,мотив
-ufo,alien,ufo,інопланетянин,False,,ufo
-corner,alley,кут,алея,False,,кут
-bravo,alpha,добре,альфа,False,,добре
-impressive,amazing,вражаюче,дивовижно,False,,вражаюче
-africa,america,африка,америка,False,,африка
-sum,amount,сума,сума,True,підсумок,підсумок
-autopsy,analysis,аутопсія,аналіз,False,,аутопсія
-jealous,angry,ревнивий,злість,False,,ревнивий
-beast,animal,звір,тварина,False,,звір
-bee,ant,бджола,мурашка,False,,бджола
-house,apartment,будинок,квартира,False,,будинок
-admire,appreciate,захоплюватися,дякую,False,,захоплюватися
-permission,approval,дозвіл,схвалення,False,,дозвіл
-engineer,architect,інженер,архітектор,False,,інженер
-hand,arm,рука,рука,True,почерк,почерк
-shield,armor,щит,броня,False,,щит
-arsenal,armory,арсенал,збройна складова,False,,арсенал
-legion,army,легіон,армія,False,,легіон
-round,around,круглий,навколо,False,,круглий
-punish,arrest,покарати,арешт,False,,покарати
-ignorance,arrogance,неосвіченість,надмірність,False,,неосвіченість
-vein,artery,вена,артерія,False,,вена
-natural,artificial,природний,штучний,False,,природний
-cavalry,artillery,кавалерія,артилерія,False,,кавалерія
-question,ask,питання,запитай,False,,питання
-mercenary,assassin,найманник,вбивця,False,,найманник
-help,assist,допомога,допомогти,False,,допомога
-support,assistance,підтримка,допомога,False,,підтримка
-secretary,assistant,секретар,помічник,False,,секретар
-conclusion,assumption,висновок,припущення,False,,висновок
-pacific,atlantic,тихоокеанський,атлантичний,False,,тихоокеанський
-environment,atmosphere,навколишнє середовище,атмосфера,False,,навколишнє середовище
-invasion,attack,вторгнення,атака,False,,вторгнення
-victim,attacker,жертва,нападник,False,,жертва
-try,attempt,спробуй,спроба,False,,спробуй
-opinion,attitude,думка,ставлення,False,,думка
-attention,attract,увага,приваблювати,False,,увага
-crowd,audience,натовп,аудиторія,False,,натовп
-jurisdiction,authority,юрисдикція,влада,False,,юрисдикція
-spring,autumn,весна,осінь,False,,весна
-toast,bacon,тост,бекон,False,,тост
-good,bad,добре,погано,False,,добре
-box,bag,коробка,мішок,False,,коробка
-trap,bait,пастка,приманка,False,,пастка
-orchestra,band,оркестр,група,False,,оркестр
-club,bar,клуб,бар,False,,клуб
-stadium,baseball,стадіон,бейсбол,False,,стадіон
-shower,bathroom,душ,ванна кімната,False,,душ
-superman,batman,супермен,бетмен,False,,супермен
-regiment,battalion,полк,батальйон,False,,полк
-war,battle,війна,битва,False,,війна
-arena,battlefield,арена,поле бою,False,,арена
-hair,beard,волосся,борода,False,,волосся
-pretty,beautiful,гарна,прекрасна,False,,гарна
-charm,beauty,чарівність,краса,False,,чарівність
-sofa,bed,диван,ліжко,False,,диван
-room,bedroom,кімната,спальня,False,,кімната
-drink,beer,пити,пиво,False,,пити
-trust,believe,довіра,вірити,False,,довіра
-million,billion,мільйон,мільярди,False,,мільйон
-chemical,biological,хімічні,біологічний,False,,хімічні
-chemistry,biology,хімія,біологія,False,,хімія
-butterfly,bird,метелик,пташка,False,,метелик
-anniversary,birthday,річниця,день народження,False,,річниця
-white,black,білий,чорний,False,,білий
-bribe,blackmail,хабар,шантаж,False,,хабар
-brown,blue,коричневий,синій,False,,коричневий
-submarine,boat,підводний човен,човен,False,,підводний човен
-bible,book,біблія,книга,False,,біблія
-manager,boss,менеджер,бос,False,,менеджер
-washington,boston,вашингтон,бостон,False,,вашингтон
-glass,bottle,скляне,пляшка,False,,скляне
-top,bottom,верхній,дно,False,,верхній
-girl,boy,дівчина,хлопчик,False,,дівчина
-noble,brave,благородний,сміливий,False,,благородний
-smash,break,розбиття,перерва,False,,розбиття
-dinner,breakfast,вечеря,сніданок,False,,вечеря
-groom,bride,наречений,наречена,False,,наречений
-shine,bright,сяйво,яскравий,False,,сяйво
-dude,bro,хлопче,брат,False,,хлопче
-sister,brother,сестра,брат,False,,сестра
-scratch,bruise,подряпка,синяк,False,,подряпка
-construction,build,будівництво,побудувати,False,,будівництво
-tower,building,вежа,будівля,False,,вежа
-caliber,bullet,калібр,куля,False,,калібр
-dig,bury,копати,поховати,False,,копати
-train,bus,поїзд,автобус,False,,поїзд
-industry,business,промисловість,бізнес,False,,промисловість
-ass,butt,задишка,задниця,False,,задишка
-honey,butter,мед,масло,False,,мед
-seller,buyer,продавець,покупця,False,,продавець
-hello,bye,привіт,до побачення,False,,привіт
-dessert,cake,десерт,торт,False,,десерт
-count,calculate,рахунок,розрахувати,False,,рахунок
-quiet,calm,тихо,спокійно,False,,тихо
-picnic,camping,пікнік,кемпінг,False,,пікнік
-tumor,cancer,пухлина,рак,False,,пухлина
-lamp,candle,лампа,свічка,False,,лампа
-glasses,cap,окуляри,капелюх,False,,окуляри
-anarchy,capitalism,анархія,капіталізм,False,,анархія
-commander,captain,командир,капітан,False,,командир
-vehicle,car,транспортне засіб,автомобіль,False,,транспортне засіб
-bishop,cardinal,єпископ,кардинал,False,,єпископ
-load,cargo,навантаження,вантаж,False,,навантаження
-floor,carpet,підлога,килим,False,,підлога
-mafia,cartel,мафія,картель,False,,мафія
-palace,castle,палац,замок,False,,палац
-dog,cat,собака,кішка,False,,собака
-grab,catch,схопи,улов,False,,схопи
-reason,cause,причина,причина,True,сперечатися,сперечатися
-grave,cemetery,могила,кладовище,False,,могила
-mile,centimeter,миля,сантиметри,False,,миля
-brain,cerebral,мозок,мозковий,False,,мозок
-ritual,ceremony,ритуал,церемонія,False,,ритуал
-table,chair,таблиця,стілець,False,,таблиця
-obstacle,challenge,перешкода,виклик,False,,перешкода
-wine,champagne,вино,шампанське,False,,вино
-competition,championship,конкуренція,чемпіонат,False,,конкуренція
-church,chapel,церква,каплиця,False,,церква
-attractive,charming,привабливий,чарівний,False,,привабливий
-follow,chase,слідувати,переслідування,False,,слідувати
-expensive,cheap,дорого,дешево,False,,дорого
-lip,cheek,губа,щелепа,False,,губа
-bread,cheese,хліб,сир,False,,хліб
-cook,chef,кухар,шефкухар,False,,кухар
-stomach,chest,шлунок,груди,False,,шлунок
-swallow,chew,проковтнути,жувати,False,,проковтнути
-baby,child,дитина,дитя,False,,дитина
-youth,childhood,молодіжність,дитинство,False,,молодіжність
-sugar,chocolate,цукор,шоколад,False,,цукор
-catholic,christian,католицький,християнський,False,,католицький
-smoke,cigar,дим,сигара,False,,дим
-tobacco,cigarette,тютюн,сигарета,False,,тютюн
-zoo,circus,зоопарк,цирк,False,,зоопарк
-capital,city,столиця,місто,False,,столиця
-culture,civilization,культура,цивілізація,False,,культура
-typical,classic,типовий,класичний,False,,типовий
-patient,client,пацієнт,клієнт,False,,пацієнт
-hospital,clinic,лікарня,клініка,False,,лікарня
-open,close,відкритий,закрити,False,,відкритий
-locked,closed,закрито,закритий,False,,закрито
-cabinet,closet,кабінет,шафа,False,,кабінет
-opening,closure,відкриття,закриття,False,,відкриття
-beach,coast,пляж,узбережжя,False,,пляж
-cup,coffee,чашка,кава,False,,чашка
-rum,cognac,ром,коньяк,False,,ром
-hot,cold,гаряче,холодно,False,,гаряче
-fall,collapse,падіння,колапс,False,,падіння
-general,colonel,загальний,полковник,False,,загальний
-arrive,come,прийшов,прийди,False,,прийшов
-drama,comedy,драма,комедія,False,,драма
-inspector,commissioner,інспектор,комісар,False,,інспектор
-commission,committee,комісія,комітет,False,,комісія
-navigation,communication,навігація,комунікація,False,,навігація
-racist,communist,расист,комуністичний,False,,расист
-society,community,суспільство,громада,False,,суспільство
-patience,compassion,терпіння,співчуття,False,,терпіння
-total,complete,загалом,повний,False,,загалом
-absolutely,completely,абсолютно,повністю,False,,абсолютно
-software,computer,програмне забезпечення,компютер,False,,програмне забезпечення
-focus,concentrate,фокус,концентрат,False,,фокус
-tour,concert,тур,концерт,False,,тур
-admit,confess,признай,зізнатися,False,,признай
-respect,confidence,повага,довіра,False,,повага
-confirmation,confirm,підтвердження,підтвердити,False,,підтвердження
-chaos,confusion,хаос,плутанина,False,,хаос
-contact,connection,контакт,зєднання,False,,контакт
-always,constantly,завжди,постійно,False,,завжди
-law,constitution,закон,конституція,False,,закон
-contain,content,містить,зміст,False,,містить
-proceed,continue,продовжуйте,продовжуйте,True,продовжуй,продовжуй
-opposite,contrary,навпроти,навпаки,False,,навпроти
-orphanage,convent,дитячий будинок,монастир,False,,дитячий будинок
-warm,cool,тепле,прохолодно,False,,тепле
-original,copy,оригінал,копія,False,,оригінал
-company,corporation,компанія,корпорація,False,,компанія
-body,corpse,тіло,труп,False,,тіло
-wrong,correct,неправильно,правильно,False,,неправильно
-silk,cotton,шовк,бавовна,False,,шовк
-baron,countess,барон,графиня,False,,барон
-relative,cousin,відносна,двоюрідний брат,False,,відносна
-rodeo,cowboy,родео,ковбой,False,,родео
-paranoid,crazy,параноїд,божевільний,False,,параноїд
-imagination,creativity,уява,творчість,False,,уява
-monster,creature,монстр,тварина,False,,монстр
-scary,creepy,страшно,жахливо,False,,страшно
-sin,crime,гріх,злочин,False,,гріх
-thief,criminal,злодій,злочинний,False,,злодій
-situation,crisis,ситуація,криза,False,,ситуація
-brutal,cruel,жорстокий,жорстокий,True,дика,дика
-evil,cruelty,злий,жорстокість,False,,злий
-tear,cut,сльоза,розрізані,False,,сльоза
-sweet,cute,солодке,милий,False,,солодке
-naive,cynical,наївна,цинічний,False,,наївна
-uncle,dad,дядько,тато,False,,дядько
-dancer,dance,танцюрист,танець,False,,танцюрист
-risk,danger,ризик,небезпека,False,,ризик
-risky,dangerous,ризиковано,небезпечно,False,,ризиковано
-shadow,dark,тінь,темний,False,,тінь
-sunset,dawn,захід сонця,світанку,False,,захід сонця
-alive,dead,живий,мертвий,False,,живий
-blind,deaf,сліпий,глухі,False,,сліпий
-century,decade,століття,десятиліття,False,,століття
-november,december,листопад,грудень,False,,листопад
-cabin,deck,каюта,палуба,False,,каюта
-victory,defeat,перемога,поразка,False,,перемога
-protect,defend,захистити,захищати,False,,захистити
-concept,definition,концепція,визначення,False,,концепція
-tasty,delicious,смачно,смачно,True,,смачно
-freedom,democracy,свобода,демократія,False,,свобода
-protest,demonstration,протест,демонстрація,False,,протест
-arrival,departure,прибуття,відїзд,False,,прибуття
-stress,depression,стрес,депресія,False,,стрес
-profile,description,профіль,опис,False,,профіль
-fate,destiny,доля,доля,True,частина,частина
-creation,destruction,створення,знищення,False,,створення
-agent,detective,агент,детектив,False,,агент
-courage,determination,мужність,визначення,False,,мужність
-progress,development,прогрес,розвиток,False,,прогрес
-chip,device,чип,пристрій,False,,чип
-angel,devil,ангел,диявол,False,,ангел
-fidelity,devotion,вірність,відданість,False,,вірність
-suffer,die,страждають,померти,False,,страждають
-similar,different,подібний,різні,False,,подібний
-pride,dignity,гордість,гідність,False,,гордість
-ping,ding,пінг,дінг,False,,пінг
-direct,directly,безпосередньо,безпосередньо,True,каналізувати,каналізувати
-producer,director,виробник,директор,False,,виробник
-death,disappearance,смерть,зникнення,False,,смерть
-surprise,disappointment,сюрприз,розчарування,False,,сюрприз
-conversation,discussion,розмова,обговорення,False,,розмова
-flu,disease,грип,хвороба,False,,грип
-dirty,disgusting,брудний,огидно,False,,брудний
-resignation,dismissal,відставка,звільнення,False,,відставка
-conflict,dispute,конфлікт,суперечка,False,,конфлікт
-county,district,графство,район,False,,графство
-interrupt,disturb,перерву,заважати,False,,перерву
-god,divine,боже,божественний,False,,боже
-unit,division,одиниця,відділ,False,,одиниця
-make,do,зробити,робити,False,,зробити
-surgeon,doctor,хірург,лікар,False,,хірург
-file,document,файл,документ,False,,файл
-pound,dollar,фунт,долар,False,,фунт
-charity,donation,благодійність,пожертвування,False,,благодійність
-window,door,вікно,двері,False,,вікно
-paint,draw,фарба,розіграш,False,,фарба
-nightmare,dream,кошмар,мрія,False,,кошмар
-skirt,dress,спідниця,одяг,False,,спідниця
-passenger,driver,пасажир,водій,False,,пасажир
-alcohol,drug,алкоголь,наркотики,False,,алкоголь
-sober,drunk,трезвий,пяний,False,,трезвий
-goose,duck,гусь,качка,False,,гусь
-ash,dust,попел,пил,False,,попел
-rusty,dusty,ржавий,пильна,False,,ржавий
-responsibility,duty,відповідальність,обовязок,False,,відповідальність
-gunpowder,dynamite,порох,динаміт,False,,порох
-eye,ear,око,вухо,False,,око
-late,early,запізно,рано,False,,запізно
-west,east,захід,схід,False,,захід
-impossible,easy,неможливо,легко,False,,неможливо
-feed,eat,корми,їсти,False,,корми
-health,education,здоровя,освіта,False,,здоровя
-influence,effect,вплив,ефект,False,,вплив
-useful,effective,корисне,ефективний,False,,корисне
-nest,egg,гніздо,яйце,False,,гніздо
-campaign,election,кампанія,вибори,False,,кампанія
-magnetic,electric,магнітні,електричний,False,,магнітні
-current,electricity,поточний,електрика,False,,поточний
-fashionable,elegant,модна,елегантно,False,,модна
-factor,element,фактор,елемент,False,,фактор
-urgent,emergency,невідкладно,надзвичайний,False,,невідкладно
-mental,emotional,психічний,емоційні,False,,психічний
-imperial,emperor,імперська,імператор,False,,імперська
-dynasty,empire,династія,імперія,False,,династія
-power,energy,потужність,енергія,False,,потужність
-tank,engine,резервуар,двигун,False,,резервуар
-exit,entrance,вихід,вхід,False,,вихід
-millionaire,entrepreneur,мільйонер,підприємець,False,,мільйонер
-plague,epidemic,чума,епідемія,False,,чума
-series,episode,серія,епізод,False,,серія
-equipment,equip,обладнання,оснастити,False,,обладнання
-orgasm,erection,оргазм,ерекція,False,,оргазм
-flee,escape,втекти,втеча,False,,втекти
-observation,evaluation,спостереження,оцінка,False,,спостереження
-night,evening,ніч,вечір,False,,ніч
-phenomenon,event,феномен,подія,False,,феномен
-finally,eventually,нарешті,зрештою,False,,нарешті
-never,ever,ніколи,ніколи,True,,ніколи
-underestimate,exaggerate,недооцінювати,перебільшувати,False,,недооцінювати
-proud,excited,пишаюся,збуджений,False,,пишаюся
-forgive,excuse,прости,виправдання,False,,прости
-hanging,execution,висить,виконання,False,,висить
-practice,exercise,практика,вправи,False,,практика
-gallery,exhibition,галерея,виставка,False,,галерея
-wait,expect,зачекайте,очікувати,False,,зачекайте
-burst,explode,розрив,вибухнути,False,,розрив
-earthquake,explosion,землетрус,вибух,False,,землетрус
-bomb,explosive,бомба,вибухові,False,,бомба
-describe,express,описати,експрес,False,,описати
-internal,external,внутрішня,зовнішній,False,,внутрішня
-success,failure,успіх,невдача,False,,успіх
-hope,faith,надія,віра,False,,надія
-loyal,faithful,вірний,вірний,True,швидко,швидко
-fake,FALSE,фальшивий,фальшиве,False,,фальшивий
-clan,family,клан,сімя,False,,клан
-popular,famous,популярний,відомий,False,,популярний
-wonderful,fantastic,чудово,фантастично,False,,чудово
-reality,fantasy,реальність,фантазія,False,,реальність
-near,far,поблизу,далеко,False,,поблизу
-slow,fast,повільно,швидко,False,,повільно
-deadly,fatal,смертельний,смертельний,True,вірулентний,вірулентний
-mother,father,мати,батько,False,,мати
-mail,fax,пошта,факс,False,,пошта
-horror,fear,жах,страх,False,,жах
-colony,federation,колонія,федерація,False,,колонія
-impression,feeling,враження,відчуття,False,,враження
-male,female,чоловічий,жіноча,False,,чоловічий
-wall,fence,стіна,огорожа,False,,стіна
-carnival,festival,карнавал,фестиваль,False,,карнавал
-cough,fever,кашель,лихоманка,False,,кашель
-combat,fight,бойові дії,бій,False,,бойові дії
-champion,fighter,чемпіон,бойовик,False,,чемпіон
-nasty,filthy,неприємно,брудний,False,,неприємно
-banking,financial,банківські послуги,фінансові,False,,банківські послуги
-financially,financing,фінансово,фінансування,False,,фінансово
-search,find,пошук,знайти,False,,пошук
-dna,fingerprint,днк,відбиток пальця,False,,днк
-end,finish,кінець,закінчити,False,,кінець
-shark,fish,акула,риба,False,,акула
-hunting,fishing,полювання,рибальство,False,,полювання
-fire,flame,вогонь,полумя,False,,вогонь
-naval,fleet,військовоморський,флот,False,,військовоморський
-landing,flight,висадка,польоту,False,,висадка
-grain,flour,зерно,борошно,False,,зерно
-plant,flower,рослина,квітка,False,,рослина
-liquid,fluid,рідина,рідина,True,розплавлені,розплавлені
-land,fly,земля,летіть,False,,земля
-cloud,fog,хмара,туман,False,,хмара
-basketball,football,баскетбол,футбол,False,,баскетбол
-strength,force,сила,сила,True,спеціальність,спеціальність
-jungle,forest,джунглі,ліс,False,,джунглі
-eternal,forever,вічна,назавжди,False,,вічна
-spoon,fork,ложка,вилка,False,,ложка
-two,four,двоє,четверо,False,,двоє
-third,fourth,третій,четвертий,False,,третій
-conspiracy,fraud,змови,шахрайство,False,,змови
-freely,free,вільно,вільно,True,,вільно
-melt,freeze,розплавлення,заморозити,False,,розплавлення
-english,french,англійська,французький,False,,англійська
-colleague,friend,колега,друг,False,,колега
-polite,friendly,ввічливий,дружній,False,,ввічливий
-relationship,friendship,звязок,дружба,False,,звязок
-scare,frighten,налякати,налякати,True,паніка,паніка
-apple,fruit,яблуко,фрукти,False,,яблуко
-gas,fuel,газ,паливо,False,,газ
-refugee,fugitive,біженця,втікач,False,,біженця
-empty,full,порожній,повний,False,,порожній
-operational,functional,операційний,функціональний,False,,операційний
-budget,funding,бюджет,фінансування,False,,бюджет
-coffin,funeral,труна,похорон,False,,труна
-witty,funny,дотепний,смішно,False,,дотепний
-universe,galaxy,всесвіт,галактика,False,,всесвіт
-play,game,грати,гра,False,,грати
-workshop,garage,семінар,гараж,False,,семінар
-trash,garbage,сміття,сміття,True,переможець,переможець
-portal,gate,портал,ворота,False,,портал
-collect,gather,збирати,зібрати,False,,збирати
-lesbian,gay,лесбіянка,гей,False,,лесбіянка
-naturally,generally,природно,загалом,False,,природно
-compassionate,generous,співчутливий,щедрий,False,,співчутливий
-soft,gentle,мякий,нежно,False,,мякий
-compliment,gift,комплімент,подарунок,False,,комплімент
-boys,girls,хлопчики,дівчата,False,,хлопчики
-offer,give,пропозиція,дати,False,,пропозиція
-national,global,національний,глобальний,False,,національний
-glorious,glory,славний,слава,False,,славний
-enter,go,ввійти,іди,False,,ввійти
-monkey,gorilla,мавпа,горилла,False,,мавпа
-administration,government,адміністрація,уряд,False,,адміністрація
-diploma,graduate,диплом,випускник,False,,диплом
-kilo,gram,кіло,грам,False,,кіло
-grandfather,grandmother,дідусь,бабуся,False,,дідусь
-hospitality,gratitude,гостинність,вдячність,False,,гостинність
-excellent,great,відмінно,чудово,False,,відмінно
-roman,greek,римський,грецька,False,,римський
-congratulate,greet,вітаю,привітання,False,,вітаю
-gang,group,банда,група,False,,банда
-innocent,guilty,невинний,винний,False,,невинний
-piano,guitar,фортепіано,гітара,False,,фортепіано
-rifle,gun,гвинтівка,пістолет,False,,гвинтівка
-illusion,hallucination,ілюзія,галюцинації,False,,ілюзія
-sandwich,hamburger,бутерброд,гамбургер,False,,бутерброд
-stick,hammer,палиця,молоток,False,,палиця
-cloth,handkerchief,тканина,хустка,False,,тканина
-occur,happen,відбуваються,сталося,False,,відбуваються
-satisfied,happy,задоволений,щасливий,False,,задоволений
-bay,harbor,бухта,гавань,False,,бухта
-tough,hard,жорсткий,важко,False,,жорсткий
-balance,harmony,баланс,гармонія,False,,баланс
-helmet,hat,шлем,капелюх,False,,шлем
-base,headquarters,основа,штабквартира,False,,основа
-recover,heal,відновити,зцілити,False,,відновити
-listen,hear,слухайте,слухайте,True,прислухатися,прислухатися
-sky,heavenly,небо,небесне,False,,небо
-heavy,heavily,важкий,сильно,False,,важкий
-weight,height,вага,висота,False,,вага
-ambulance,helicopter,швидка допомога,вертоліт,False,,швидка допомога
-paradise,hell,рай,пекло,False,,рай
-cocaine,heroin,кокаїн,героїн,False,,кокаїн
-cover,hide,обкладинка,приховати,False,,обкладинка
-low,high,низький,високий,False,,низький
-majesty,highness,ваше величність,ваше високість,False,,ваше величність
-road,highway,дорога,шосе,False,,дорога
-aids,hiv,допоміг,віл,False,,допоміг
-crack,hole,тріщина,діра,False,,тріщина
-christmas,holiday,різдво,відпустка,False,,різдво
-decent,honest,пристойний,чесний,False,,пристойний
-loyalty,honesty,лояльність,чесність,False,,лояльність
-privilege,honor,привілей,честь,False,,привілей
-terrible,horrible,жахливо,жахливо,True,неописуемо,неописуемо
-donkey,horse,ослик,кінь,False,,ослик
-pump,hose,насос,шланг,False,,насос
-kiss,hug,поцілунок,обійми,False,,поцілунок
-big,huge,великий,величезний,False,,великий
-man,human,чоловік,людські,False,,чоловік
-thousand,hundred,тисячі,сотня,False,,тисячі
-tired,hungry,втомився,голодний,False,,втомився
-carbon,hydrogen,вуглець,водню,False,,вуглець
-fool,idiot,дурниця,ідіот,False,,дурниця
-meaning,importance,значення,важливість,False,,значення
-valuable,important,цінні,важливе,False,,цінні
-flatter,impress,плоскіший,вразити,False,,плоскіший
-penalty,imprisonment,штраф,увязнення,False,,штраф
-change,improvement,зміна,поліпшення,False,,зміна
-profit,income,прибуток,дохід,False,,прибуток
-point,indicate,точка,вказувати,False,,точка
-person,individual,особа,індивідуальний,False,,особа
-virus,infection,вірус,інфекція,False,,вірус
-report,inform,звіт,інформувати,False,,звіт
-source,informant,джерело,інформатор,False,,джерело
-data,information,дані,інформація,False,,дані
-heritage,inherit,спадщина,успадкувати,False,,спадщина
-dose,injection,доза,інєкція,False,,доза
-wound,injury,рана,травма,False,,рана
-spider,insect,павук,комах,False,,павук
-outside,inside,зовні,всередині,False,,зовні
-examination,inspection,огляд,інспекція,False,,огляд
-inspire,inspiration,натхнення,натхнення,True,підбадьорюйся,підбадьорюйся
-tool,instrument,інструмент,інструмент,True,пекер,пекер
-smart,intelligent,розумний,розумні,False,,розумний
-purpose,intention,мета,наміри,False,,мета
-accidentally,intentionally,випадково,навмисно,False,,випадково
-exciting,interesting,захоплююче,цікаво,False,,захоплююче
-personal,intimate,особистий,інтимний,False,,особистий
-instinct,intuition,інстинкт,інтуїція,False,,інстинкт
-finance,invest,фінанси,інвестувати,False,,фінанси
-examine,investigate,оглянути,розслідувати,False,,оглянути
-analyst,investigator,аналітик,дослідник,False,,аналітик
-banker,investor,банкір,інвестор,False,,банкір
-irony,ironic,іронія,іронія,True,сатира,сатира
-unreasonable,irresponsible,нерозумний,безвідповідально,False,,нерозумний
-shirt,jacket,сорочка,куртка,False,,сорочка
-diamond,jewel,діамант,ювелірний,False,,діамант
-trick,joke,трюк,жарт,False,,трюк
-reporter,journalist,репортер,журналіст,False,,репортер
-pleasure,joy,задоволення,радість,False,,задоволення
-court,judge,суд,суддя,False,,суд
-milk,juice,молоко,сок,False,,молоко
-romeo,juliet,ромео,джульєтта,False,,ромео
-june,july,червень,липня,False,,червень
-climb,jump,підніматися,стрибати,False,,підніматися
-senior,junior,старший,молодший,False,,старший
-revenge,justice,помста,правосуддя,False,,помста
-hold,keep,тримати,тримати,True,книга,книга
-poison,kill,отрута,вбити,False,,отрута
-queen,king,королева,король,False,,королева
-royal,kingdom,королівська,королівство,False,,королівська
-shoulder,knee,плече,коліно,False,,плече
-recognize,knew,розпізнати,знав,False,,розпізнати
-sword,knife,меч,нож,False,,меч
-now,know,тепер,знаю,False,,тепер
-experience,knowledge,досвід,знання,False,,досвід
-lord,lady,господи,леді,False,,господи
-river,lake,річка,озеро,False,,річка
-tenant,landlord,орендатор,власник будинку,False,,орендатор
-first,last,спочатку,останній,False,,спочатку
-smile,laugh,посмішка,смійся,False,,посмішка
-member,leader,член,лідер,False,,член
-seminar,lecture,семінар,лекція,False,,семінар
-right,left,правильно,ліворуч,False,,правильно
-illegal,legal,незаконно,юридичний,False,,незаконно
-myth,legend,міф,легенда,False,,міф
-size,length,розмір,довжина,False,,розмір
-allow,let,дозволити,дозвольте,False,,дозволити
-telegram,letter,телеграма,лист,False,,телеграма
-lie,liar,брехня,брехня,True,лежить,лежить
-conservative,liberal,консервативний,ліберальний,False,,консервативний
-suck,lick,сосать,лизати,False,,сосать
-sergeant,lieutenant,сержант,лейтенант,False,,сержант
-darkness,light,темрява,світло,False,,темрява
-probability,likely,ймовірність,ймовірно,False,,ймовірність
-taxi,limousine,таксі,лімузин,False,,таксі
-ming,ling,мінг,лінг,False,,мінг
-dragon,lion,дракон,лев,False,,дракон
-art,literature,мистецтво,література,False,,мистецтво
-kidney,liver,нирки,печінка,False,,нирки
-frog,lizard,жаба,ящірка,False,,жаба
-credit,loan,кредит,позика,False,,кредит
-tuna,lobster,тунец,лобстер,False,,тунец
-regional,local,регіональні,місцевий,False,,регіональні
-place,location,місце,місце розташування,False,,місце
-key,lock,ключ,замк,False,,ключ
-alone,lonely,один,самотній,False,,один
-short,long,короткий,довгий,False,,короткий
-hate,love,ненависть,кохання,False,,ненависть
-nice,lovely,приємно,прекрасно,False,,приємно
-mistress,lover,коханка,коханий,False,,коханка
-snack,lunch,закуска,обід,False,,закуска
-robot,machine,робот,машина,False,,робот
-playboy,magazine,плейбой,журнал,False,,плейбой
-nanny,maid,няня,служниця,False,,няня
-preserve,maintain,зберегти,підтримувати,False,,зберегти
-service,maintenance,послуга,технічне обслуговування,False,,послуга
-control,manipulate,контроль,маніпулювати,False,,контроль
-compass,map,компас,карта,False,,компас
-advertising,marketing,реклама,маркетинг,False,,реклама
-divorce,marriage,розлучення,шлюб,False,,розлучення
-single,married,одинокий,одружений,False,,одинокий
-yoga,massage,йога,масаж,False,,йога
-tournament,match,турнір,збіг,False,,турнір
-physics,mathematics,фізика,математика,False,,фізика
-minimum,maximum,мінімальний,максимальна,False,,мінімальний
-ketchup,mayonnaise,кетчуп,майонез,False,,кетчуп
-sheriff,mayor,шериф,мер,False,,шериф
-food,meal,їжа,їжа,True,поживна речовина,поживна речовина
-pork,meat,свиняча,мясо,False,,свиняча
-technical,mechanical,технічні,механічні,False,,технічні
-trophy,medal,трофей,медаль,False,,трофей
-artifact,medallion,артефакт,медальйон,False,,артефакт
-see,meet,дивіться,зустрітися,False,,дивіться
-conference,meeting,конференція,зустріч,False,,конференція
-commercial,merchant,комерційний,купець,False,,комерційний
-forgiveness,mercy,прощення,милосердя,False,,прощення
-warning,message,попередження,повідомлення,False,,попередження
-iron,metal,залізо,метал,False,,залізо
-kilometer,meter,кілометр,метр,False,,кілометр
-camera,microphone,камера,мікрофон,False,,камера
-telescope,microscope,телескоп,мікроскоп,False,,телескоп
-civil,military,цивільне,військові,False,,цивільне
-ambassador,minister,посол,міністр,False,,посол
-embassy,ministry,посольство,міністерство,False,,посольство
-plus,minus,плюс,мінус,False,,плюс
-second,minute,другий,хвилина,False,,другий
-reflection,mirror,відбиття,дзеркало,False,,відбиття
-poverty,misery,бідність,нещастя,False,,бідність
-unfortunate,misfortune,нещасний,нещастя,False,,нещасний
-rocket,missile,ракета,ракета,True,ругула,ругула
-task,mission,завдання,місія,False,,завдання
-error,mistake,помилка,помилка,True,правопорушення,правопорушення
-combination,mixture,комбінація,суміш,False,,комбінація
-humble,modest,скромний,скромний,True,базовий,базовий
-temple,monastery,храм,монастир,False,,храм
-cash,money,готівка,гроші,False,,готівка
-screen,monitor,екран,монітор,False,,екран
-tomorrow,morning,завтра,ранку,False,,завтра
-aspirin,morphine,аспірин,морфін,False,,аспірин
-hotel,motel,готель,мотель,False,,готель
-hill,mountain,пагорб,гора,False,,пагорб
-porn,movie,порно,фільм,False,,порно
-daddy,mum,тато,мама,False,,тато
-suicide,murder,самогубство,вбивство,False,,самогубство
-killer,murderer,вбивця,вбивця,True,морський вовк,морський вовк
-nerve,muscle,нерв,мязи,False,,нерв
-library,museum,бібліотека,музей,False,,бібліотека
-jazz,music,джаз,музика,False,,джаз
-singer,musician,співак,музикант,False,,співак
-evolution,mutation,еволюція,мутація,False,,еволюція
-secret,mystery,таємниця,таємниця,True,закрита книга,закрита книга
-nude,naked,голий,голий,True,обнажена скульптура,обнажена скульптура
-country,nation,країна,нація,False,,країна
-diarrhea,nausea,діарея,нудота,False,,діарея
-marine,navy,морські,військовоморський флот,False,,морські
-throat,neck,горло,шия,False,,горло
-ring,necklace,кільце,ожерелье,False,,кільце
-necessary,need,необхідно,потреба,False,,необхідно
-positive,negative,позитивний,негативний,False,,позитивний
-grandson,nephew,онук,племінник,False,,онук
-worried,nervous,турбується,нервовий,False,,турбується
-channel,news,канал,новини,False,,канал
-article,newspaper,стаття,газета,False,,стаття
-midnight,noon,опівночі,полудня,False,,опівночі
-healthy,normal,здоровий,нормально,False,,здоровий
-south,north,південь,північ,False,,південь
-mouth,nose,рот,ніс,False,,рот
-atomic,nuclear,атомний,ядерна,False,,атомний
-swear,oath,клянуся,присяга,False,,клянуся
-clearly,obviously,ясно,очевидно,False,,ясно
-sea,ocean,море,океан,False,,море
-september,october,вересень,жовтень,False,,вересень
-insult,offend,образа,образити,False,,образа
-desk,office,стіл,офіс,False,,стіл
-officially,official,офіційно,офіційний,False,,офіційно
-sometimes,often,іноді,часто,False,,іноді
-coal,oil,вугілля,олія,False,,вугілля
-garlic,onion,часник,цибуля,False,,часник
-enemy,opponent,ворог,опонент,False,,ворог
-choice,option,вибір,варіант,False,,вибір
-green,orange,зелений,помаранчевий,False,,зелений
-planet,orbit,планета,орбіта,False,,планета
-command,order,команда,порядок,False,,команда
-arrange,organize,влаштувати,організувати,False,,влаштувати
-result,outcome,результат,результат,True,свинцю,свинцю
-property,owner,власність,власник,False,,власність
-air,oxygen,повітря,кисень,False,,повітря
-envelope,package,конверт,пакет,False,,конверт
-suffering,pain,страждання,біль,False,,страждання
-artist,painter,художник,художник,True,творча людина,творча людина
-section,paragraph,розділ,параграф,False,,розділ
-supernatural,paranormal,надприродні,паранормальні,False,,надприродні
-adult,parent,дорослий,батько,False,,дорослий
-matter,particle,матерія,частинка,False,,матерія
-reception,party,прийом,вечірка,False,,прийом
-enthusiasm,passion,ентузіазм,пристрасть,False,,ентузіазм
-ticket,passport,квиток,паспорт,False,,квиток
-code,password,код,пароль,False,,код
-future,past,майбутнє,минуле,False,,майбутнє
-route,path,маршрут,шлях,False,,маршрут
-miserable,pathetic,нещасний,жалюгідний,False,,нещасний
-guard,patrol,охоронець,патруль,False,,охоронець
-paper,pen,папір,ручка,False,,папір
-vagina,penis,вагіна,пеніс,False,,вагіна
-population,people,населення,люди,False,,населення
-ideal,perfect,ідеальний,ідеально,False,,ідеальний
-show,performance,шоу,продуктивність,False,,шоу
-lipstick,perfume,помада,парфюмерия,False,,помада
-radius,perimeter,радіус,периметр,False,,радіус
-phase,period,фаза,період,False,,фаза
-character,personality,характер,особистість,False,,характер
-view,perspective,вигляд,перспектива,False,,вигляд
-picture,photo,фотографія,фотографія,True,дивіться,дивіться
-autograph,photographer,автограф,фотограф,False,,автограф
-dictionary,phrase,словник,фраза,False,,словник
-sexual,physical,сексуальний,фізична,False,,сексуальний
-fragment,piece,фрагмент,шматок,False,,фрагмент
-cow,pig,корова,свиня,False,,корова
-tablet,pill,планшети,таблетки,False,,планшети
-astronaut,pilot,астронавт,пілот,False,,астронавт
-preparation,planning,підготовка,планування,False,,підготовка
-cement,plastic,цемент,пластик,False,,цемент
-bowl,plate,чаша,пластина,False,,чаша
-explanation,plausible,пояснення,правдоподібний,False,,пояснення
-coach,player,тренер,гравець,False,,тренер
-comfortable,pleasant,комфортно,приємно,False,,комфортно
-text,poem,текст,поема,False,,текст
-gambling,poker,азартні ігри,покер,False,,азартні ігри
-critical,political,критичний,політичні,False,,критичний
-policy,politician,політика,політик,False,,політика
-journalism,politics,журналістика,політика,False,,журналістика
-status,position,статус,позиція,False,,статус
-chance,possibility,шанс,можливість,False,,шанс
-helpless,powerless,безпорадний,безсильний,False,,безпорадний
-literally,practically,буквально,практично,False,,буквально
-prey,predator,здобич,хижак,False,,здобич
-birth,pregnancy,народження,вагітність,False,,народження
-ready,prepare,готовий,підготуйте,False,,готовий
-chancellor,president,канцлер,президент,False,,канцлер
-button,press,кнопка,преса,False,,кнопка
-pulse,pressure,імпульс,тиск,False,,імпульс
-value,price,вартість,ціна,False,,вартість
-monk,priest,монах,священик,False,,монах
-secondary,primary,вторинний,первинний,False,,вторинний
-princess,prince,принцеса,принц,False,,принцеса
-cell,prison,клітина,вязниця,False,,клітина
-hostage,prisoner,заручники,увязнений,False,,заручники
-private,privacy,приватний,конфіденційність,False,,приватний
-nobel,prize,нобель,премія,False,,нобель
-maybe,probably,можливо,ймовірно,False,,можливо
-capsule,probe,капсула,зонд,False,,капсула
-trouble,problem,проблема,проблема,True,карк,карк
-process,procedure,процес,процедура,False,,процес
-create,produce,створити,продукція,False,,створити
-brand,product,марка,продукт,False,,марка
-factory,production,фабрика,виробництво,False,,фабрика
-amateur,professional,аматор,професіонал,False,,аматор
-dean,professor,декан,професор,False,,декан
-project,program,проект,програма,False,,проект
-forbidden,prohibit,заборонено,заборонити,False,,заборонено
-guarantee,promise,гарантія,обіцянка,False,,гарантія
-evidence,proof,докази,доказ,False,,докази
-lawyer,prosecutor,адвокат,прокурор,False,,адвокат
-rule,protocol,правило,протокол,False,,правило
-model,prototype,модель,прототип,False,,модель
-enable,provide,включити,забезпечити,False,,включити
-medical,psychological,медичний,психологічна,False,,медичний
-anatomy,psychology,анатомія,психологія,False,,анатомія
-push,pull,натискати,витягувати,False,,натискати
-insert,put,вставити,покласти,False,,вставити
-quantity,quality,кількість,якість,False,,кількість
-half,quarter,половина,квартал,False,,половина
-slowly,quickly,повільно,швидко,False,,повільно
-fox,rabbit,лиса,кролик,False,,лиса
-squirrel,raccoon,білка,енота,False,,білка
-marathon,race,марафон,раса,False,,марафон
-contamination,radiation,забруднення,випромінювання,False,,забруднення
-anger,rage,гнів,гнів,True,червоний,червоний
-kidnapper,ransom,викрадач,викуп,False,,викрадач
-occasionally,rarely,іноді,рідко,False,,іноді
-mouse,rat,миша,щур,False,,миша
-generator,reactor,генератор,реактор,False,,генератор
-TRUE,real,правда,реальний,False,,правда
-optimistic,realistic,оптимістичний,реалістичний,False,,оптимістичний
-actually,really,насправді,дійсно,False,,насправді
-front,rear,передній,задній,False,,передній
-fair,reasonable,справедливий,розумний,False,,справедливий
-just,recently,просто,нещодавно,False,,просто
-record,recording,запис,запис,True,реєстр,реєстр
-increase,reduce,збільшення,зменшити,False,,збільшення
-fresh,refresh,свіжий,оновлення,False,,свіжий
-philosophy,religion,філософія,релігія,False,,філософія
-stay,remain,залишитись,залишаються,False,,залишитись
-exceptional,remarkable,виняткові,дивовижний,False,,виняткові
-forget,remember,забути,памятай,False,,забути
-eliminate,remove,усунути,видалити,False,,усунути
-hire,rent,оренду,оренду,True,візьміть,візьміть
-fix,repair,виправити,ремонт,False,,виправити
-answer,reply,відповідь,відповідь,True,резолюція,резолюція
-career,reputation,карєра,репутація,False,,карєра
-demand,request,попит,запит,False,,попит
-resistance,resist,опору,протистояти,False,,опору
-pub,restaurant,паб,ресторан,False,,паб
-back,return,назад,повернення,False,,назад
-bonus,reward,бонус,винагорода,False,,бонус
-poor,rich,бідний,багатий,False,,бідний
-drive,ride,привід,їздити,False,,привід
-steal,rob,вкрасти,роб,False,,вкрасти
-theft,robbery,крадіжка,пограбування,False,,крадіжка
-dramatic,romantic,драматичний,романтична,False,,драматичний
-caesar,rome,цезарь,рим,False,,цезарь
-chain,rope,ланцюг,мотузка,False,,ланцюг
-turn,rotate,поворот,обертати,False,,поворот
-espionage,sabotage,шпигунство,саботаж,False,,шпигунство
-security,safety,безпека,безпека,True,сертифікат,сертифікат
-anchor,sail,якорь,вітрило,False,,якорь
-pirate,sailor,пірат,моряк,False,,пірат
-soup,salad,суп,салат,False,,суп
-pension,salary,пенсія,зарплата,False,,пенсія
-auction,sale,аукціон,продаж,False,,аукціон
-ninja,samurai,я,самураї,False,,я
-mud,sand,брудь,пісок,False,,брудь
-radar,satellite,радар,супутник,False,,радар
-cream,sauce,крем,соус,False,,крем
-rescue,save,порятунок,зберегти,False,,порятунок
-hero,savior,герой,спаситель,False,,герой
-gossip,scandal,плітки,скандал,False,,плітки
-tattoo,scar,татуювання,шрам,False,,татуювання
-calendar,schedule,календар,розклад,False,,календар
-class,school,клас,школа,False,,клас
-technology,science,технологія,наука,False,,технологія
-genius,scientist,геній,вчений,False,,геній
-safe,secure,безпечно,безпечно,True,гума,гума
-choose,select,вибрати,вибрати,True,віддаю перевагу,віддаю перевагу
-stubborn,selfish,впертий,егоїстичний,False,,впертий
-buy,sell,купити,продати,False,,купити
-parliament,senate,парламент,сенат,False,,парламент
-governor,senator,губернатор,сенатор,False,,губернатор
-bring,send,принесіть,відправити,False,,принесіть
-delicate,sensitive,делікатний,чутливий,False,,делікатний
-word,sentence,слово,речення,False,,слово
-speech,sermon,промова,проповідь,False,,промова
-slave,servant,раб,слуга,False,,раб
-refuge,shelter,притулок,притулок,True,святилище,святилище
-crew,ship,екіпаж,корабель,False,,екіпаж
-boot,shoe,завантаження,взуття,False,,завантаження
-shot,shoot,стрілянину,стріляти,False,,стрілянину
-ill,sick,хворий,хворий,True,зловісний,зловісний
-form,sign,форма,знак,False,,форма
-frequency,signal,частота,сигнал,False,,частота
-stamp,signature,штамп,підпис,False,,штамп
-silent,silence,тихо,тиша,False,,тихо
-golden,silver,золотий,срібло,False,,золотий
-simply,simple,просто,просто,True,але,але
-toilet,sink,туалет,раковина,False,,туалет
-drop,sip,падіння,глоток,False,,падіння
-stand,sit,стоянка,сидіти,False,,стоянка
-bone,skull,кістка,череп,False,,кістка
-rest,sleep,відпочинок,спати,False,,відпочинок
-little,small,невеликий,невеликі,False,,невеликий
-taste,smell,смак,запах,False,,смак
-worm,snake,червяк,змія,False,,червяк
-shooter,sniper,стрільця,снайпер,False,,стрільця
-rain,snow,дощ,сніг,False,,дощ
-lemonade,soda,лимонад,сода,False,,лимонад
-lunar,solar,місячний,сонячна,False,,місячний
-nothing,something,нічого,щось,False,,нічого
-elsewhere,somewhere,в іншому місці,десь,False,,в іншому місці
-daughter,son,дочка,син,False,,дочка
-album,song,альбом,пісня,False,,альбом
-noise,sound,шум,звук,False,,шум
-lasagna,spaghetti,лазанья,спагеті,False,,лазанья
-talk,speak,розмова,говоріть,False,,розмова
-expert,specialist,експерт,спеціаліст,False,,експерт
-sensational,spectacular,сенсаційний,вражаюче,False,,сенсаційний
-distance,speed,відстань,швидкість,False,,відстань
-waste,spend,відходи,витратити,False,,відходи
-soul,spirit,душа,дух,False,,душа
-hobby,sport,хобі,спорт,False,,хобі
-celebrity,star,знаменитість,зірка,False,,знаменитість
-federal,state,федеральний,держава,False,,федеральний
-comment,statement,коментар,заява,False,,коментар
-platform,station,платформа,станція,False,,платформа
-monument,statue,памятник,статуя,False,,памятник
-concrete,steel,бетон,сталь,False,,бетон
-already,still,вже,ще не,False,,вже
-rock,stone,камінь,камінь,True,карін,карін
-prevent,stop,запобігти,зупинитися,False,,запобігти
-shop,store,магазин,магазин,True,олен,олен
-wind,storm,вітер,шторм,False,,вітер
-oven,stove,печ,печ,True,,печ
-unusual,strange,незвично,дивно,False,,незвично
-plan,strategy,план,стратегія,False,,план
-banana,strawberry,банани,полуниця,False,,банани
-avenue,street,проспект,вулиця,False,,проспект
-hit,strike,ударив,страйк,False,,ударив
-nap,stroll,дрімати,прогулянка,False,,дрімати
-firmly,strongly,твердо,сильно,False,,твердо
-pyramid,structure,піраміда,структура,False,,піраміда
-research,study,дослідження,дослідження,True,досліджувати,досліджувати
-naïve,stupid,наївна,дурний,False,,наївна
-madness,stupidity,божевілля,дурість,False,,божевілля
-rhythm,style,ритм,стиль,False,,ритм
-object,subject,обєкт,предмет,False,,обєкт
-replace,substitute,замінити,замінник,False,,замінити
-manage,succeed,керувати,успіх,False,,керувати
-enough,sufficient,досить,достатньо,False,,досить
-propose,suggest,запропонувати,запропонувати,True,запитання зявилося,запитання зявилося
-briefcase,suitcase,портфель,валіз,False,,портфель
-moon,sun,місяць,сонце,False,,місяць
-saturday,sunday,субота,неділя,False,,субота
-layer,surface,шар,поверхня,False,,шар
-operate,surgery,працювати,хірургія,False,,працювати
-nickname,surname,прізвище,прізвище,True,дуб,дуб
-live,survive,живий,вижити,False,,живий
-doubt,suspect,сумніви,підозрюваний,False,,сумніви
-drown,swim,утонув,плавати,False,,утонув
-flag,symbol,прапор,символ,False,,прапор
-symptom,syndrome,симптом,синдром,False,,симптом
-needle,syringe,ігла,шприц,False,,ігла
-network,system,мережа,система,False,,мережа
-potential,talent,потенціал,талант,False,,потенціал
-learn,teach,навчитися,навчати,False,,навчитися
-student,teacher,студент,вчитель,False,,студент
-league,team,ліга,команда,False,,ліга
-method,technique,метод,техніка,False,,метод
-teenage,teenager,підліток,підліток,True,,підліток
-call,telephone,дзвонити,телефон,False,,дзвонити
-radio,television,радіо,телебачення,False,,радіо
-say,tell,скажіть,розкажіть,False,,скажіть
-heat,temperature,тепло,температура,False,,тепло
-golf,tennis,гольф,теніс,False,,гольф
-experiment,test,експеримент,випробування,False,,експеримент
-witness,testimony,свідка,свідчення,False,,свідка
-grateful,thank,вдячний,дякую,False,,вдячний
-what,that,що це,що,False,,що це
-cinema,theater,кінотеатр,театр,False,,кінотеатр
-idea,theory,ідея,теорія,False,,ідея
-here,there,тут,там,False,,тут
-thin,thick,тонкий,товстий,False,,тонкий
-consider,think,розглянути,подумайте,False,,розглянути
-hunger,thirst,голод,спрага,False,,голод
-one,three,один,три,False,,один
-crown,throne,корона,трон,False,,корона
-finger,thumb,палець,палець,True,цифри,цифри
-lightning,thunder,блискавка,гром,False,,блискавка
-bind,tie,звязувати,краватка,False,,звязувати
-detonator,timer,детонатор,таймер,False,,детонатор
-skin,tissue,шкіра,тканини,False,,шкіра
-name,title,імя,назва,False,,імя
-potato,tomato,картопля,помідор,False,,картопля
-nail,tooth,нігтя,зуб,False,,нігтя
-hurricane,tornado,ураган,торнадо,False,,ураган
-torment,torture,муки,тортури,False,,муки
-blanket,towel,ковдру,рушник,False,,ковдру
-doll,toy,лялька,іграшка,False,,лялька
-modern,traditional,сучасні,традиційні,False,,сучасні
-sad,tragic,сумно,трагічний,False,,сумно
-spy,traitor,шпигун,зрадник,False,,шпигун
-move,transfer,переміститися,перенесення,False,,переміститися
-sensor,transmitter,сенсор,передавач,False,,сенсор
-therapy,treatment,терапія,лікування,False,,терапія
-bush,tree,кущ,дерево,False,,кущ
-hearing,trial,слух,судовий розгляд,False,,слух
-circle,triangle,круг,трикутник,False,,круг
-double,triple,подвійне,тройний,False,,подвійне
-jeep,truck,джип,вантажівка,False,,джип
-monday,tuesday,понеділок,вівторок,False,,понеділок
-bridge,tunnel,міст,тунель,False,,міст
-chicken,turkey,курка,индюка,False,,курка
-snail,turtle,улитка,черепаха,False,,улитка
-disgusting,ugly,огидно,потворний,False,,огидно
-final,ultimate,остаточний,остаточний,True,нетто,нетто
-inability,unable,нездатність,не в змозі,False,,нездатність
-realize,understand,усвідомити,розумію,False,,усвідомити
-suddenly,unexpectedly,раптом,несподівано,False,,раптом
-injustice,unfair,несправедливість,несправедливо,False,,несправедливість
-badge,uniform,значок,однорідна,False,,значок
-special,unique,спеціальний,унікальний,False,,спеціальний
-college,university,коледж,університет,False,,коледж
-anonymous,unknown,анонімний,невідоме,False,,анонімний
-uncomfortable,unpleasant,незручно,неприємно,False,,незручно
-down,up,вниз,вгору,False,,вниз
-lower,upper,нижче,верхній,False,,нижче
-blood,urine,кров,сеча,False,,кров
-apply,use,застосовувати,використання,False,,застосовувати
-ordinary,usual,звичайний,зазвичай,False,,звичайний
-normally,usually,зазвичай,зазвичай,True,не помітно,не помітно
-antidote,vaccine,антидот,вакцинація,False,,антидот
-desert,valley,пустеля,долина,False,,пустеля
-zombie,vampire,зомбі,вампір,False,,зомбі
-trailer,van,причеп,фургон,False,,причеп
-cinnamon,vanilla,кориця,ваніль,False,,кориця
-valve,ventilation,клапан,вентиляція,False,,клапан
-mars,venus,марс,венера,False,,марс
-check,verify,перевірка,перевірка,True,обґрунтування,обґрунтування
-extremely,very,надзвичайно,дуже,False,,надзвичайно
-dvd,video,dvd,відео,False,,dvd
-camp,village,табір,село,False,,табір
-revelation,vision,відкриття,бачення,False,,відкриття
-protein,vitamin,білки,вітамін,False,,білки
-whiskey,vodka,віскі,горілка,False,,віскі
-volunteer,voluntarily,волонтер,добровільно,False,,волонтер
-majority,vote,більшість,голосування,False,,більшість
-candidate,voter,кандидат,виборця,False,,кандидат
-waiter,waitress,офіціант,офіціантка,False,,офіціант
-run,walk,бігти,ходити,False,,бігти
-pocket,wallet,кишеню,гаманець,False,,кишеню
-soldier,warrior,солдат,воїн,False,,солдат
-clean,wash,чистий,мити,False,,чистий
-look,watch,дивіться,годинник,False,,дивіться
-sherlock,watson,шерлок,уотсон,False,,шерлок
-strong,weak,сильний,слабкий,False,,сильний
-treasure,wealth,скарб,багатство,False,,скарб
-pistol,weapon,,зброя,False,,
-internet,web,інтернет,вебсайт,False,,інтернет
-engagement,wedding,заручення,весілля,False,,заручення
-month,week,місяць,тиждень,False,,місяць
-daily,weekly,щодня,щотижнево,False,,щодня
-southern,western,південний,західний,False,,південний
-dry,wet,сухий,мокро,False,,сухий
-horn,whistle,рог,свисток,False,,рог
-narrow,wide,вузький,широкий,False,,вузький
-husband,wife,чоловік,дружина,False,,чоловік
-gain,win,прибуток,перемога,False,,прибуток
-loser,winner,програвець,переможець,False,,програвець
-summer,winter,літо,зима,False,,літо
-cable,wire,кабель,дріт,False,,кабель
-desire,wish,бажання,бажання,True,надія,надія
-curse,witch,прокляття,відьма,False,,прокляття
-magic,wizard,магія,чарівник,False,,магія
-bear,wolf,ведмедь,вовк,False,,ведмедь
-widow,woman,вдова,жінка,False,,вдова
-job,work,робота,робота,True,галузь роботи,галузь роботи
-farmer,worker,фермер,робітник,False,,фермер
-international,world,міжнародний,світ,False,,міжнародний
-concern,worry,занепокоєння,турбуватися,False,,занепокоєння
-useless,worthless,безкорисливий,безцінний,False,,безкорисливий
-deserve,worthy,заслуговують,гідний,False,,заслуговують
-read,write,прочитати,писати,False,,прочитати
-poet,writer,поет,письменник,False,,поет
-reading,writing,читання,письмо,False,,читання
-okay,yeah,гаразд,так,False,,гаразд
-red,yellow,червоний,жовтий,False,,червоний
-today,yesterday,сьогодні,вчора,False,,сьогодні
-old,young,старий,молодий,False,,старий
-area,zone,площа,зона,False,,площа
+en_cue,en_target,ukr_cue,ukr_target,needs_review,suggested_ukr_cue,final_ukr_cue,backtrans_cue,backtrans_target,backtrans_cue_match,backtrans_target_match,backtrans_needs_review
+leave,abandon,піти,залишити,False,,піти,to go,leave,False,False,True
+spinal,abdominal,спинальний,живота,False,,спинальний,the spinal cord,of life,False,False,True
+kidnap,abduct,викрасти,викрадення,False,,викрасти,steal,the kidnapping,False,False,True
+capacity,ability,потужність,здатність,False,,потужність,power,ability,False,True,True
+out,about,вийшов,про,False,,вийшов,he left,about,False,True,True
+presence,absence,присутність,відсутність,False,,присутність,the presence,absence,False,True,True
+ridiculous,absurd,нелепо,абсурдно,False,,нелепо,this is ridiculous,this is absurd,False,False,True
+voice,accent,голос,акцент,False,,голос,the voice,the accent,False,False,True
+refuse,accept,відмовитись,прийняти,False,,відмовитись,give up,to accept,False,False,True
+incident,accident,інцидент,аварія,False,,інцидент,the incident,the accident,False,False,True
+escort,accompany,ескорт,супроводжувати,False,,ескорт,the escort,accompanying,False,False,True
+complaint,accusation,скарга,звинувачення,False,,скарга,complaint,the accusation,True,False,True
+gesture,act,жест,акт,False,,жест,the gesture,the act,False,False,True
+trigger,activate,спусковий механізм,активувати,False,,спусковий механізм,the descent mechanism,activate,False,True,True
+active,activity,активний,діяльність,False,,активний,active,activities,True,False,True
+author,actor,автор,актор,False,,автор,author,actor,True,True,False
+extra,additional,додатково,додаткові,False,,додатково,additionally,additional,False,True,True
+number,address,номер,адреса,False,,номер,number,address,True,True,False
+management,administrative,управління,адміністративний,False,,управління,management,administrative office,True,False,True
+hormone,adrenaline,гормон,адреналін,False,,гормон,the hormone,the adrenaline,False,False,True
+advice,advise,поради,порадити,False,,поради,advice,advise,True,True,False
+firm,agency,тверда,агентство,False,,тверда,the fortress,agency,False,True,True
+contract,agreement,контракт,угода,False,,контракт,the contract,the deal,False,False,True
+terminal,airport,термінал,аеропорт,False,,термінал,the terminal,airport,False,True,True
+alert,alarm,попередження,тривожна сигналізація,False,,попередження,warning,alarm system,False,False,True
+motive,alibi,мотив,алібі,False,,мотив,motive,the alibi,True,False,True
+ufo,alien,ufo,інопланетянин,False,,ufo,the ufo,the alien,False,False,True
+corner,alley,кут,алея,False,,кут,the angle,the alley,False,False,True
+bravo,alpha,добре,альфа,False,,добре,very well,the alpha,False,False,True
+impressive,amazing,вражаюче,дивовижно,False,,вражаюче,it was amazing,its wonderful,False,False,True
+africa,america,африка,америка,False,,африка,africa,the united states,True,False,True
+sum,amount,сума,сума,True,додати,додати,add,the amount,False,False,True
+autopsy,analysis,аутопсія,аналіз,False,,аутопсія,the autopsy,the analysis,False,False,True
+jealous,angry,ревнивий,злість,False,,ревнивий,jealous,anger,True,False,True
+beast,animal,звір,тварина,False,,звір,the beast,the animal,False,False,True
+bee,ant,бджола,мурашка,False,,бджола,the bee,the ant,False,False,True
+house,apartment,будинок,квартира,False,,будинок,house,apartment,True,True,False
+admire,appreciate,захоплюватися,дякую,False,,захоплюватися,to be fascinated,thank you,False,False,True
+permission,approval,дозвіл,схвалення,False,,дозвіл,permission to travel,approved,False,False,True
+engineer,architect,інженер,архітектор,False,,інженер,engineer,architect,True,True,False
+hand,arm,рука,рука,True,сценарій,сценарій,the script,the hand,False,False,True
+shield,armor,щит,броня,False,,щит,shield,the armor,True,False,True
+arsenal,armory,арсенал,збройна складова,False,,арсенал,the arsenal,weaponry,False,False,True
+legion,army,легіон,армія,False,,легіон,the legion,the army,False,False,True
+round,around,круглий,навколо,False,,круглий,round,around,True,True,False
+punish,arrest,покарати,арешт,False,,покарати,punish,arrested,True,False,True
+ignorance,arrogance,неосвіченість,надмірність,False,,неосвіченість,uneducated,excess,False,False,True
+vein,artery,вена,артерія,False,,вена,the vein,arteries,False,False,True
+natural,artificial,природний,штучний,False,,природний,natural,artificial,True,True,False
+cavalry,artillery,кавалерія,артилерія,False,,кавалерія,the cavalry,artillery,False,True,True
+question,ask,питання,запитай,False,,питання,questions and answers,ask him,False,False,True
+mercenary,assassin,найманник,вбивця,False,,найманник,the mercenary,the murderer,False,False,True
+help,assist,допомога,допомогти,False,,допомога,help,help,True,False,True
+support,assistance,підтримка,допомога,False,,підтримка,support,help,True,False,True
+secretary,assistant,секретар,помічник,False,,секретар,secretary,assistant to,True,False,True
+conclusion,assumption,висновок,припущення,False,,висновок,the conclusion,assumptions made,False,False,True
+pacific,atlantic,тихоокеанський,атлантичний,False,,тихоокеанський,pacific,the atlantic,True,False,True
+environment,atmosphere,навколишнє середовище,атмосфера,False,,навколишнє середовище,the environment,the atmosphere,False,False,True
+invasion,attack,вторгнення,атака,False,,вторгнення,the invasion,the attack,False,False,True
+victim,attacker,жертва,нападник,False,,жертва,victim,the attacker,True,False,True
+try,attempt,спробуй,спроба,False,,спробуй,try it,attempt,False,True,True
+opinion,attitude,думка,ставлення,False,,думка,thought,attitude,False,True,True
+attention,attract,увага,приваблювати,False,,увага,attention,attract,True,True,False
+crowd,audience,натовп,аудиторія,False,,натовп,the crowd,the audience,False,False,True
+jurisdiction,authority,юрисдикція,влада,False,,юрисдикція,jurisdiction,government,True,False,True
+spring,autumn,весна,осінь,False,,весна,the spring,the autumn,False,False,True
+toast,bacon,тост,бекон,False,,тост,a toast,the bacon,False,False,True
+good,bad,добре,погано,False,,добре,very well,its not good,False,False,True
+box,bag,коробка,мішок,False,,коробка,the box,the bag,False,False,True
+trap,bait,пастка,приманка,False,,пастка,the trap,the bait,False,False,True
+orchestra,band,оркестр,група,False,,оркестр,orchestra,group,True,False,True
+club,bar,клуб,бар,False,,клуб,the club,the bar,False,False,True
+stadium,baseball,стадіон,бейсбол,False,,стадіон,the stadium,baseball,False,True,True
+shower,bathroom,душ,ванна кімната,False,,душ,the soul,bathroom,False,True,True
+superman,batman,супермен,бетмен,False,,супермен,the superman,the betmen,False,False,True
+regiment,battalion,полк,батальйон,False,,полк,regiment,the battalion,True,False,True
+war,battle,війна,битва,False,,війна,the war,the battle,False,False,True
+arena,battlefield,арена,поле бою,False,,арена,the arena,the battlefield,False,False,True
+hair,beard,волосся,борода,False,,волосся,the hair,beard,False,True,True
+pretty,beautiful,гарна,прекрасна,False,,гарна,thats good,its wonderful,False,False,True
+charm,beauty,чарівність,краса,False,,чарівність,the magic,beauty,False,True,True
+sofa,bed,диван,ліжко,False,,диван,the couch,the bed,False,False,True
+room,bedroom,кімната,спальня,False,,кімната,the room,the bedroom,False,False,True
+drink,beer,пити,пиво,False,,пити,drinking,beer,False,True,True
+trust,believe,довіра,вірити,False,,довіра,the trust,to believe,False,False,True
+million,billion,мільйон,мільярди,False,,мільйон,million,billions,True,False,True
+chemical,biological,хімічні,біологічний,False,,хімічні,chemical,biological,True,True,False
+chemistry,biology,хімія,біологія,False,,хімія,chemistry,and biology,True,False,True
+butterfly,bird,метелик,пташка,False,,метелик,the meteor,the bird,False,False,True
+anniversary,birthday,річниця,день народження,False,,річниця,year,birthday,False,True,True
+white,black,білий,чорний,False,,білий,white,black,True,True,False
+bribe,blackmail,хабар,шантаж,False,,хабар,the message,blackmailed,False,False,True
+brown,blue,коричневий,синій,False,,коричневий,brown,the blue,True,False,True
+submarine,boat,підводний човен,човен,False,,підводний човен,a submarine,the boat,False,False,True
+bible,book,біблія,книга,False,,біблія,the bible,the book,False,False,True
+manager,boss,менеджер,бос,False,,менеджер,the manager,the boss,False,False,True
+washington,boston,вашингтон,бостон,False,,вашингтон,washington and washington,the boston,False,False,True
+glass,bottle,скляне,пляшка,False,,скляне,glass,the bottle,True,False,True
+top,bottom,верхній,дно,False,,верхній,the top,the bottom,False,False,True
+girl,boy,дівчина,хлопчик,False,,дівчина,the girl,the boy,False,False,True
+noble,brave,благородний,сміливий,False,,благородний,the noble,courageous,False,False,True
+smash,break,розбиття,перерва,False,,розбиття,breaking up,the break,False,False,True
+dinner,breakfast,вечеря,сніданок,False,,вечеря,dinner is served,breakfast is served,False,False,True
+groom,bride,наречений,наречена,False,,наречений,the bride,engaged,False,False,True
+shine,bright,сяйво,яскравий,False,,сяйво,its shining,bright,False,True,True
+dude,bro,хлопче,брат,False,,хлопче,the boy,brother,False,False,True
+sister,brother,сестра,брат,False,,сестра,my sister,brother,False,True,True
+scratch,bruise,подряпка,синяк,False,,подряпка,the shed,the blue,False,False,True
+construction,build,будівництво,побудувати,False,,будівництво,construction work,to build,False,False,True
+tower,building,вежа,будівля,False,,вежа,the tower,building,False,True,True
+caliber,bullet,калібр,куля,False,,калібр,caliber,the bullet,True,False,True
+dig,bury,копати,поховати,False,,копати,digging,buried,False,False,True
+train,bus,поїзд,автобус,False,,поїзд,the train,the bus,False,False,True
+industry,business,промисловість,бізнес,False,,промисловість,the industry,business,False,True,True
+ass,butt,задишка,задниця,False,,задишка,shortness of breath,the ass,False,False,True
+honey,butter,мед,масло,False,,мед,honey,oil,True,False,True
+seller,buyer,продавець,покупця,False,,продавець,the seller,the buyer,False,False,True
+hello,bye,привіт,до побачення,False,,привіт,how are you,see you,False,False,True
+dessert,cake,десерт,торт,False,,десерт,the dessert,cake,False,True,True
+count,calculate,рахунок,розрахувати,False,,рахунок,account,calculate,False,True,True
+quiet,calm,тихо,спокійно,False,,тихо,quietly,calm down,False,False,True
+picnic,camping,пікнік,кемпінг,False,,пікнік,the picnic,camping,False,True,True
+tumor,cancer,пухлина,рак,False,,пухлина,the tumor,cancer,False,True,True
+lamp,candle,лампа,свічка,False,,лампа,the lamp,candle,False,True,True
+glasses,cap,окуляри,капелюх,False,,окуляри,glasses,the hat,True,False,True
+anarchy,capitalism,анархія,капіталізм,False,,анархія,anarchy,capitalism,True,True,False
+commander,captain,командир,капітан,False,,командир,the commander,the captain,False,False,True
+vehicle,car,транспортне засіб,автомобіль,False,,транспортне засіб,means of transport,the car,False,False,True
+bishop,cardinal,єпископ,кардинал,False,,єпископ,the bishop,the cardinal,False,False,True
+load,cargo,навантаження,вантаж,False,,навантаження,load,the cargo,True,False,True
+floor,carpet,підлога,килим,False,,підлога,floor,the carpet,True,False,True
+mafia,cartel,мафія,картель,False,,мафія,the mafia,the cartel,False,False,True
+palace,castle,палац,замок,False,,палац,the palace,the castle,False,False,True
+dog,cat,собака,кішка,False,,собака,the dog,the cat,False,False,True
+grab,catch,схопи,улов,False,,схопи,hide and seek,catch,False,True,True
+reason,cause,причина,причина,True,розуміння,розуміння,understanding,reason,False,False,True
+grave,cemetery,могила,кладовище,False,,могила,the grave,the cemetery,False,False,True
+mile,centimeter,миля,сантиметри,False,,миля,miles,inches,False,False,True
+brain,cerebral,мозок,мозковий,False,,мозок,the brain,the brain,False,False,True
+ritual,ceremony,ритуал,церемонія,False,,ритуал,the ritual,the ceremony,False,False,True
+table,chair,таблиця,стілець,False,,таблиця,the table,the chair,False,False,True
+obstacle,challenge,перешкода,виклик,False,,перешкода,the obstacle,call,False,False,True
+wine,champagne,вино,шампанське,False,,вино,wine,the champagne,True,False,True
+competition,championship,конкуренція,чемпіонат,False,,конкуренція,competition,the championship,True,False,True
+church,chapel,церква,каплиця,False,,церква,church,chapel,True,True,False
+attractive,charming,привабливий,чарівний,False,,привабливий,attractive,its wonderful,True,False,True
+follow,chase,слідувати,переслідування,False,,слідувати,follow,persecution,True,False,True
+expensive,cheap,дорого,дешево,False,,дорого,expensive,its cheap,True,False,True
+lip,cheek,губа,щелепа,False,,губа,the lip,the jaw,False,False,True
+bread,cheese,хліб,сир,False,,хліб,bread,the cheese,True,False,True
+cook,chef,кухар,шефкухар,False,,кухар,cook,the chef,True,False,True
+stomach,chest,шлунок,груди,False,,шлунок,the stomach,the chest,False,False,True
+swallow,chew,проковтнути,жувати,False,,проковтнути,to be awakened,chewing,False,False,True
+baby,child,дитина,дитя,False,,дитина,the child,the child,False,False,True
+youth,childhood,молодіжність,дитинство,False,,молодіжність,youth,childhood,True,True,False
+sugar,chocolate,цукор,шоколад,False,,цукор,sugar,chocolate,True,True,False
+catholic,christian,католицький,християнський,False,,католицький,catholic,christianity and christianity,True,False,True
+smoke,cigar,дим,сигара,False,,дим,the smoke,the cigar,False,False,True
+tobacco,cigarette,тютюн,сигарета,False,,тютюн,tobacco,the cigarette,True,False,True
+zoo,circus,зоопарк,цирк,False,,зоопарк,the zoo,the circus,False,False,True
+capital,city,столиця,місто,False,,столиця,capital city,the city,False,False,True
+culture,civilization,культура,цивілізація,False,,культура,the culture,the civilization,False,False,True
+typical,classic,типовий,класичний,False,,типовий,typical,classical,True,False,True
+patient,client,пацієнт,клієнт,False,,пацієнт,the patient,the client,False,False,True
+hospital,clinic,лікарня,клініка,False,,лікарня,hospital,the clinic,True,False,True
+open,close,відкритий,закрити,False,,відкритий,open,close,True,True,False
+locked,closed,закрито,закритий,False,,закрито,closed,closed,False,True,True
+cabinet,closet,кабінет,шафа,False,,кабінет,office,the cabinet,False,False,True
+opening,closure,відкриття,закриття,False,,відкриття,the opening,closure,False,True,True
+beach,coast,пляж,узбережжя,False,,пляж,the beach,coast,False,True,True
+cup,coffee,чашка,кава,False,,чашка,cup,coffee,True,True,False
+rum,cognac,ром,коньяк,False,,ром,the rum,cognac and brandy,False,False,True
+hot,cold,гаряче,холодно,False,,гаряче,hot,its cold,True,False,True
+fall,collapse,падіння,колапс,False,,падіння,the fall,collapse,False,True,True
+general,colonel,загальний,полковник,False,,загальний,general,the colonel,True,False,True
+arrive,come,прийшов,прийди,False,,прийшов,he came,please come,False,False,True
+drama,comedy,драма,комедія,False,,драма,drama,comedy,True,True,False
+inspector,commissioner,інспектор,комісар,False,,інспектор,the inspector,the commissioner,False,False,True
+commission,committee,комісія,комітет,False,,комісія,the commission,committee,False,True,True
+navigation,communication,навігація,комунікація,False,,навігація,navigation,communication,True,True,False
+racist,communist,расист,комуністичний,False,,расист,racist,communist,True,True,False
+society,community,суспільство,громада,False,,суспільство,the society,community,False,True,True
+patience,compassion,терпіння,співчуття,False,,терпіння,patience,the sympathy,True,False,True
+total,complete,загалом,повний,False,,загалом,overall,full,False,False,True
+absolutely,completely,абсолютно,повністю,False,,абсолютно,absolutely,completely,True,True,False
+software,computer,програмне забезпечення,компютер,False,,програмне забезпечення,software,computer,True,True,False
+focus,concentrate,фокус,концентрат,False,,фокус,focus,concentration,True,False,True
+tour,concert,тур,концерт,False,,тур,the tour,the concert,False,False,True
+admit,confess,признай,зізнатися,False,,признай,admit it,get to know each other,False,False,True
+respect,confidence,повага,довіра,False,,повага,respect,the trust,True,False,True
+confirmation,confirm,підтвердження,підтвердити,False,,підтвердження,confirmed,confirm,False,True,True
+chaos,confusion,хаос,плутанина,False,,хаос,the chaos,confused,False,False,True
+contact,connection,контакт,зєднання,False,,контакт,the contact,connection,False,True,True
+always,constantly,завжди,постійно,False,,завжди,always,constantly,True,True,False
+law,constitution,закон,конституція,False,,закон,the law,the constitution,False,False,True
+contain,content,містить,зміст,False,,містить,contains,content,False,True,True
+proceed,continue,продовжуйте,продовжуйте,True,продовжуй,продовжуй,keep going,keep going,False,False,True
+opposite,contrary,навпроти,навпаки,False,,навпроти,opposite,on the contrary,True,False,True
+orphanage,convent,дитячий будинок,монастир,False,,дитячий будинок,childrens home,monastery,False,False,True
+warm,cool,тепле,прохолодно,False,,тепле,warm,its cold,True,False,True
+original,copy,оригінал,копія,False,,оригінал,the original,copy,False,True,True
+company,corporation,компанія,корпорація,False,,компанія,company,corporation,True,True,False
+body,corpse,тіло,труп,False,,тіло,body,the corpse,True,False,True
+wrong,correct,неправильно,правильно,False,,неправильно,wrong,right,True,False,True
+silk,cotton,шовк,бавовна,False,,шовк,shock,cotton,False,True,True
+baron,countess,барон,графиня,False,,барон,baron,countess,True,True,False
+relative,cousin,відносна,двоюрідний брат,False,,відносна,relatively,cousin,False,True,True
+rodeo,cowboy,родео,ковбой,False,,родео,the rodeo,the cowboy,False,False,True
+paranoid,crazy,параноїд,божевільний,False,,параноїд,the parade,its crazy,False,False,True
+imagination,creativity,уява,творчість,False,,уява,appearance,creativity,False,True,True
+monster,creature,монстр,тварина,False,,монстр,the monster,the animal,False,False,True
+scary,creepy,страшно,жахливо,False,,страшно,its scary,its awful,False,False,True
+sin,crime,гріх,злочин,False,,гріх,the sins,crime,False,True,True
+thief,criminal,злодій,злочинний,False,,злодій,the thief,criminal,False,True,True
+situation,crisis,ситуація,криза,False,,ситуація,the situation,the crisis,False,False,True
+brutal,cruel,жорстокий,жорстокий,True,зверсько,зверсько,the beast,cruel,False,True,True
+evil,cruelty,злий,жорстокість,False,,злий,the evil one,cruelty,False,True,True
+tear,cut,сльоза,розрізані,False,,сльоза,tears,cut off,False,False,True
+sweet,cute,солодке,милий,False,,солодке,sweet,sweetheart,True,False,True
+naive,cynical,наївна,цинічний,False,,наївна,naive,cynical,True,True,False
+uncle,dad,дядько,тато,False,,дядько,my uncle,my father,False,False,True
+dancer,dance,танцюрист,танець,False,,танцюрист,the dancer,the dance,False,False,True
+risk,danger,ризик,небезпека,False,,ризик,the risk,the danger,False,False,True
+risky,dangerous,ризиковано,небезпечно,False,,ризиковано,risky,dangerous,True,True,False
+shadow,dark,тінь,темний,False,,тінь,shadow,the dark,True,False,True
+sunset,dawn,захід сонця,світанку,False,,захід сонця,the sunset,the dawn,False,False,True
+alive,dead,живий,мертвий,False,,живий,he is alive,dead,False,True,True
+blind,deaf,сліпий,глухі,False,,сліпий,the blind man,deaf,False,True,True
+century,decade,століття,десятиліття,False,,століття,the century,the decade,False,False,True
+november,december,листопад,грудень,False,,листопад,the month of november,december,False,True,True
+cabin,deck,каюта,палуба,False,,каюта,cabin,the deck,True,False,True
+victory,defeat,перемога,поразка,False,,перемога,victory,defeat,True,True,False
+protect,defend,захистити,захищати,False,,захистити,protect,to defend,True,False,True
+concept,definition,концепція,визначення,False,,концепція,the concept,the definition,False,False,True
+tasty,delicious,смачно,смачно,True,,смачно,its good,its good,False,False,True
+freedom,democracy,свобода,демократія,False,,свобода,freedom,democracy,True,True,False
+protest,demonstration,протест,демонстрація,False,,протест,the protest,the demonstration,False,False,True
+arrival,departure,прибуття,відїзд,False,,прибуття,arrival,departure,True,True,False
+stress,depression,стрес,депресія,False,,стрес,stress,depression,True,True,False
+profile,description,профіль,опис,False,,профіль,the profile,the description,False,False,True
+fate,destiny,доля,доля,True,судьба,судьба,fate,share,True,False,True
+creation,destruction,створення,знищення,False,,створення,creation,destruction,True,True,False
+agent,detective,агент,детектив,False,,агент,the agent,the detective,False,False,True
+courage,determination,мужність,визначення,False,,мужність,courage,the definition,True,False,True
+progress,development,прогрес,розвиток,False,,прогрес,the progress,development,False,True,True
+chip,device,чип,пристрій,False,,чип,the chip,the device,False,False,True
+angel,devil,ангел,диявол,False,,ангел,the angel,the devil,False,False,True
+fidelity,devotion,вірність,відданість,False,,вірність,loyalty,loyalty,False,False,True
+suffer,die,страждають,померти,False,,страждають,they suffer,to die,False,False,True
+similar,different,подібний,різні,False,,подібний,similar,different,True,True,False
+pride,dignity,гордість,гідність,False,,гордість,pride,dignity,True,True,False
+ping,ding,пінг,дінг,False,,пінг,ping,ding,True,True,False
+direct,directly,безпосередньо,безпосередньо,True,лінійна,лінійна,linear,directly,False,True,True
+producer,director,виробник,директор,False,,виробник,manufacturer,director,False,True,True
+death,disappearance,смерть,зникнення,False,,смерть,death,disappearance,True,True,False
+surprise,disappointment,сюрприз,розчарування,False,,сюрприз,the surprise,disappointment,False,True,True
+conversation,discussion,розмова,обговорення,False,,розмова,the conversation,the discussion,False,False,True
+flu,disease,грип,хвороба,False,,грип,the flu,illness,False,False,True
+dirty,disgusting,брудний,огидно,False,,брудний,its dirty,its disgusting,False,False,True
+resignation,dismissal,відставка,звільнення,False,,відставка,resigned,release,False,False,True
+conflict,dispute,конфлікт,суперечка,False,,конфлікт,the conflict,the dispute,False,False,True
+county,district,графство,район,False,,графство,county,district,True,True,False
+interrupt,disturb,перерву,заважати,False,,перерву,im going to take a break,to interfere,False,False,True
+god,divine,боже,божественний,False,,боже,oh my god,the divine,False,False,True
+unit,division,одиниця,відділ,False,,одиниця,unit,department of,True,False,True
+make,do,зробити,робити,False,,зробити,to do,to do,False,False,True
+surgeon,doctor,хірург,лікар,False,,хірург,the surgeon,the doctor,False,False,True
+file,document,файл,документ,False,,файл,the file,the document,False,False,True
+pound,dollar,фунт,долар,False,,фунт,pound,one dollar,True,False,True
+charity,donation,благодійність,пожертвування,False,,благодійність,charity,donations,True,False,True
+window,door,вікно,двері,False,,вікно,the window,the door,False,False,True
+paint,draw,фарба,розіграш,False,,фарба,paint,youll win,True,False,True
+nightmare,dream,кошмар,мрія,False,,кошмар,the nightmare,the dream,False,False,True
+skirt,dress,спідниця,одяг,False,,спідниця,the skirt,clothing,False,False,True
+passenger,driver,пасажир,водій,False,,пасажир,the passenger,the driver,False,False,True
+alcohol,drug,алкоголь,наркотики,False,,алкоголь,alcoholic beverages,drugs,False,False,True
+sober,drunk,трезвий,пяний,False,,трезвий,you are sober,foamy,False,False,True
+goose,duck,гусь,качка,False,,гусь,the goose,duck,False,True,True
+ash,dust,попел,пил,False,,попел,ashes,drank,False,False,True
+rusty,dusty,ржавий,пильна,False,,ржавий,rusted,careful,False,False,True
+responsibility,duty,відповідальність,обовязок,False,,відповідальність,responsibility,the bond,True,False,True
+gunpowder,dynamite,порох,динаміт,False,,порох,the powder,the dynamite,False,False,True
+eye,ear,око,вухо,False,,око,the eye,the ear,False,False,True
+late,early,запізно,рано,False,,запізно,its too late,early,False,True,True
+west,east,захід,схід,False,,захід,west,east,True,True,False
+impossible,easy,неможливо,легко,False,,неможливо,its not possible,easy,False,True,True
+feed,eat,корми,їсти,False,,корми,food,to eat,False,False,True
+health,education,здоровя,освіта,False,,здоровя,good health,education,False,True,True
+influence,effect,вплив,ефект,False,,вплив,influence,effect,True,True,False
+useful,effective,корисне,ефективний,False,,корисне,useful,effective,True,True,False
+nest,egg,гніздо,яйце,False,,гніздо,the nest,eggs,False,False,True
+campaign,election,кампанія,вибори,False,,кампанія,the campaign,elections,False,False,True
+magnetic,electric,магнітні,електричний,False,,магнітні,magnetic,electric,True,True,False
+current,electricity,поточний,електрика,False,,поточний,current,electricity,True,True,False
+fashionable,elegant,модна,елегантно,False,,модна,fashionable,elegantly,True,False,True
+factor,element,фактор,елемент,False,,фактор,factor,the element,True,False,True
+urgent,emergency,невідкладно,надзвичайний,False,,невідкладно,immediately,extraordinary,False,False,True
+mental,emotional,психічний,емоційні,False,,психічний,mental health,emotional,False,True,True
+imperial,emperor,імперська,імператор,False,,імперська,the imperial,the emperor,False,False,True
+dynasty,empire,династія,імперія,False,,династія,dynasties,the empire,False,False,True
+power,energy,потужність,енергія,False,,потужність,power,energy,True,True,False
+tank,engine,резервуар,двигун,False,,резервуар,the reservoir,engine,False,True,True
+exit,entrance,вихід,вхід,False,,вихід,exit,the entrance,True,False,True
+millionaire,entrepreneur,мільйонер,підприємець,False,,мільйонер,the millionaire,entrepreneur,False,True,True
+plague,epidemic,чума,епідемія,False,,чума,the plague,the epidemic,False,False,True
+series,episode,серія,епізод,False,,серія,the series,episode,False,True,True
+equipment,equip,обладнання,оснастити,False,,обладнання,equipment,equipped,True,False,True
+orgasm,erection,оргазм,ерекція,False,,оргазм,the orgasm,erection,False,True,True
+flee,escape,втекти,втеча,False,,втекти,escape,escape,False,True,True
+observation,evaluation,спостереження,оцінка,False,,спостереження,the observation,evaluation of the,False,False,True
+night,evening,ніч,вечір,False,,ніч,the night,the evening,False,False,True
+phenomenon,event,феномен,подія,False,,феномен,the phenomenon,the event,False,False,True
+finally,eventually,нарешті,зрештою,False,,нарешті,finally,in the end,True,False,True
+never,ever,ніколи,ніколи,True,,ніколи,never,never,True,False,True
+underestimate,exaggerate,недооцінювати,перебільшувати,False,,недооцінювати,underestimating,exaggerate,False,True,True
+proud,excited,пишаюся,збуджений,False,,пишаюся,im proud of you,excited,False,True,True
+forgive,excuse,прости,виправдання,False,,прости,sorry about that,the excuse,False,False,True
+hanging,execution,висить,виконання,False,,висить,hanging,execution,True,True,False
+practice,exercise,практика,вправи,False,,практика,practice,exercises,True,False,True
+gallery,exhibition,галерея,виставка,False,,галерея,gallery,exhibition,True,True,False
+wait,expect,зачекайте,очікувати,False,,зачекайте,hold on a second,expect,False,True,True
+burst,explode,розрив,вибухнути,False,,розрив,breach,explode,False,True,True
+earthquake,explosion,землетрус,вибух,False,,землетрус,earthquake,explosion,True,True,False
+bomb,explosive,бомба,вибухові,False,,бомба,the bomb,explosive,False,True,True
+describe,express,описати,експрес,False,,описати,describe,the express,True,False,True
+internal,external,внутрішня,зовнішній,False,,внутрішня,the interior,outer,False,False,True
+success,failure,успіх,невдача,False,,успіх,success,failure,True,True,False
+hope,faith,надія,віра,False,,надія,hope,the faith,True,False,True
+loyal,faithful,вірний,вірний,True,швидко,швидко,hurry up,loyal,False,False,True
+fake,FALSE,фальшивий,фальшиве,False,,фальшивий,is false,false,False,True,True
+clan,family,клан,сімя,False,,клан,clan,seven,True,False,True
+popular,famous,популярний,відомий,False,,популярний,popular,wellknown,True,False,True
+wonderful,fantastic,чудово,фантастично,False,,чудово,thats great,this is fantastic,False,False,True
+reality,fantasy,реальність,фантазія,False,,реальність,the reality,the fantasy,False,False,True
+near,far,поблизу,далеко,False,,поблизу,nearby,far away,False,False,True
+slow,fast,повільно,швидко,False,,повільно,slowly,hurry up,False,False,True
+deadly,fatal,смертельний,смертельний,True,шкідливий,шкідливий,harmful,deadly,False,False,True
+mother,father,мати,батько,False,,мати,mother,father,True,True,False
+mail,fax,пошта,факс,False,,пошта,the post office,the fax,False,False,True
+horror,fear,жах,страх,False,,жах,the horror,fear,False,True,True
+colony,federation,колонія,федерація,False,,колонія,the colony,the federation,False,False,True
+impression,feeling,враження,відчуття,False,,враження,the impression,the feeling,False,False,True
+male,female,чоловічий,жіноча,False,,чоловічий,the man,woman,False,False,True
+wall,fence,стіна,огорожа,False,,стіна,the wall,the fence,False,False,True
+carnival,festival,карнавал,фестиваль,False,,карнавал,the carnival,the festival,False,False,True
+cough,fever,кашель,лихоманка,False,,кашель,cough,feverishness,True,False,True
+combat,fight,бойові дії,бій,False,,бойові дії,combat operations,the fight,False,False,True
+champion,fighter,чемпіон,бойовик,False,,чемпіон,champion,the fighter,True,False,True
+nasty,filthy,неприємно,брудний,False,,неприємно,its not pleasant,its dirty,False,False,True
+banking,financial,банківські послуги,фінансові,False,,банківські послуги,banking services,financial,False,True,True
+financially,financing,фінансово,фінансування,False,,фінансово,financially,funding,True,False,True
+search,find,пошук,знайти,False,,пошук,search,to find,True,False,True
+dna,fingerprint,днк,відбиток пальця,False,,днк,the dna,the fingerprint,False,False,True
+end,finish,кінець,закінчити,False,,кінець,the end,finish,False,True,True
+shark,fish,акула,риба,False,,акула,the shark,fish,False,True,True
+hunting,fishing,полювання,рибальство,False,,полювання,hunting,fishing,True,True,False
+fire,flame,вогонь,полумя,False,,вогонь,fire,the flame,True,False,True
+naval,fleet,військовоморський,флот,False,,військовоморський,naval officer,the fleet,False,False,True
+landing,flight,висадка,польоту,False,,висадка,landing,the flight,True,False,True
+grain,flour,зерно,борошно,False,,зерно,grain,flour,True,True,False
+plant,flower,рослина,квітка,False,,рослина,plant,the flower,True,False,True
+liquid,fluid,рідина,рідина,True,вільно,вільно,free,liquid,False,False,True
+land,fly,земля,летіть,False,,земля,the earth,fly,False,True,True
+cloud,fog,хмара,туман,False,,хмара,the cloud,the fog,False,False,True
+basketball,football,баскетбол,футбол,False,,баскетбол,basketball player,football,False,True,True
+strength,force,сила,сила,True,довговічність,довговічність,longevity of life,strength,False,False,True
+jungle,forest,джунглі,ліс,False,,джунглі,the jungle,forests,False,False,True
+eternal,forever,вічна,назавжди,False,,вічна,eternal,forever and ever,True,False,True
+spoon,fork,ложка,вилка,False,,ложка,the bed,the fork,False,False,True
+two,four,двоє,четверо,False,,двоє,two,four,True,True,False
+third,fourth,третій,четвертий,False,,третій,third,fourth,True,True,False
+conspiracy,fraud,змови,шахрайство,False,,змови,conspiracy,cheating,True,False,True
+freely,free,вільно,вільно,True,,вільно,free,free,False,True,True
+melt,freeze,розплавлення,заморозити,False,,розплавлення,melting,freeze,False,True,True
+english,french,англійська,французький,False,,англійська,english,french,True,True,False
+colleague,friend,колега,друг,False,,колега,colleague,a friend,True,False,True
+polite,friendly,ввічливий,дружній,False,,ввічливий,polite,friendly,True,True,False
+relationship,friendship,звязок,дружба,False,,звязок,the ligament,friendship,False,True,True
+scare,frighten,налякати,налякати,True,страх,страх,fear,to scare,False,False,True
+apple,fruit,яблуко,фрукти,False,,яблуко,the apple,fruits,False,False,True
+gas,fuel,газ,паливо,False,,газ,the gas,fuel,False,True,True
+refugee,fugitive,біженця,втікач,False,,біженця,the refugee,the fugitive,False,False,True
+empty,full,порожній,повний,False,,порожній,empty,full,True,True,False
+operational,functional,операційний,функціональний,False,,операційний,operational,functional,True,True,False
+budget,funding,бюджет,фінансування,False,,бюджет,the budget,funding,False,True,True
+coffin,funeral,труна,похорон,False,,труна,the coffin,the funeral,False,False,True
+witty,funny,дотепний,смішно,False,,дотепний,its funny,its funny,False,False,True
+universe,galaxy,всесвіт,галактика,False,,всесвіт,the world,the galaxy,False,False,True
+play,game,грати,гра,False,,грати,play,game,True,True,False
+workshop,garage,семінар,гараж,False,,семінар,the seminar,the garage,False,False,True
+trash,garbage,сміття,сміття,True,кальян,кальян,the canyon,waste,False,False,True
+portal,gate,портал,ворота,False,,портал,the portal,the gate,False,False,True
+collect,gather,збирати,зібрати,False,,збирати,collecting,gather,False,True,True
+lesbian,gay,лесбіянка,гей,False,,лесбіянка,lesbian or gay,gay people,False,False,True
+naturally,generally,природно,загалом,False,,природно,naturally,overall,True,False,True
+compassionate,generous,співчутливий,щедрий,False,,співчутливий,compassionate,generous,True,True,False
+soft,gentle,мякий,нежно,False,,мякий,soft,gently,True,False,True
+compliment,gift,комплімент,подарунок,False,,комплімент,the compliment,the gift,False,False,True
+boys,girls,хлопчики,дівчата,False,,хлопчики,the boys,the girls,False,False,True
+offer,give,пропозиція,дати,False,,пропозиція,the proposal,date and time,False,False,True
+national,global,національний,глобальний,False,,національний,national,global,True,True,False
+glorious,glory,славний,слава,False,,славний,glorious,glory to god,True,False,True
+enter,go,ввійти,іди,False,,ввійти,to enter,go on then,False,False,True
+monkey,gorilla,мавпа,горилла,False,,мавпа,the monkey,the gorilla,False,False,True
+administration,government,адміністрація,уряд,False,,адміністрація,the administration,government,False,True,True
+diploma,graduate,диплом,випускник,False,,диплом,the diploma,graduate,False,True,True
+kilo,gram,кіло,грам,False,,кіло,one kilogram,grams,False,False,True
+grandfather,grandmother,дідусь,бабуся,False,,дідусь,my grandfather,my grandmother,False,False,True
+hospitality,gratitude,гостинність,вдячність,False,,гостинність,hospitality,thank you,True,False,True
+excellent,great,відмінно,чудово,False,,відмінно,very well,thats great,False,False,True
+roman,greek,римський,грецька,False,,римський,roman,greek,True,True,False
+congratulate,greet,вітаю,привітання,False,,вітаю,greetings,greetings,False,False,True
+gang,group,банда,група,False,,банда,the gang,group,False,True,True
+innocent,guilty,невинний,винний,False,,невинний,he is innocent,guilty,False,True,True
+piano,guitar,фортепіано,гітара,False,,фортепіано,the piano,the guitar,False,False,True
+rifle,gun,гвинтівка,пістолет,False,,гвинтівка,the rifle,the gun,False,False,True
+illusion,hallucination,ілюзія,галюцинації,False,,ілюзія,the illusion,hallucinations,False,False,True
+sandwich,hamburger,бутерброд,гамбургер,False,,бутерброд,the sandwich,the hamburger,False,False,True
+stick,hammer,палиця,молоток,False,,палиця,the palace,the hammer,False,False,True
+cloth,handkerchief,тканина,хустка,False,,тканина,fabric,the handkerchief,False,False,True
+occur,happen,відбуваються,сталося,False,,відбуваються,occurring,it happened,False,False,True
+satisfied,happy,задоволений,щасливий,False,,задоволений,satisfied,happy,True,True,False
+bay,harbor,бухта,гавань,False,,бухта,the bay,the harbour,False,False,True
+tough,hard,жорсткий,важко,False,,жорсткий,tough,its difficult,True,False,True
+balance,harmony,баланс,гармонія,False,,баланс,the balance,harmony,False,True,True
+helmet,hat,шлем,капелюх,False,,шлем,the helmet,the hat,False,False,True
+base,headquarters,основа,штабквартира,False,,основа,foundation,headquarters,False,True,True
+recover,heal,відновити,зцілити,False,,відновити,to restore,heal yourself,False,False,True
+listen,hear,слухайте,слухайте,True,розум,розум,the mind,listen to this,False,False,True
+sky,heavenly,небо,небесне,False,,небо,the sky,the heavens,False,False,True
+heavy,heavily,важкий,сильно,False,,важкий,heavy,strongly,True,False,True
+weight,height,вага,висота,False,,вага,weight,height,True,True,False
+ambulance,helicopter,швидка допомога,вертоліт,False,,швидка допомога,emergency help,the helicopter,False,False,True
+paradise,hell,рай,пекло,False,,рай,the paradise,the hell,False,False,True
+cocaine,heroin,кокаїн,героїн,False,,кокаїн,cocaine,the heroin,True,False,True
+cover,hide,обкладинка,приховати,False,,обкладинка,the cover,hide,False,True,True
+low,high,низький,високий,False,,низький,low,high,True,True,False
+majesty,highness,ваше величність,ваше високість,False,,ваше величність,your highness,your height,False,False,True
+road,highway,дорога,шосе,False,,дорога,road,highway,True,True,False
+aids,hiv,допоміг,віл,False,,допоміг,help,the will,False,False,True
+crack,hole,тріщина,діра,False,,тріщина,crack,the hole,True,False,True
+christmas,holiday,різдво,відпустка,False,,різдво,christmas,leave,True,False,True
+decent,honest,пристойний,чесний,False,,пристойний,decent,honestly,True,False,True
+loyalty,honesty,лояльність,чесність,False,,лояльність,loyalty,honesty,True,True,False
+privilege,honor,привілей,честь,False,,привілей,privilege,the honor,True,False,True
+terrible,horrible,жахливо,жахливо,True,болісне,болісне,painful,its awful,False,False,True
+donkey,horse,ослик,кінь,False,,ослик,the donkey,the horse,False,False,True
+pump,hose,насос,шланг,False,,насос,pump,the hose,True,False,True
+kiss,hug,поцілунок,обійми,False,,поцілунок,the kiss,hugs,False,False,True
+big,huge,великий,величезний,False,,великий,the great,its huge,False,False,True
+man,human,чоловік,людські,False,,чоловік,the man,human,False,True,True
+thousand,hundred,тисячі,сотня,False,,тисячі,thousands,one hundred,False,False,True
+tired,hungry,втомився,голодний,False,,втомився,tired,hungry,True,True,False
+carbon,hydrogen,вуглець,водню,False,,вуглець,coal,water,False,False,True
+fool,idiot,дурниця,ідіот,False,,дурниця,foolishness,the idiot,False,False,True
+meaning,importance,значення,важливість,False,,значення,meaning,importance,True,True,False
+valuable,important,цінні,важливе,False,,цінні,valuable,important,True,True,False
+flatter,impress,плоскіший,вразити,False,,плоскіший,flatter,to impress,True,False,True
+penalty,imprisonment,штраф,увязнення,False,,штраф,the fine,imprisonment,False,True,True
+change,improvement,зміна,поліпшення,False,,зміна,changes,improvements,False,False,True
+profit,income,прибуток,дохід,False,,прибуток,profit,income,True,True,False
+point,indicate,точка,вказувати,False,,точка,point,to indicate,True,False,True
+person,individual,особа,індивідуальний,False,,особа,person,individual,True,True,False
+virus,infection,вірус,інфекція,False,,вірус,the virus,infection,False,True,True
+report,inform,звіт,інформувати,False,,звіт,report,to inform,True,False,True
+source,informant,джерело,інформатор,False,,джерело,the source,the informant,False,False,True
+data,information,дані,інформація,False,,дані,data,other information,True,False,True
+heritage,inherit,спадщина,успадкувати,False,,спадщина,inheritance,to inherit,False,False,True
+dose,injection,доза,інєкція,False,,доза,the dose,injection,False,True,True
+wound,injury,рана,травма,False,,рана,wound,injury,True,True,False
+spider,insect,павук,комах,False,,павук,the spider,insects,False,False,True
+outside,inside,зовні,всередині,False,,зовні,outside,on the inside,True,False,True
+examination,inspection,огляд,інспекція,False,,огляд,view,inspection,False,True,True
+inspire,inspiration,натхнення,натхнення,True,покликання,покликання,the calling,inspired,False,False,True
+tool,instrument,інструмент,інструмент,True,дік,дік,the deck,the instrument,False,False,True
+smart,intelligent,розумний,розумні,False,,розумний,clever,smart,False,False,True
+purpose,intention,мета,наміри,False,,мета,purpose,intentions,True,False,True
+accidentally,intentionally,випадково,навмисно,False,,випадково,by accident,intentionally,False,True,True
+exciting,interesting,захоплююче,цікаво,False,,захоплююче,its exciting,this is interesting,False,False,True
+personal,intimate,особистий,інтимний,False,,особистий,personal,intimate,True,True,False
+instinct,intuition,інстинкт,інтуїція,False,,інстинкт,the instinct,intuition,False,True,True
+finance,invest,фінанси,інвестувати,False,,фінанси,finance,to invest,True,False,True
+examine,investigate,оглянути,розслідувати,False,,оглянути,take a look,to investigate,False,False,True
+analyst,investigator,аналітик,дослідник,False,,аналітик,analyst,researcher,True,False,True
+banker,investor,банкір,інвестор,False,,банкір,the banker,the investor,False,False,True
+irony,ironic,іронія,іронія,True,сарказм,сарказм,sarcasm,irony,False,False,True
+unreasonable,irresponsible,нерозумний,безвідповідально,False,,нерозумний,foolish,irresponsibly,False,False,True
+shirt,jacket,сорочка,куртка,False,,сорочка,shirt,the jacket,True,False,True
+diamond,jewel,діамант,ювелірний,False,,діамант,the diamond,jewelry,False,False,True
+trick,joke,трюк,жарт,False,,трюк,the trick,the joke,False,False,True
+reporter,journalist,репортер,журналіст,False,,репортер,the reporter,the journalist,False,False,True
+pleasure,joy,задоволення,радість,False,,задоволення,pleasure,happiness,True,False,True
+court,judge,суд,суддя,False,,суд,court,judge,True,True,False
+milk,juice,молоко,сок,False,,молоко,the milk,juice,False,True,True
+romeo,juliet,ромео,джульєтта,False,,ромео,romeo and juliet,juliet please,False,False,True
+june,july,червень,липня,False,,червень,june,july,True,True,False
+climb,jump,підніматися,стрибати,False,,підніматися,get up,jump,False,True,True
+senior,junior,старший,молодший,False,,старший,senior,younger,True,False,True
+revenge,justice,помста,правосуддя,False,,помста,the revenge,justice,False,True,True
+hold,keep,тримати,тримати,True,вантажна палуба,вантажна палуба,the cargo deck,hold,False,False,True
+poison,kill,отрута,вбити,False,,отрута,the poison,killed,False,False,True
+queen,king,королева,король,False,,королева,the queen,the king,False,False,True
+royal,kingdom,королівська,королівство,False,,королівська,the royal,the kingdom,False,False,True
+shoulder,knee,плече,коліно,False,,плече,shoulders,the knee,False,False,True
+recognize,knew,розпізнати,знав,False,,розпізнати,recognize,i knew,True,False,True
+sword,knife,меч,нож,False,,меч,the sword,the knife,False,False,True
+now,know,тепер,знаю,False,,тепер,now,i know,True,False,True
+experience,knowledge,досвід,знання,False,,досвід,experience,knowledge,True,True,False
+lord,lady,господи,леді,False,,господи,my lord,the ladies,False,False,True
+river,lake,річка,озеро,False,,річка,river,the lake,True,False,True
+tenant,landlord,орендатор,власник будинку,False,,орендатор,the tenant,the owner of the house,False,False,True
+first,last,спочатку,останній,False,,спочатку,first of all,the last one,False,False,True
+smile,laugh,посмішка,смійся,False,,посмішка,smile,laugh it up,True,False,True
+member,leader,член,лідер,False,,член,member of,leader,False,True,True
+seminar,lecture,семінар,лекція,False,,семінар,the seminar,the lecture,False,False,True
+right,left,правильно,ліворуч,False,,правильно,right,left,True,True,False
+illegal,legal,незаконно,юридичний,False,,незаконно,illegally,legal,False,True,True
+myth,legend,міф,легенда,False,,міф,myth,the legend,True,False,True
+size,length,розмір,довжина,False,,розмір,size,length,True,True,False
+allow,let,дозволити,дозвольте,False,,дозволити,allow,let me,True,False,True
+telegram,letter,телеграма,лист,False,,телеграма,the telegram,the letter,False,False,True
+lie,liar,брехня,брехня,True,перевернення,перевернення,conversion,lying,False,False,True
+conservative,liberal,консервативний,ліберальний,False,,консервативний,conservative,liberal,True,True,False
+suck,lick,сосать,лизати,False,,сосать,the sonate,to lick,False,False,True
+sergeant,lieutenant,сержант,лейтенант,False,,сержант,sergeant,lieutenant,True,True,False
+darkness,light,темрява,світло,False,,темрява,the darkness,the light,False,False,True
+probability,likely,ймовірність,ймовірно,False,,ймовірність,probability,i guess,True,False,True
+taxi,limousine,таксі,лімузин,False,,таксі,the taxi,the limousine,False,False,True
+ming,ling,мінг,лінг,False,,мінг,ming,ling,True,True,False
+dragon,lion,дракон,лев,False,,дракон,the dragon,the lion,False,False,True
+art,literature,мистецтво,література,False,,мистецтво,art,and literature,True,False,True
+kidney,liver,нирки,печінка,False,,нирки,the kidneys,the liver,False,False,True
+frog,lizard,жаба,ящірка,False,,жаба,frog,the lizard,True,False,True
+credit,loan,кредит,позика,False,,кредит,the loan,the loan,False,False,True
+tuna,lobster,тунец,лобстер,False,,тунец,tuna and,the lobster,False,False,True
+regional,local,регіональні,місцевий,False,,регіональні,regional,local,True,True,False
+place,location,місце,місце розташування,False,,місце,location,location,False,True,True
+key,lock,ключ,замк,False,,ключ,the key,the castle,False,False,True
+alone,lonely,один,самотній,False,,один,one,the lonely one,False,False,True
+short,long,короткий,довгий,False,,короткий,short,long,True,True,False
+hate,love,ненависть,кохання,False,,ненависть,hatred,of love,False,False,True
+nice,lovely,приємно,прекрасно,False,,приємно,nice to meet you,thats great,False,False,True
+mistress,lover,коханка,коханий,False,,коханка,my lover,beloved,False,False,True
+snack,lunch,закуска,обід,False,,закуска,the appetizer,lunch is served,False,False,True
+robot,machine,робот,машина,False,,робот,the robot,the car,False,False,True
+playboy,magazine,плейбой,журнал,False,,плейбой,playboy,the magazine,True,False,True
+nanny,maid,няня,служниця,False,,няня,the nanny,the maid,False,False,True
+preserve,maintain,зберегти,підтримувати,False,,зберегти,keep it,support,False,False,True
+service,maintenance,послуга,технічне обслуговування,False,,послуга,service,technical maintenance,True,False,True
+control,manipulate,контроль,маніпулювати,False,,контроль,control,to manipulate,True,False,True
+compass,map,компас,карта,False,,компас,the compass,the map,False,False,True
+advertising,marketing,реклама,маркетинг,False,,реклама,advertising,marketing,True,True,False
+divorce,marriage,розлучення,шлюб,False,,розлучення,divorce and separation,marriage,False,True,True
+single,married,одинокий,одружений,False,,одинокий,lonely,married,False,True,True
+yoga,massage,йога,масаж,False,,йога,and yoga,massage,False,True,True
+tournament,match,турнір,збіг,False,,турнір,the tournament,the collapse,False,False,True
+physics,mathematics,фізика,математика,False,,фізика,physics,mathematics,True,True,False
+minimum,maximum,мінімальний,максимальна,False,,мінімальний,the minimum,the maximum,False,False,True
+ketchup,mayonnaise,кетчуп,майонез,False,,кетчуп,ketchup,mayonnaise,True,True,False
+sheriff,mayor,шериф,мер,False,,шериф,the sheriff,the mayor,False,False,True
+food,meal,їжа,їжа,True,їжа для роздумів,їжа для роздумів,food for thought,food,False,False,True
+pork,meat,свиняча,мясо,False,,свиняча,of pork,meat,False,True,True
+technical,mechanical,технічні,механічні,False,,технічні,technical,mechanical,True,True,False
+trophy,medal,трофей,медаль,False,,трофей,the trophy,medal,False,True,True
+artifact,medallion,артефакт,медальйон,False,,артефакт,the artifact,the medal,False,False,True
+see,meet,дивіться,зустрітися,False,,дивіться,look at that,see you,False,False,True
+conference,meeting,конференція,зустріч,False,,конференція,the conference,the meeting,False,False,True
+commercial,merchant,комерційний,купець,False,,комерційний,commercial,the merchant,True,False,True
+forgiveness,mercy,прощення,милосердя,False,,прощення,forgiveness,mercy,True,True,False
+warning,message,попередження,повідомлення,False,,попередження,warning,the message,True,False,True
+iron,metal,залізо,метал,False,,залізо,iron,the metal,True,False,True
+kilometer,meter,кілометр,метр,False,,кілометр,kilometres,meters,False,False,True
+camera,microphone,камера,мікрофон,False,,камера,the camera,the microphone,False,False,True
+telescope,microscope,телескоп,мікроскоп,False,,телескоп,the telescope,the microscope,False,False,True
+civil,military,цивільне,військові,False,,цивільне,civil,military,True,True,False
+ambassador,minister,посол,міністр,False,,посол,the ambassador,minister,False,True,True
+embassy,ministry,посольство,міністерство,False,,посольство,the embassy,ministry,False,True,True
+plus,minus,плюс,мінус,False,,плюс,plus one,minus one,False,False,True
+second,minute,другий,хвилина,False,,другий,second,one minute,True,False,True
+reflection,mirror,відбиття,дзеркало,False,,відбиття,beating,the mirror,False,False,True
+poverty,misery,бідність,нещастя,False,,бідність,the poverty,the misfortune,False,False,True
+unfortunate,misfortune,нещасний,нещастя,False,,нещасний,unhappy,the misfortune,False,False,True
+rocket,missile,ракета,ракета,True,рокет,рокет,rocket,rocket,True,False,True
+task,mission,завдання,місія,False,,завдання,the task,the mission,False,False,True
+error,mistake,помилка,помилка,True,правопорушення,правопорушення,violation of the law,the error,False,False,True
+combination,mixture,комбінація,суміш,False,,комбінація,combination,mixture,True,True,False
+humble,modest,скромний,скромний,True,абазе,абазе,the abbey,modest,False,True,True
+temple,monastery,храм,монастир,False,,храм,the temple,monastery,False,True,True
+cash,money,готівка,гроші,False,,готівка,cash,the money,True,False,True
+screen,monitor,екран,монітор,False,,екран,the screen,the monitor,False,False,True
+tomorrow,morning,завтра,ранку,False,,завтра,see you tomorrow,in the morning,False,False,True
+aspirin,morphine,аспірин,морфін,False,,аспірин,the aspirin,the morphine,False,False,True
+hotel,motel,готель,мотель,False,,готель,the hotel,the motel,False,False,True
+hill,mountain,пагорб,гора,False,,пагорб,the hill,mountain,False,True,True
+porn,movie,порно,фільм,False,,порно,pornography,film,False,False,True
+daddy,mum,тато,мама,False,,тато,my father,my mother,False,False,True
+suicide,murder,самогубство,вбивство,False,,самогубство,suicide,murdered,True,False,True
+killer,murderer,вбивця,вбивця,True,морський вовк,морський вовк,the sea wolf,the murderer,False,False,True
+nerve,muscle,нерв,мязи,False,,нерв,the nerve,boundaries,False,False,True
+library,museum,бібліотека,музей,False,,бібліотека,the library,museum,False,True,True
+jazz,music,джаз,музика,False,,джаз,and jazz,music,False,True,True
+singer,musician,співак,музикант,False,,співак,the singer,musician,False,True,True
+evolution,mutation,еволюція,мутація,False,,еволюція,the evolution,the mutation,False,False,True
+secret,mystery,таємниця,таємниця,True,конфіденційне,конфіденційне,confidential,the secret,False,False,True
+nude,naked,голий,голий,True,природний,природний,natural,naked,False,True,True
+country,nation,країна,нація,False,,країна,country,the nation,True,False,True
+diarrhea,nausea,діарея,нудота,False,,діарея,diarrhea,boredom,True,False,True
+marine,navy,морські,військовоморський флот,False,,морські,sea,naval fleet,False,False,True
+throat,neck,горло,шия,False,,горло,the throat,the neck,False,False,True
+ring,necklace,кільце,ожерелье,False,,кільце,the ring,the necklace,False,False,True
+necessary,need,необхідно,потреба,False,,необхідно,necessary,need,True,True,False
+positive,negative,позитивний,негативний,False,,позитивний,positive,negative,True,True,False
+grandson,nephew,онук,племінник,False,,онук,the grandson,nephew,False,True,True
+worried,nervous,турбується,нервовий,False,,турбується,worried,nervous,True,True,False
+channel,news,канал,новини,False,,канал,channel,news and information,True,False,True
+article,newspaper,стаття,газета,False,,стаття,the article,newspaper,False,True,True
+midnight,noon,опівночі,полудня,False,,опівночі,its the middle of the night,afternoon,False,False,True
+healthy,normal,здоровий,нормально,False,,здоровий,healthy,its all right,True,False,True
+south,north,південь,північ,False,,південь,south,north,True,True,False
+mouth,nose,рот,ніс,False,,рот,mouth,the nose,True,False,True
+atomic,nuclear,атомний,ядерна,False,,атомний,atomic,nuclear,True,True,False
+swear,oath,клянуся,присяга,False,,клянуся,i swear,the oath,False,False,True
+clearly,obviously,ясно,очевидно,False,,ясно,clearly,obviously,True,True,False
+sea,ocean,море,океан,False,,море,the sea,the ocean,False,False,True
+september,october,вересень,жовтень,False,,вересень,this is september,october,False,True,True
+insult,offend,образа,образити,False,,образа,the image,offended,False,False,True
+desk,office,стіл,офіс,False,,стіл,the table,office,False,True,True
+officially,official,офіційно,офіційний,False,,офіційно,officially,official,True,True,False
+sometimes,often,іноді,часто,False,,іноді,sometimes,frequently,True,False,True
+coal,oil,вугілля,олія,False,,вугілля,coal,oil,True,True,False
+garlic,onion,часник,цибуля,False,,часник,the garlic,the onion,False,False,True
+enemy,opponent,ворог,опонент,False,,ворог,the enemy,opponent,False,True,True
+choice,option,вибір,варіант,False,,вибір,selection,the option,False,False,True
+green,orange,зелений,помаранчевий,False,,зелений,green,orange,True,True,False
+planet,orbit,планета,орбіта,False,,планета,the planet,the orbit,False,False,True
+command,order,команда,порядок,False,,команда,team,orderly,False,False,True
+arrange,organize,влаштувати,організувати,False,,влаштувати,arrange,to organize,True,False,True
+result,outcome,результат,результат,True,наслідки,наслідки,consequences,the result,False,False,True
+property,owner,власність,власник,False,,власність,property,owner,True,True,False
+air,oxygen,повітря,кисень,False,,повітря,the air,the oxygen,False,False,True
+envelope,package,конверт,пакет,False,,конверт,the envelope,the package,False,False,True
+suffering,pain,страждання,біль,False,,страждання,suffering,pain,True,True,False
+artist,painter,художник,художник,True,творча людина,творча людина,a creative person,artist,False,False,True
+section,paragraph,розділ,параграф,False,,розділ,section,the paragraph,True,False,True
+supernatural,paranormal,надприродні,паранормальні,False,,надприродні,supernatural,paranormal activity,True,False,True
+adult,parent,дорослий,батько,False,,дорослий,adult,father,True,False,True
+matter,particle,матерія,частинка,False,,матерія,the matter,particle,False,True,True
+reception,party,прийом,вечірка,False,,прийом,receiving,the evening,False,False,True
+enthusiasm,passion,ентузіазм,пристрасть,False,,ентузіазм,enthusiasm,passion,True,True,False
+ticket,passport,квиток,паспорт,False,,квиток,the ticket,the passport,False,False,True
+code,password,код,пароль,False,,код,the code,the password,False,False,True
+future,past,майбутнє,минуле,False,,майбутнє,the future,the past,False,False,True
+route,path,маршрут,шлях,False,,маршрут,the route,the way,False,False,True
+miserable,pathetic,нещасний,жалюгідний,False,,нещасний,unhappy,its a pity,False,False,True
+guard,patrol,охоронець,патруль,False,,охоронець,the guard,the patrol,False,False,True
+paper,pen,папір,ручка,False,,папір,paper,the pen,True,False,True
+vagina,penis,вагіна,пеніс,False,,вагіна,the vagina,the penis,False,False,True
+population,people,населення,люди,False,,населення,population,people,True,True,False
+ideal,perfect,ідеальний,ідеально,False,,ідеальний,the perfect,perfectly,False,False,True
+show,performance,шоу,продуктивність,False,,шоу,the show,productivity,False,False,True
+lipstick,perfume,помада,парфюмерия,False,,помада,the lipstick,perfumery,False,False,True
+radius,perimeter,радіус,периметр,False,,радіус,radius,the perimeter,True,False,True
+phase,period,фаза,період,False,,фаза,phase,period,True,True,False
+character,personality,характер,особистість,False,,характер,character,personality,True,True,False
+view,perspective,вигляд,перспектива,False,,вигляд,appearance,the prospect,False,False,True
+picture,photo,фотографія,фотографія,True,проект,проект,project,the photo,False,False,True
+autograph,photographer,автограф,фотограф,False,,автограф,the autograph,the photographer,False,False,True
+dictionary,phrase,словник,фраза,False,,словник,the dictionary,the phrase,False,False,True
+sexual,physical,сексуальний,фізична,False,,сексуальний,sexual,physical,True,True,False
+fragment,piece,фрагмент,шматок,False,,фрагмент,the fragment,piece of,False,False,True
+cow,pig,корова,свиня,False,,корова,cows,pigs,False,False,True
+tablet,pill,планшети,таблетки,False,,планшети,tablets,the tablets,False,False,True
+astronaut,pilot,астронавт,пілот,False,,астронавт,the astronaut,the pilot,False,False,True
+preparation,planning,підготовка,планування,False,,підготовка,preparedness,planning,False,True,True
+cement,plastic,цемент,пластик,False,,цемент,the cement,plastic,False,True,True
+bowl,plate,чаша,пластина,False,,чаша,the cup,plate,False,True,True
+explanation,plausible,пояснення,правдоподібний,False,,пояснення,explanation of the,its plausible,False,False,True
+coach,player,тренер,гравець,False,,тренер,coach,player,True,True,False
+comfortable,pleasant,комфортно,приємно,False,,комфортно,comfortably,nice to meet you,False,False,True
+text,poem,текст,поема,False,,текст,the text,the poem,False,False,True
+gambling,poker,азартні ігри,покер,False,,азартні ігри,gambling,the poker,True,False,True
+critical,political,критичний,політичні,False,,критичний,critical,political,True,True,False
+policy,politician,політика,політик,False,,політика,policy,politician,True,True,False
+journalism,politics,журналістика,політика,False,,журналістика,journalism,policy,True,False,True
+status,position,статус,позиція,False,,статус,the status,position,False,True,True
+chance,possibility,шанс,можливість,False,,шанс,chance,opportunity,True,False,True
+helpless,powerless,безпорадний,безсильний,False,,безпорадний,helpless,powerless,True,True,False
+literally,practically,буквально,практично,False,,буквально,literally,practically,True,True,False
+prey,predator,здобич,хижак,False,,здобич,the spoils,the predator,False,False,True
+birth,pregnancy,народження,вагітність,False,,народження,births,pregnancy,False,True,True
+ready,prepare,готовий,підготуйте,False,,готовий,ready to go,get ready,False,False,True
+chancellor,president,канцлер,президент,False,,канцлер,the chancellor,president,False,True,True
+button,press,кнопка,преса,False,,кнопка,the button,the press,False,False,True
+pulse,pressure,імпульс,тиск,False,,імпульс,the impulse,pressure,False,True,True
+value,price,вартість,ціна,False,,вартість,cost,the price,False,False,True
+monk,priest,монах,священик,False,,монах,monk,the priest,True,False,True
+secondary,primary,вторинний,первинний,False,,вторинний,secondary,primary,True,True,False
+princess,prince,принцеса,принц,False,,принцеса,the princess,the prince,False,False,True
+cell,prison,клітина,вязниця,False,,клітина,the cell,prison,False,True,True
+hostage,prisoner,заручники,увязнений,False,,заручники,hostages,imprisoned,False,False,True
+private,privacy,приватний,конфіденційність,False,,приватний,private,confidentiality,True,False,True
+nobel,prize,нобель,премія,False,,нобель,the nobel,the prize,False,False,True
+maybe,probably,можливо,ймовірно,False,,можливо,it might,i guess,False,False,True
+capsule,probe,капсула,зонд,False,,капсула,the capsule,the probe,False,False,True
+trouble,problem,проблема,проблема,True,незручний,незручний,its not comfortable,the problem,False,False,True
+process,procedure,процес,процедура,False,,процес,the process,the procedure,False,False,True
+create,produce,створити,продукція,False,,створити,to create,products,False,False,True
+brand,product,марка,продукт,False,,марка,the mark,product,False,True,True
+factory,production,фабрика,виробництво,False,,фабрика,factory,manufacturing,True,False,True
+amateur,professional,аматор,професіонал,False,,аматор,amateurish,professional,False,True,True
+dean,professor,декан,професор,False,,декан,dean of the college,professor,False,True,True
+project,program,проект,програма,False,,проект,project,the programme,True,False,True
+forbidden,prohibit,заборонено,заборонити,False,,заборонено,prohibited,banned,False,False,True
+guarantee,promise,гарантія,обіцянка,False,,гарантія,the guarantee,the promise,False,False,True
+evidence,proof,докази,доказ,False,,докази,the evidence,the proof,False,False,True
+lawyer,prosecutor,адвокат,прокурор,False,,адвокат,lawyer,the prosecutor,True,False,True
+rule,protocol,правило,протокол,False,,правило,rule,the protocol,True,False,True
+model,prototype,модель,прототип,False,,модель,model,the prototype,True,False,True
+enable,provide,включити,забезпечити,False,,включити,include,to ensure,False,False,True
+medical,psychological,медичний,психологічна,False,,медичний,medical,psychologically,True,False,True
+anatomy,psychology,анатомія,психологія,False,,анатомія,the anatomy,psychology,False,True,True
+push,pull,натискати,витягувати,False,,натискати,pressing,pull out,False,False,True
+insert,put,вставити,покласти,False,,вставити,inserted,put,False,True,True
+quantity,quality,кількість,якість,False,,кількість,number,quality,False,True,True
+half,quarter,половина,квартал,False,,половина,half,quarterly,True,False,True
+slowly,quickly,повільно,швидко,False,,повільно,slowly,hurry up,True,False,True
+fox,rabbit,лиса,кролик,False,,лиса,the fox,the rabbit,False,False,True
+squirrel,raccoon,білка,енота,False,,білка,white,the enote,False,False,True
+marathon,race,марафон,раса,False,,марафон,the marathon,race,False,True,True
+contamination,radiation,забруднення,випромінювання,False,,забруднення,pollution,radiation,False,True,True
+anger,rage,гнів,гнів,True,іре,іре,and,anger,False,False,True
+kidnapper,ransom,викрадач,викуп,False,,викрадач,the thief,the purchase,False,False,True
+occasionally,rarely,іноді,рідко,False,,іноді,sometimes,rarely,False,True,True
+mouse,rat,миша,щур,False,,миша,the mouse,the rat,False,False,True
+generator,reactor,генератор,реактор,False,,генератор,the generator,reactor,False,True,True
+TRUE,real,правда,реальний,False,,правда,the truth,the real,False,False,True
+optimistic,realistic,оптимістичний,реалістичний,False,,оптимістичний,optimistic,realistic,True,True,False
+actually,really,насправді,дійсно,False,,насправді,actually,i really do,True,False,True
+front,rear,передній,задній,False,,передній,the front,the back,False,False,True
+fair,reasonable,справедливий,розумний,False,,справедливий,fair,clever,True,False,True
+just,recently,просто,нещодавно,False,,просто,its easy,recently,False,True,True
+record,recording,запис,запис,True,диск,диск,the disk,record,False,False,True
+increase,reduce,збільшення,зменшити,False,,збільшення,increase,decrease,True,False,True
+fresh,refresh,свіжий,оновлення,False,,свіжий,fresh,renewal,True,False,True
+philosophy,religion,філософія,релігія,False,,філософія,the philosophy,religious,False,False,True
+stay,remain,залишитись,залишаються,False,,залишитись,to stay,remain,False,True,True
+exceptional,remarkable,виняткові,дивовижний,False,,виняткові,exceptional,its wonderful,True,False,True
+forget,remember,забути,памятай,False,,забути,to forget,remember this,False,False,True
+eliminate,remove,усунути,видалити,False,,усунути,remove,deleted,False,False,True
+hire,rent,оренду,оренду,True,залучити,залучити,to involve,the rent,False,False,True
+fix,repair,виправити,ремонт,False,,виправити,correct,repairs,False,False,True
+answer,reply,відповідь,відповідь,True,достатньо,достатньо,enough is enough,the answer,False,False,True
+career,reputation,карєра,репутація,False,,карєра,career,reputation,True,True,False
+demand,request,попит,запит,False,,попит,the demand,the request,False,False,True
+resistance,resist,опору,протистояти,False,,опору,resistance,to resist,True,False,True
+pub,restaurant,паб,ресторан,False,,паб,the pub,the restaurant,False,False,True
+back,return,назад,повернення,False,,назад,back,returned,True,False,True
+bonus,reward,бонус,винагорода,False,,бонус,the bonus,reward,False,True,True
+poor,rich,бідний,багатий,False,,бідний,poor,wealthy,True,False,True
+drive,ride,привід,їздити,False,,привід,the drive,to drive,False,False,True
+steal,rob,вкрасти,роб,False,,вкрасти,steal,the slave,True,False,True
+theft,robbery,крадіжка,пограбування,False,,крадіжка,theft,theft,True,False,True
+dramatic,romantic,драматичний,романтична,False,,драматичний,dramatic,romantic,True,True,False
+caesar,rome,цезарь,рим,False,,цезарь,caesar please,rome,False,True,True
+chain,rope,ланцюг,мотузка,False,,ланцюг,chain,the motor,True,False,True
+turn,rotate,поворот,обертати,False,,поворот,turn around,rotate,False,True,True
+espionage,sabotage,шпигунство,саботаж,False,,шпигунство,the spying,the sabotage,False,False,True
+security,safety,безпека,безпека,True,захист,захист,defense,safety,False,True,True
+anchor,sail,якорь,вітрило,False,,якорь,the anchor,the wind,False,False,True
+pirate,sailor,пірат,моряк,False,,пірат,the pirate,the sailor,False,False,True
+soup,salad,суп,салат,False,,суп,soup,the salad,True,False,True
+pension,salary,пенсія,зарплата,False,,пенсія,pension,salary,True,True,False
+auction,sale,аукціон,продаж,False,,аукціон,the auction,the sale,False,False,True
+ninja,samurai,я,самураї,False,,я,i did,the samurai,False,False,True
+mud,sand,брудь,пісок,False,,брудь,the dirt,the sand,False,False,True
+radar,satellite,радар,супутник,False,,радар,the radar,the satellite,False,False,True
+cream,sauce,крем,соус,False,,крем,cream,sauce,True,True,False
+rescue,save,порятунок,зберегти,False,,порятунок,the rescue,keep it,False,False,True
+hero,savior,герой,спаситель,False,,герой,the hero,the savior,False,False,True
+gossip,scandal,плітки,скандал,False,,плітки,the tiles,the scandal,False,False,True
+tattoo,scar,татуювання,шрам,False,,татуювання,tattooing,the scar,False,False,True
+calendar,schedule,календар,розклад,False,,календар,calendar and calendar,the layout,False,False,True
+class,school,клас,школа,False,,клас,class,school,True,True,False
+technology,science,технологія,наука,False,,технологія,technology,science,True,True,False
+genius,scientist,геній,вчений,False,,геній,the genius,scientist,False,True,True
+safe,secure,безпечно,безпечно,True,добре,добре,very well,safe,False,False,True
+choose,select,вибрати,вибрати,True,opt,opt,eight,select,False,True,True
+stubborn,selfish,впертий,егоїстичний,False,,впертий,stubborn,selfish,True,True,False
+buy,sell,купити,продати,False,,купити,to buy,to sell,False,False,True
+parliament,senate,парламент,сенат,False,,парламент,parliament,senate,True,True,False
+governor,senator,губернатор,сенатор,False,,губернатор,governor,senator,True,True,False
+bring,send,принесіть,відправити,False,,принесіть,bring it,to send,False,False,True
+delicate,sensitive,делікатний,чутливий,False,,делікатний,delicate,sensitive,True,True,False
+word,sentence,слово,речення,False,,слово,the word,the sentence,False,False,True
+speech,sermon,промова,проповідь,False,,промова,speech,the sermon,True,False,True
+slave,servant,раб,слуга,False,,раб,the slave,the servant,False,False,True
+refuge,shelter,притулок,притулок,True,безпека,безпека,safety,shelter,False,True,True
+crew,ship,екіпаж,корабель,False,,екіпаж,the crew,ship,False,True,True
+boot,shoe,завантаження,взуття,False,,завантаження,loading,shoes,False,False,True
+shot,shoot,стрілянину,стріляти,False,,стрілянину,the shooting,shoot,False,True,True
+ill,sick,хворий,хворий,True,хвороба,хвороба,illness,the sick,False,False,True
+form,sign,форма,знак,False,,форма,form,the sign,True,False,True
+frequency,signal,частота,сигнал,False,,частота,frequency,the signal,True,False,True
+stamp,signature,штамп,підпис,False,,штамп,the stamp,signed,False,False,True
+silent,silence,тихо,тиша,False,,тихо,quietly,shut up,False,False,True
+golden,silver,золотий,срібло,False,,золотий,gold,silver,False,True,True
+simply,simple,просто,просто,True,очевидно,очевидно,obviously,its easy,False,False,True
+toilet,sink,туалет,раковина,False,,туалет,the toilet,the sink,False,False,True
+drop,sip,падіння,глоток,False,,падіння,the fall,a sip,False,False,True
+stand,sit,стоянка,сидіти,False,,стоянка,the stop,to sit,False,False,True
+bone,skull,кістка,череп,False,,кістка,the bone,the skull,False,False,True
+rest,sleep,відпочинок,спати,False,,відпочинок,rest,sleep,True,True,False
+little,small,невеликий,невеликі,False,,невеликий,small,small,False,True,True
+taste,smell,смак,запах,False,,смак,the taste,the smell,False,False,True
+worm,snake,червяк,змія,False,,червяк,worm,the snake,True,False,True
+shooter,sniper,стрільця,снайпер,False,,стрільця,the shooter,the sniper,False,False,True
+rain,snow,дощ,сніг,False,,дощ,rain,snow,True,True,False
+lemonade,soda,лимонад,сода,False,,лимонад,lemonade,soda and,True,False,True
+lunar,solar,місячний,сонячна,False,,місячний,the lunar,sunny,False,False,True
+nothing,something,нічого,щось,False,,нічого,its all right,something,False,True,True
+elsewhere,somewhere,в іншому місці,десь,False,,в іншому місці,elsewhere,somewhere,True,True,False
+daughter,son,дочка,син,False,,дочка,daughter,the son,True,False,True
+album,song,альбом,пісня,False,,альбом,the album,the song,False,False,True
+noise,sound,шум,звук,False,,шум,noise,sound,True,True,False
+lasagna,spaghetti,лазанья,спагеті,False,,лазанья,the lasagna,spaghetti and cheese,False,False,True
+talk,speak,розмова,говоріть,False,,розмова,the conversation,speak up,False,False,True
+expert,specialist,експерт,спеціаліст,False,,експерт,expert,specialist,True,True,False
+sensational,spectacular,сенсаційний,вражаюче,False,,сенсаційний,sensational,it was amazing,True,False,True
+distance,speed,відстань,швидкість,False,,відстань,the distance,speed,False,True,True
+waste,spend,відходи,витратити,False,,відходи,waste,spend,True,True,False
+soul,spirit,душа,дух,False,,душа,the soul,the spirit,False,False,True
+hobby,sport,хобі,спорт,False,,хобі,his hobbies,sports,False,False,True
+celebrity,star,знаменитість,зірка,False,,знаменитість,celebrity,the star,True,False,True
+federal,state,федеральний,держава,False,,федеральний,federal,state,True,True,False
+comment,statement,коментар,заява,False,,коментар,commentary,the statement,False,False,True
+platform,station,платформа,станція,False,,платформа,the platform,the station,False,False,True
+monument,statue,памятник,статуя,False,,памятник,the monument,the statue,False,False,True
+concrete,steel,бетон,сталь,False,,бетон,the concrete,steel,False,True,True
+already,still,вже,ще не,False,,вже,already,not yet,True,False,True
+rock,stone,камінь,камінь,True,коливання,коливання,swinging,stone,False,True,True
+prevent,stop,запобігти,зупинитися,False,,запобігти,preventing,stop it,False,False,True
+shop,store,магазин,магазин,True,снайпер,снайпер,the sniper,the store,False,False,True
+wind,storm,вітер,шторм,False,,вітер,the wind,the storm,False,False,True
+oven,stove,печ,печ,True,,печ,the furnace,the furnace,False,False,True
+unusual,strange,незвично,дивно,False,,незвично,unusual,this is weird,True,False,True
+plan,strategy,план,стратегія,False,,план,the plan,the strategy,False,False,True
+banana,strawberry,банани,полуниця,False,,банани,the baths,the peninsula,False,False,True
+avenue,street,проспект,вулиця,False,,проспект,the avenue,street,False,True,True
+hit,strike,ударив,страйк,False,,ударив,hit,the strike,True,False,True
+nap,stroll,дрімати,прогулянка,False,,дрімати,to sleep,a walk,False,False,True
+firmly,strongly,твердо,сильно,False,,твердо,firmly,strongly,True,True,False
+pyramid,structure,піраміда,структура,False,,піраміда,the pyramid,the structure,False,False,True
+research,study,дослідження,дослідження,True,досліджувати,досліджувати,to explore,research,False,False,True
+naïve,stupid,наївна,дурний,False,,наївна,naive,foolish,False,False,True
+madness,stupidity,божевілля,дурість,False,,божевілля,it was madness,foolishness,False,False,True
+rhythm,style,ритм,стиль,False,,ритм,rhythm,style,True,True,False
+object,subject,обєкт,предмет,False,,обєкт,object,subject matter,True,False,True
+replace,substitute,замінити,замінник,False,,замінити,replace,replacement,True,False,True
+manage,succeed,керувати,успіх,False,,керувати,to drive,success,False,False,True
+enough,sufficient,досить,достатньо,False,,досить,thats enough,enough is enough,False,False,True
+propose,suggest,запропонувати,запропонувати,True,проект,проект,project,to propose,False,False,True
+briefcase,suitcase,портфель,валіз,False,,портфель,the portfolio,the suitcase,False,False,True
+moon,sun,місяць,сонце,False,,місяць,the moon,the sun,False,False,True
+saturday,sunday,субота,неділя,False,,субота,saturday,sundays,True,False,True
+layer,surface,шар,поверхня,False,,шар,the ball,surface,False,True,True
+operate,surgery,працювати,хірургія,False,,працювати,to work,surgery,False,True,True
+nickname,surname,прізвище,прізвище,True,дуб,дуб,oak,surname,False,True,True
+live,survive,живий,вижити,False,,живий,he is alive,to survive,False,False,True
+doubt,suspect,сумніви,підозрюваний,False,,сумніви,doubts,the suspect,False,False,True
+drown,swim,утонув,плавати,False,,утонув,drowned,swimming,False,False,True
+flag,symbol,прапор,символ,False,,прапор,the flag,the symbol,False,False,True
+symptom,syndrome,симптом,синдром,False,,симптом,the symptom,syndrome,False,True,True
+needle,syringe,ігла,шприц,False,,ігла,needle,the syringe,True,False,True
+network,system,мережа,система,False,,мережа,network,system,True,True,False
+potential,talent,потенціал,талант,False,,потенціал,potential,the talent,True,False,True
+learn,teach,навчитися,навчати,False,,навчитися,learn to read,teach,False,True,True
+student,teacher,студент,вчитель,False,,студент,student,teacher,True,True,False
+league,team,ліга,команда,False,,ліга,league,team,True,True,False
+method,technique,метод,техніка,False,,метод,method,technology,True,False,True
+teenage,teenager,підліток,підліток,True,,підліток,teenage,teenage,True,False,True
+call,telephone,дзвонити,телефон,False,,дзвонити,ring the bell,telephone,False,True,True
+radio,television,радіо,телебачення,False,,радіо,radio,television,True,True,False
+say,tell,скажіть,розкажіть,False,,скажіть,please tell me,tell me about it,False,False,True
+heat,temperature,тепло,температура,False,,тепло,warmth,the temperature,False,False,True
+golf,tennis,гольф,теніс,False,,гольф,golf course,tennis player,False,False,True
+experiment,test,експеримент,випробування,False,,експеримент,the experiment,testing,False,False,True
+witness,testimony,свідка,свідчення,False,,свідка,witness,the testimony,True,False,True
+grateful,thank,вдячний,дякую,False,,вдячний,thank you,thank you,False,False,True
+what,that,що це,що,False,,що це,what is this,what,False,False,True
+cinema,theater,кінотеатр,театр,False,,кінотеатр,the cinema,theatre,False,False,True
+idea,theory,ідея,теорія,False,,ідея,the idea,the theory,False,False,True
+here,there,тут,там,False,,тут,right here,there,False,True,True
+thin,thick,тонкий,товстий,False,,тонкий,thin,thick,True,True,False
+consider,think,розглянути,подумайте,False,,розглянути,consider,think about it,True,False,True
+hunger,thirst,голод,спрага,False,,голод,the hunger,thirst,False,True,True
+one,three,один,три,False,,один,one,three,True,True,False
+crown,throne,корона,трон,False,,корона,crown,the throne,True,False,True
+finger,thumb,палець,палець,True,ширина пальця,ширина пальця,the width of a finger,the finger,False,False,True
+lightning,thunder,блискавка,гром,False,,блискавка,the flash,thunder,False,True,True
+bind,tie,звязувати,краватка,False,,звязувати,to connect,the tie,False,False,True
+detonator,timer,детонатор,таймер,False,,детонатор,the detonator,the timer,False,False,True
+skin,tissue,шкіра,тканини,False,,шкіра,the skin,fabrics,False,False,True
+name,title,імя,назва,False,,імя,name,name,True,False,True
+potato,tomato,картопля,помідор,False,,картопля,potatoes,the tomato,False,False,True
+nail,tooth,нігтя,зуб,False,,нігтя,the nail,tooth,False,True,True
+hurricane,tornado,ураган,торнадо,False,,ураган,hurricane,the tornado,True,False,True
+torment,torture,муки,тортури,False,,муки,pain,torture,False,True,True
+blanket,towel,ковдру,рушник,False,,ковдру,the blanket,towel,False,True,True
+doll,toy,лялька,іграшка,False,,лялька,the doll,toys,False,False,True
+modern,traditional,сучасні,традиційні,False,,сучасні,modern,traditional,True,True,False
+sad,tragic,сумно,трагічний,False,,сумно,this is sad,it was tragic,False,False,True
+spy,traitor,шпигун,зрадник,False,,шпигун,the spy,the traitor,False,False,True
+move,transfer,переміститися,перенесення,False,,переміститися,move,transfer,True,True,False
+sensor,transmitter,сенсор,передавач,False,,сенсор,the sensor,transmitter,False,True,True
+therapy,treatment,терапія,лікування,False,,терапія,therapy,treatment,True,True,False
+bush,tree,кущ,дерево,False,,кущ,the bush,tree,False,True,True
+hearing,trial,слух,судовий розгляд,False,,слух,hearing,trial,True,True,False
+circle,triangle,круг,трикутник,False,,круг,circle,triangle,True,True,False
+double,triple,подвійне,тройний,False,,подвійне,double,triple,True,True,False
+jeep,truck,джип,вантажівка,False,,джип,the jeep,the truck,False,False,True
+monday,tuesday,понеділок,вівторок,False,,понеділок,monday,tuesday,True,True,False
+bridge,tunnel,міст,тунель,False,,міст,cities,the tunnel,False,False,True
+chicken,turkey,курка,индюка,False,,курка,the chicken,indian,False,False,True
+snail,turtle,улитка,черепаха,False,,улитка,snail,the turtle,True,False,True
+disgusting,ugly,огидно,потворний,False,,огидно,its disgusting,ugly,False,True,True
+final,ultimate,остаточний,остаточний,True,термінал,термінал,the terminal,final,False,False,True
+inability,unable,нездатність,не в змозі,False,,нездатність,disability,not able to,False,False,True
+realize,understand,усвідомити,розумію,False,,усвідомити,become aware,i see,False,False,True
+suddenly,unexpectedly,раптом,несподівано,False,,раптом,suddenly,unexpectedly,True,True,False
+injustice,unfair,несправедливість,несправедливо,False,,несправедливість,injustice,unfairly,True,False,True
+badge,uniform,значок,однорідна,False,,значок,the badge,uniform,False,True,True
+special,unique,спеціальний,унікальний,False,,спеціальний,special,it is unique,True,False,True
+college,university,коледж,університет,False,,коледж,college,college,True,False,True
+anonymous,unknown,анонімний,невідоме,False,,анонімний,anonymous,unknown,True,True,False
+uncomfortable,unpleasant,незручно,неприємно,False,,незручно,its not comfortable,its not pleasant,False,False,True
+down,up,вниз,вгору,False,,вниз,down there,up,False,True,True
+lower,upper,нижче,верхній,False,,нижче,lower,the top,True,False,True
+blood,urine,кров,сеча,False,,кров,the blood,the urine,False,False,True
+apply,use,застосовувати,використання,False,,застосовувати,apply,use of,True,False,True
+ordinary,usual,звичайний,зазвичай,False,,звичайний,ordinary,usually,True,False,True
+normally,usually,зазвичай,зазвичай,True,не помітно,не помітно,not noticeable,usually,False,True,True
+antidote,vaccine,антидот,вакцинація,False,,антидот,the antidote,the vaccination,False,False,True
+desert,valley,пустеля,долина,False,,пустеля,the desert,the valley,False,False,True
+zombie,vampire,зомбі,вампір,False,,зомбі,the zombies,the vampire,False,False,True
+trailer,van,причеп,фургон,False,,причеп,the trailer,the van,False,False,True
+cinnamon,vanilla,кориця,ваніль,False,,кориця,cinnamon,and vanilla,True,False,True
+valve,ventilation,клапан,вентиляція,False,,клапан,the valve,the ventilation,False,False,True
+mars,venus,марс,венера,False,,марс,the mars,and venus,False,False,True
+check,verify,перевірка,перевірка,True,вкладка,вкладка,the tab,the inspection,False,False,True
+extremely,very,надзвичайно,дуже,False,,надзвичайно,extremely,very much,True,False,True
+dvd,video,dvd,відео,False,,dvd,the dvd,the video,False,False,True
+camp,village,табір,село,False,,табір,the camp,village,False,True,True
+revelation,vision,відкриття,бачення,False,,відкриття,the opening,vision,False,True,True
+protein,vitamin,білки,вітамін,False,,білки,proteins,vitamin and minerals,False,False,True
+whiskey,vodka,віскі,горілка,False,,віскі,whiskey,the vodka,True,False,True
+volunteer,voluntarily,волонтер,добровільно,False,,волонтер,the volunteer,voluntarily,False,True,True
+majority,vote,більшість,голосування,False,,більшість,most of them,voting,False,False,True
+candidate,voter,кандидат,виборця,False,,кандидат,candidate,electorate,True,False,True
+waiter,waitress,офіціант,офіціантка,False,,офіціант,the waiter,the waitress,False,False,True
+run,walk,бігти,ходити,False,,бігти,run,to walk,True,False,True
+pocket,wallet,кишеню,гаманець,False,,кишеню,my pocket,wallet,False,True,True
+soldier,warrior,солдат,воїн,False,,солдат,the soldier,the warrior,False,False,True
+clean,wash,чистий,мити,False,,чистий,clean,the myth,True,False,True
+look,watch,дивіться,годинник,False,,дивіться,look at that,the clock,False,False,True
+sherlock,watson,шерлок,уотсон,False,,шерлок,sherlock please,this is watson,False,False,True
+strong,weak,сильний,слабкий,False,,сильний,strongly,weak,False,True,True
+treasure,wealth,скарб,багатство,False,,скарб,the treasure,wealth,False,True,True
+pistol,weapon,,зброя,False,,,the commission is also working on a document which will facilitate access to information on the implementation of the,weapons,False,False,True
+internet,web,інтернет,вебсайт,False,,інтернет,the internet,the website,False,False,True
+engagement,wedding,заручення,весілля,False,,заручення,engagement,the wedding,True,False,True
+month,week,місяць,тиждень,False,,місяць,the moon,week,False,True,True
+daily,weekly,щодня,щотижнево,False,,щодня,every day,weekly,False,True,True
+southern,western,південний,західний,False,,південний,southern,western,True,True,False
+dry,wet,сухий,мокро,False,,сухий,dry,wetly,True,False,True
+horn,whistle,рог,свисток,False,,рог,horn,whistle,True,True,False
+narrow,wide,вузький,широкий,False,,вузький,narrow,wide,True,True,False
+husband,wife,чоловік,дружина,False,,чоловік,the man,wife,False,True,True
+gain,win,прибуток,перемога,False,,прибуток,profit,victory,False,False,True
+loser,winner,програвець,переможець,False,,програвець,loser,the winner,True,False,True
+summer,winter,літо,зима,False,,літо,summer,the winter,True,False,True
+cable,wire,кабель,дріт,False,,кабель,cable,the wire,True,False,True
+desire,wish,бажання,бажання,True,надія,надія,hope,desire,False,False,True
+curse,witch,прокляття,відьма,False,,прокляття,the curse,the witch,False,False,True
+magic,wizard,магія,чарівник,False,,магія,the magic,the wizard,False,False,True
+bear,wolf,ведмедь,вовк,False,,ведмедь,the bear,the wolf,False,False,True
+widow,woman,вдова,жінка,False,,вдова,widow,woman,True,True,False
+job,work,робота,робота,True,бізнес,бізнес,business,work,False,True,True
+farmer,worker,фермер,робітник,False,,фермер,farmer,worker,True,True,False
+international,world,міжнародний,світ,False,,міжнародний,international,the world,True,False,True
+concern,worry,занепокоєння,турбуватися,False,,занепокоєння,worries,to be worried,False,False,True
+useless,worthless,безкорисливий,безцінний,False,,безкорисливий,selfless,invaluable,False,False,True
+deserve,worthy,заслуговують,гідний,False,,заслуговують,they deserve it,worthy,False,True,True
+read,write,прочитати,писати,False,,прочитати,to read,write,False,True,True
+poet,writer,поет,письменник,False,,поет,poet,writer,True,True,False
+reading,writing,читання,письмо,False,,читання,reading,the letter,True,False,True
+okay,yeah,гаразд,так,False,,гаразд,the weather,thats right,False,False,True
+red,yellow,червоний,жовтий,False,,червоний,red,yellow,True,True,False
+today,yesterday,сьогодні,вчора,False,,сьогодні,today,yesterday,True,True,False
+old,young,старий,молодий,False,,старий,old,young,True,True,False
+area,zone,площа,зона,False,,площа,square,area,False,False,True
