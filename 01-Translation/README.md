@@ -1,10 +1,45 @@
 # Translation 
 
-- Includes code for LLM translation for stimuli and tasks
+To create the materials, we started with `01_stimuli_selection`:
 
-- Note each stimuli that was translated was then manually updated ... moved into the stimuli folder
-- Previous stimuli worked on were just directly put in the stimuli folder
-- Link to the spaml here
-- Includes information from previous translations for the SPAML
+-   The file `stimuli_creation.Rmd` shows how the stimuli were originally generated according to our pre-print description. You can also view a picture of the process using the `selection_flowchart` files (original .drawio form or .jpg). Note that the files used from subs2vec were stored externally to this repository because they are several GB large. The links for them can be found in the stimuli options file. As of June 2026, subs2vec requires a login to download, so that portion of the pipeline is not fully reproducible without credentials.
 
-- also includes translation forms for the tasks
+    Three languages required hand-created word vector files rather than subs2vec downloads. These files are large and not in the repository — place them in the locations below before running those chunks:
+
+    | Language | File | Location |
+    |---|---|---|
+    | Japanese | `ja_300_5_sg_wxd.csv` | `01_stimuli_selection/subs_vec/ja/` |
+    | Chinese Simplified | `zh_300_5_sg_wxd.csv` | `01_stimuli_selection/subs_vec/zh_cn/` |
+    | Chinese Traditional | `tw_300_5_sg_wxd.csv` | `01_stimuli_selection/subs_vec/zh_tw/` |
+
+    These are word2vec-style CSVs with a `word` column followed by 300 embedding dimensions. Vietnamese (`vi`) also had its count and vector zip files pre-populated rather than downloaded; those belong at `01_stimuli_selection/subs_count/vi/vi.zip` and `01_stimuli_selection/subs_vec/vi/vi.zip`.
+-   In the `similarity` folder, the output from `stimuli_creation.Rmd` can be found. Each file is formatted as *(language code)*\_ sims.csv to indicate the two-digit language code and that they are the simulation output. These files contain the top 10,000 words by top 5 cosine values related to each word as a starting point for stimuli.
+-   These files were then combined together into `translation_dict.csv`, merging all potential starting cue-target pairs into one file. These are loosely translated using Google Translate.
+-   From this file `finalstimuli_list.xlsx` was created. This file contains the English word-pairs selected with the most overlap between languages, trying to avoid using words twice, avoid some direct orthographic forms, and more (this was not totally possible, but were the guidelines we followed).
+-   Last, `final_selected_words.csv` was created, which was the starting point for the final stimuli: it contains all available translations for the stimuli from English to other languages. These are not the procedure stimuli, as they have not yet undergone translation checks and fixes.
+
+Next, we created the `02_stimuli_translation` folder:
+
+-   `final_selected_words.xlsx` is a file that contains all the final words from the previous folder filled in using Google Translate to give translators a starting point from which to work.
+-   Next, we used `01_translation_stimuli.Rmd` to create the files for translators (which are stored in individual folders within this folder). This document takes the proposed stimuli and creates the information for each one to be included in the experiment for translation purposes. This file creates the Wuggy-like fake words for most languages (but not Chinese) and originally created trial pairings for each language. We ended up reorganizing these original trial pairings in the final step, as the unrelated pairs needed to be controlled for their cosine similarity. The outputs for this document are in each subfolder. The important information is:
+    -   `LANG_translate.csv`: original file given to translators to review
+    -   `LANG_fake_cues.csv`: statistics information Wuggy style of the original fake cues (note that many of these changed during the translation process)
+    -   `LANG_fake_targets.csv`: statistics information Wuggy style of the original fake targets (note that many of these changed during the translation process)
+    -   Note that the `hyphen` folder contains the hyphenation rules used when available for our Wuggy-like algorithm.
+-   Next, the `02_finalize_stimuil.Rmd` was used on the the files provided by translators to create the list actually shown to participants. All cues, targets, and fake words were updated from the original translate list. The trials were created by matching unrelated pairings from the English version to the current language. These were shuffled until the lowest pairings could be found. Then the related pairs were added, and the non-word pairings were created with a random shuffle. Other notes are included, as well as noting that this file is an informal record of what order the language versions were created in.
+
+The other files in each subfolder (possibly) include:
+
+-   `LANG_translated.xlsx`: a step between `LANG_translate.csv` and the finalized translations. Not included in all languages, but sometimes necessary when new fake words were needed be generated.
+-   `LANG_update.R`: used to create new fake words when requested, this file was used to created the `_updated` file.
+-   `LANG_translated_updated.xlsx`: The new fake words combined with the previous translations files given back to translators.
+-   `LANG_translated_final.xlsx`: the finalized excel document that translators provided to create the trials from.
+-   `LANG_trials_final.csv`: final trials information used to create the experiment copied over to procedure files.
+-   `materias_LANG.docx/pdf`: materials translated into language added from translators.
+-   `consent_LANG.docx/pdf`: consent form translated into language added from translators.
+-   All other files come from translation teams and are used to create the finalized trials, please see code.
+-   We did our best to normalize the names in this manner - please let us know if you see any issues.
+
+Other files in this folder include:
+
+-   `stimuli_options.xlsx`: this file includes all the possible languages we could use, links to their *subs2vec* files and *udpipe* information. This file was used in stimuli creation.
