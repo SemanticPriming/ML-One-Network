@@ -270,7 +270,7 @@
             name: `aoa_block_${PAGE_INDEX}`,
             title: `Age ratings (Block ${PAGE_INDEX + 1} of ${TOTAL_TASK_PAGES})`,
             description:
-              "For each word, enter the age (in years) when you think you learned it, or select X if unknown.",
+              "For each word, enter the age (in years) when you think you learned it. An approximate age is good enough for this rating. If you do not know the word, please select the letter X for unknown.",
             elements: [
               {
                 type: "html",
@@ -326,7 +326,7 @@
                 hasErrors = true;
                 sender.setValue(field.ageName, null);
                 sender.setValue(field.unknownName, null);
-                setRowError(row, ageInput, "Enter an age or select unknown.");
+                setRowError(row, ageInput, "Enter an age or if you do not know the word, please select the letter X for unknown.");
                 return;
               }
               const numericAge = Number(ageValue);
