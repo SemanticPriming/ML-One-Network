@@ -94,10 +94,6 @@ Janschewitz2008.csv,arousal,word_english,arousal_mean,arousal_sd,1380,1.13,7.11,
 Janschewitz2008.csv,imagine,word_english,imagine_mean,imagine_sd,1380,1.4,8.63,84
 Janssen2011.csv,familiar,word_english,familiar_mean,familiar_sd,150,1.32,6.87,29
 Janssen2011.csv,imagine,word_english,imagine_mean,imagine_sd,150,2.39,6.78,31
-Jasmin2012.csv,concrete,word_dutch,concrete_mean,concrete_sd,984,2.6,9,132
-Jasmin2012.csv,valence,word_dutch,valence_mean,valence_sd,983,1,9,132
-Jasmin2012.csv,arousal,word_dutch,arousal_mean,arousal_sd,983,1.33,9,132
-Jasmin2012.csv,imagine,word_dutch,imagine_mean,imagine_sd,984,1.6,775,132
 Kanske2010.csv,concrete,word_german,concrete_mean,concrete_sd,1000,1.190476,8.377049,64
 Kanske2010.csv,valence,word_german,valence_mean,valence_sd,1000,2.516129,7.396825,64
 Kanske2010.csv,arousal,word_german,arousal_mean,arousal_sd,1000,1.645161,7.921875,64
@@ -213,8 +209,6 @@ Walley1992.csv,imagine,word_english,imagine_mean,imagine_sd,87,2.1,6.85,20
 Warriner2013.csv,valence,word_english,valence_mean,valence_sd,13915,1.26,8.53,20
 Warriner2013.csv,arousal,word_english,arousal_mean,arousal_sd,13915,1.6,7.79,21
 Whalen1994.csv,familiar,word_english,familiar_mean,familiar_sd,120,1.78,6.37,32
-Yang2018.csv,valence,source,valence_mean,valence_sd,935,1.18,8.09,22
-Yang2018.csv,arousal,source,arousal_mean,arousal_sd,935,1.91,8.46,22
 Yao2017.csv,familiar,word_chinese_simplified,familiar_mean,familiar_sd,1100,1.5,8.32,48
 Yao2017.csv,concrete,word_chinese_simplified,concrete_mean,concrete_sd,1100,2.33,8.82,48
 Yao2017.csv,valence,word_chinese_simplified,valence_mean,valence_sd,1100,1.22,8.41,48
