@@ -9,7 +9,7 @@
 # POS / word-length / stroke-count subgroup analyses are not used here -
 # only overall (whole-dataset) precision and split-half reliability.
 
-VARIABLES <- c("familiar", "concrete", "valence", "arousal", "imagine")
+VARIABLES <- c("familiar", "concrete", "valence", "arousal", "imagine", "aoa")
 
 DATA_DIR <- "/Users/erinbuchanan/GitHub/Research/2_projects/SPAML/todo_semanticprimeR/datasets/completed"
 JOB_LIST_FILE <- "power_job_list.csv"
