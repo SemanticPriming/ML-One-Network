@@ -76,7 +76,7 @@ run_refine_for_variable <- function(variable) {
 
     log_line(
       "refine ", job$name,
-      " using start=", start_size, " stop=", stop_size, " nsim=100",
+      " using start=", start_size, " stop=", stop_size, " nsim=500",
       log_file = log_file
     )
 
@@ -88,7 +88,7 @@ run_refine_for_variable <- function(variable) {
         start = start_size,
         stop = stop_size,
         increase = 5,
-        nsim = 100,
+        nsim = 500,
         power_levels = c(70, 75, 80, 85, 90, 95),
         log_file = log_file
       ),

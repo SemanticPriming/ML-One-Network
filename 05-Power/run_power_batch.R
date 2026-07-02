@@ -237,7 +237,7 @@ run_job <- function(job,
                     increase = 5,
                     nsim = 100,
                     power_levels = c(80, 85, 90, 95),
-                    max_rows = 100,
+                    max_rows = 1000,
                     log_file = "power_batch.log") {
   out_file <- file.path(out_dir, job$output)
 
@@ -304,7 +304,7 @@ run_jobs_stage <- function(jobs,
                            increase = 5,
                            nsim = 100,
                            power_levels = c(80, 85, 90, 95),
-                           max_rows = 100,
+                           max_rows = 1000,
                            log_file = "power_batch.log") {
   results <- vector("list", nrow(jobs))
   for (i in seq_len(nrow(jobs))) {

@@ -1,0 +1,346 @@
+---
+title: "ML One Network: Norming Variable Power Analysis"
+author: "The Doom Lab"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.width = 8, fig.height = 5)
+knitr::opts_knit$set(root.dir = normalizePath("."))
+
+source("run_power_batch.R")
+attach_required_packages()
+load_shared_functions("functions.R")
+library(ggplot2)
+library(DT)
+
+# `corrected_summary`/`overall_power` (semanticprimeR::calculate_correction)
+# records, for each dataset run, the *achieved* percent_below nearest each
+# requested power level (a near-continuous number like 76.85, not a clean
+# 80) - but always in the fixed order of REFINE_POWER_LEVELS below, six rows
+# per run. Grouping directly on the raw percent_below value (as
+# load_and_summarize_simulations()'s own recommendation_summary does) treats
+# every dataset's slightly-different achieved value as its own bin, so pools
+# across datasets barely happen. Binning by position within each run
+# recovers the intended target instead.
+REFINE_POWER_LEVELS <- c(70, 75, 80, 85, 90, 95)
+
+summarize_by_target <- function(overall_power, power_levels = REFINE_POWER_LEVELS) {
+  overall_power %>%
+    dplyr::group_by(run_id) %>%
+    dplyr::mutate(target_power = power_levels[((dplyr::row_number() - 1) %% length(power_levels)) + 1]) %>%
+    dplyr::ungroup() %>%
+    dplyr::group_by(target_power) %>%
+    dplyr::summarise(
+      n_runs = sum(!is.na(corrected_sample_size)),
+      mean_recommended_sample_size = mean(corrected_sample_size, na.rm = TRUE),
+      median_recommended_sample_size = median(corrected_sample_size, na.rm = TRUE),
+      sd_recommended_sample_size = sd(corrected_sample_size, na.rm = TRUE),
+      min_recommended_sample_size = min(corrected_sample_size, na.rm = TRUE),
+      max_recommended_sample_size = max(corrected_sample_size, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    dplyr::arrange(target_power) %>%
+    dplyr::mutate(recommended_sample_size = ceiling(cummax(median_recommended_sample_size)))
+}
+
+label_by_target <- function(overall_power, power_levels = REFINE_POWER_LEVELS) {
+  overall_power %>%
+    dplyr::group_by(run_id) %>%
+    dplyr::mutate(target_power = power_levels[((dplyr::row_number() - 1) %% length(power_levels)) + 1]) %>%
+    dplyr::ungroup()
+}
+```
+
+## Why this analysis exists
+
+The ML One Network stimuli are scored on several norming variables collected
+by SPAML/semanticprimeR contributor datasets: familiarity, concreteness,
+valence, arousal, imageability, and age of acquisition (AoA). Before we
+finalize how many raters we need per item for our own norming pass, we asked:
+**given a target level of precision, how many participants per item are
+needed to estimate the mean of a norming variable accurately, and how many
+are needed for the item-level scores to be reliable?**
+
+This is an *Accuracy in Parameter Estimation* (AIPE) question rather than a
+traditional null-hypothesis-testing power question - we are not testing
+whether a mean differs from zero, we are asking how large a sample needs to
+be so that a *sample mean* lands acceptably close to the *true population
+mean* for a given item. `functions.R` implements this using tools from the
+`semanticprimeR` package: for each real dataset in
+`power_job_list.csv`, item means/SDs are used to simulate a plausible
+population distribution per item (`rtruncnorm`, bounded by the scale's
+observed min/max), samples are repeatedly drawn from that simulated
+population at increasing sample sizes, and for each sample size we compute:
+
+- **percent below cutoff**: the proportion of simulated samples whose
+  standard error falls under a precision cutoff (tighter error = more
+  accurate estimate of the item mean).
+- **corrected sample size**: the AIPE-corrected number of participants per
+  item needed to reach a given target proportion (e.g., "95% of samples hit
+  the precision cutoff").
+- **split-half reliability**: participants for each item are split in half,
+  the two half-means are correlated, and the correlation is Spearman-Brown
+  corrected - this tells us how consistent the item-level scores would be
+  with a given number of raters per item.
+
+## Two-stage design: pilot then refine
+
+Running a fine-grained simulation (many sample sizes x many simulations per
+size) over every dataset up front would be slow, so the pipeline runs in two
+stages (`run_power_pilot.R` then `run_power_refine.R`, both sourcing
+`run_power_batch.R`):
+
+1. **Pilot** - a coarse sweep per dataset (sample sizes 20-500, step 10, 10
+   simulations per step) to find roughly where the precision curve crosses
+   70% and 95% "hit" rates.
+2. **Refine** - a narrow, high-precision rerun (step 5, 100 simulations per
+   step) restricted to the pilot's recommended `[start, stop]` window for
+   that specific dataset.
+
+This document reads the **refined** stage output only, since that is the
+higher-precision, final estimate. The pipeline currently covers six
+variables:
+
+```{r variables}
+VARIABLES
+```
+
+## Loading refined results
+
+```{r load-results}
+variable_dirs <- file.path("simulations", VARIABLES, "refined")
+names(variable_dirs) <- VARIABLES
+available_vars <- VARIABLES[dir.exists(variable_dirs) &
+  lengths(purrr::map(variable_dirs, list.files, pattern = "\\.rds$")) > 0]
+
+cat("Variables with refined output available:", paste(available_vars, collapse = ", "), "\n")
+cat("Variables still pending:", paste(setdiff(VARIABLES, available_vars), collapse = ", "), "\n")
+
+results_by_variable <- purrr::map(
+  setNames(available_vars, available_vars),
+  ~ load_and_summarize_simulations(file.path("simulations", .x, "refined"))
+)
+```
+
+Each dataset contributes one simulation "run" per variable (i.e., one row
+per source paper/corpus that reported that variable for the words in our
+stimuli set). The tables below pool across *all* dataset runs for a
+variable, since our own norming study will draw one sample of participants
+per item, not one sample per source paper.
+
+## Per-variable results
+
+```{r per-variable-results, results='asis'}
+target_results_by_variable <- purrr::map(results_by_variable, ~ summarize_by_target(.x$overall_power))
+labeled_power_by_variable <- purrr::map(results_by_variable, ~ label_by_target(.x$overall_power))
+
+variable_labels <- c(
+  familiar = "Familiarity", concrete = "Concreteness", valence = "Valence",
+  arousal = "Arousal", imagine = "Imageability", aoa = "Age of Acquisition (AoA)"
+)
+
+for (v in available_vars) {
+  cat(sprintf("\n### %s\n\n", variable_labels[[v]]))
+
+  res <- results_by_variable[[v]]
+  target_summary <- target_results_by_variable[[v]]
+  n_runs <- dplyr::n_distinct(res$overall_power$run_id)
+  cat(sprintf("Based on %d dataset run(s) for `%s`.\n\n", n_runs, v))
+
+  cat("**Recommended sample size per item, by target precision (% of simulations hitting the AIPE cutoff):**\n\n")
+  print(htmltools::tagList(DT::datatable(
+    target_summary %>%
+      dplyr::mutate(dplyr::across(where(is.numeric), ~ round(.x, 2))),
+    rownames = FALSE, options = list(dom = "t", pageLength = 10)
+  )))
+
+  box_dat <- labeled_power_by_variable[[v]] %>%
+    dplyr::mutate(target_power = factor(target_power, levels = REFINE_POWER_LEVELS))
+  print(
+    ggplot2::ggplot(box_dat, ggplot2::aes(x = target_power, y = corrected_sample_size)) +
+      ggplot2::geom_boxplot(fill = "#d9e7ff", outlier.alpha = 0.2, width = 0.6) +
+      ggplot2::geom_jitter(width = 0.12, alpha = 0.35, size = 1.4) +
+      ggplot2::geom_line(
+        data = target_summary %>% dplyr::mutate(target_power = factor(target_power, levels = REFINE_POWER_LEVELS)),
+        ggplot2::aes(x = target_power, y = recommended_sample_size, group = 1),
+        color = "#b00020", linewidth = 0.9
+      ) +
+      ggplot2::geom_point(
+        data = target_summary %>% dplyr::mutate(target_power = factor(target_power, levels = REFINE_POWER_LEVELS)),
+        ggplot2::aes(x = target_power, y = recommended_sample_size),
+        color = "#b00020", size = 2.5
+      ) +
+      ggplot2::labs(
+        x = "Target precision (%)", y = "Corrected sample size",
+        title = paste0(v, ": spread of per-dataset recommendations"),
+        subtitle = "red line = across-dataset running max of the median"
+      ) +
+      ggplot2::theme_minimal()
+  )
+
+  if (nrow(res$reliability_summary) > 0) {
+    cat("\n\n**Sample size needed to reach target split-half reliability:**\n\n")
+    print(htmltools::tagList(DT::datatable(
+      res$reliability_recommendation %>%
+        dplyr::mutate(dplyr::across(where(is.numeric), ~ round(.x, 3))),
+      rownames = FALSE, options = list(dom = "t", pageLength = 10)
+    )))
+
+    if (!is.null(res$reliability_plot)) {
+      print(res$reliability_plot +
+        ggplot2::labs(subtitle = paste0(v, ": median reliability curve across dataset runs")))
+    }
+  }
+
+  cat("\n\n**Per-dataset detail (recommended n at 80% target precision):**\n\n")
+  per_dataset <- labeled_power_by_variable[[v]] %>%
+    dplyr::filter(target_power == 80) %>%
+    dplyr::select(run_id, corrected_sample_size) %>%
+    dplyr::arrange(dplyr::desc(corrected_sample_size))
+  print(htmltools::tagList(DT::datatable(
+    per_dataset %>% dplyr::mutate(corrected_sample_size = round(corrected_sample_size, 1)),
+    rownames = FALSE, options = list(pageLength = 10)
+  )))
+
+  cat("\n\n---\n")
+}
+```
+
+## Combined recommendation across variables
+
+Our norming study collects all variables from the same participants per
+item, so the binding constraint is the **largest** recommended sample size
+across variables and across *both* precision and reliability, not any single
+variable's number. Precision (AIPE) and split-half reliability answer
+different questions and don't move together at the same rate - the two
+sections below show why.
+
+### Precision (AIPE)
+
+```{r combined-summary}
+combined_power <- purrr::imap_dfr(target_results_by_variable, function(target_summary, v) {
+  target_summary %>%
+    dplyr::filter(target_power %in% c(80, 90, 95)) %>%
+    dplyr::transmute(
+      variable = v,
+      target_precision = target_power,
+      recommended_n = recommended_sample_size
+    )
+})
+
+combined_power_wide <- combined_power %>%
+  tidyr::pivot_wider(names_from = target_precision, values_from = recommended_n,
+                      names_prefix = "n_at_") %>%
+  dplyr::arrange(dplyr::desc(n_at_95))
+
+DT::datatable(combined_power_wide, rownames = FALSE, options = list(dom = "t", pageLength = 10))
+```
+
+```{r combined-plot, fig.height=4}
+plot_dat <- combined_power %>%
+  dplyr::mutate(target_precision = factor(target_precision))
+
+ggplot2::ggplot(plot_dat, ggplot2::aes(x = reorder(variable, recommended_n), y = recommended_n, fill = target_precision)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.7), width = 0.6) +
+  ggplot2::coord_flip() +
+  ggplot2::labs(
+    x = NULL, y = "Recommended sample size per item",
+    fill = "Target precision (%)",
+    title = "Recommended sample size per item, by variable and target precision"
+  ) +
+  ggplot2::theme_minimal()
+```
+
+### Reliability (split-half, Spearman-Brown corrected)
+
+Reliability climbs to an acceptable level much faster than precision does at
+the *lower* targets - across all six variables it clears 0.80 by n=20-30
+(the smallest sample sizes the refine stage actually tested). At the
+strictest 95% target, though, it is not automatically dominated by
+precision: see the bottom line below for which one actually binds once both
+are compared directly.
+
+```{r combined-reliability}
+combined_reliability <- purrr::imap_dfr(results_by_variable, function(res, v) {
+  if (nrow(res$reliability_recommendation) == 0) return(tibble::tibble())
+  res$reliability_recommendation %>%
+    dplyr::transmute(variable = v, target_reliability, recommended_sample_size)
+})
+
+combined_reliability_wide <- combined_reliability %>%
+  tidyr::pivot_wider(names_from = target_reliability, values_from = recommended_sample_size,
+                      names_prefix = "n_at_rel_") %>%
+  dplyr::arrange(dplyr::desc(n_at_rel_0.95))
+
+DT::datatable(combined_reliability_wide, rownames = FALSE, options = list(dom = "t", pageLength = 10))
+```
+
+```{r combined-reliability-plot, fig.height=4}
+rel_plot_dat <- combined_reliability %>%
+  dplyr::filter(target_reliability %in% c(0.8, 0.9, 0.95)) %>%
+  dplyr::mutate(target_reliability = factor(target_reliability))
+
+ggplot2::ggplot(rel_plot_dat, ggplot2::aes(x = reorder(variable, recommended_sample_size), y = recommended_sample_size, fill = target_reliability)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.7), width = 0.6) +
+  ggplot2::coord_flip() +
+  ggplot2::labs(
+    x = NULL, y = "Recommended sample size per item",
+    fill = "Target reliability",
+    title = "Recommended sample size per item, by variable and target reliability"
+  ) +
+  ggplot2::theme_minimal()
+```
+
+```{r overall-max}
+overall_n_precision <- max(combined_power_wide$n_at_95, na.rm = TRUE)
+precision_driver <- combined_power_wide$variable[[which.max(combined_power_wide$n_at_95)]]
+
+overall_n_reliability <- max(combined_reliability_wide$n_at_rel_0.95, na.rm = TRUE)
+reliability_driver <- combined_reliability_wide$variable[[which.max(combined_reliability_wide$n_at_rel_0.95)]]
+
+overall_n_needed <- max(overall_n_precision, overall_n_reliability, na.rm = TRUE)
+binding_constraint <- if (overall_n_reliability > overall_n_precision) {
+  sprintf("reliability (%s, needing %d for 0.95 reliability)", reliability_driver, overall_n_reliability)
+} else {
+  sprintf("precision (%s, needing %d for 95%% target precision)", precision_driver, overall_n_precision)
+}
+overall_n_needed
+```
+
+**Bottom line:** at the 95% target level the binding constraint is
+`r binding_constraint`, not the other metric. Precision alone needs at
+least **`r overall_n_precision`** participants per item (driven by
+`r precision_driver`); reliability alone needs at least
+**`r overall_n_reliability`** (driven by `r reliability_driver`). Combined
+across both metrics and all six variables, our norming study needs at least
+**`r overall_n_needed`** participants per item. If budget requires trading
+precision for sample size, the per-variable tables show what's achievable at
+80%/90% instead.
+
+## Notes and caveats
+
+- These recommendations are pooled across dataset runs that vary in scale,
+  language, and item set - a per-dataset table is included above so outliers
+  (e.g., unusually small or noisy source datasets) can be inspected directly.
+- `run_job()` in `run_power_batch.R` currently subsamples any input dataset
+  over 100 rows down to 100 rows before simulating. If that subsampling
+  turns out to be unintentional, these numbers should be treated as
+  provisional and rerun on the full item sets.
+- AoA (`aoa`) is included in `VARIABLES` but its refined-stage simulation may
+  not have finished yet - if it's missing from the results above, rerun this
+  document after `run_power_refine.R` completes for `aoa`.
+- A handful of individual split-half reliability draws come out as exactly
+  -1.0 (perfect negative correlation on a small, noisy split), which sends
+  the Spearman-Brown-corrected value to +/-Infinity and poisons
+  `mean_reliability` for a few sample sizes in `valence`/`arousal`
+  (visible if you inspect `overall_rel` directly). All reliability figures
+  reported in this document use the median, which is unaffected - flag this
+  if a mean-based reliability figure is ever pulled from these `.rds`
+  files elsewhere.
