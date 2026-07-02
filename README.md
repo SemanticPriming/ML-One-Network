@@ -12,7 +12,9 @@ This repository contains the materials, stimuli, and tasks for the ML One Networ
 
 **[04-Ethics](04-Ethics/)** — IRB application, approval, and ethics packet.
 
-**[05-Data](05-Data/)** — Collected data (stored externally; see folder for access details).
+**[05-Power](05-Power/README.md)** — AIPE-based sample-size power simulations for the semanticprimeR norming variables, run against the finalized SPAML datasets.
+
+**[06-Data](06-Data/)** — Collected data (stored externally; see folder for access details).
 
 ## Notes
 
