@@ -120,18 +120,18 @@ summarize_variable_recommendation <- function(res, target_power = 80, target_rel
   precision_clean <- per_run$n_precision[is.finite(per_run$n_precision) & !per_run$precision_outlier]
   reliability_clean <- per_run$n_reliability[is.finite(per_run$n_reliability) & !per_run$reliability_outlier]
 
-  precision_mean <- mean(precision_clean)
-  reliability_mean <- mean(reliability_clean)
+  precision_median <- stats::median(precision_clean)
+  reliability_median <- stats::median(reliability_clean)
 
   list(
     per_run = per_run,
     precision_n_total = nrow(precision_per_run),
     precision_n_kept = length(precision_clean),
-    precision_mean = precision_mean,
+    precision_median = precision_median,
     reliability_n_total = nrow(reliability_per_run),
     reliability_n_kept = length(reliability_clean),
-    reliability_mean = reliability_mean,
-    recommended_n = mean(c(precision_mean, reliability_mean))
+    reliability_median = reliability_median,
+    recommended_n = mean(c(precision_median, reliability_median))
   )
 }
 ```
@@ -204,11 +204,15 @@ paper/corpus) before pooling: for a given variable, every dataset run
 contributes one "n needed for 80% precision" value and one "n needed for
 80% reliability" value. A handful of source datasets are small, noisy, or
 otherwise unusual and can pull these per-run numbers to extreme highs or
-lows. Before averaging across runs, we drop outlier runs using the standard
+lows. Before pooling across runs, we drop outlier runs using the standard
 **1.5 x IQR rule** (values more than 1.5 interquartile ranges below Q1 or
 above Q3 are dropped), applied separately to the precision values and the
-reliability values for that variable. The per-variable sections below show
-which runs were flagged.
+reliability values for that variable. We then take the **median** of the
+remaining runs for each metric (median rather than mean, since a handful of
+runs can still sit near the trim boundary without being dropped outright -
+in practice the two are close once outliers are trimmed, but median is the
+more standard choice for a "typical" recommendation). The per-variable
+sections below show which runs were flagged.
 
 ## Loading refined results
 
@@ -300,16 +304,16 @@ for (v in available_vars) {
 
   rec <- variable_recommendation[[v]]
   cat(sprintf(
-    "\n\n**Recommended n (80%% precision + 80%% reliability, IQR-trimmed average): %.1f -> %d participants/item**\n\n",
+    "\n\n**Recommended n (80%% precision + 80%% reliability, IQR-trimmed medians averaged): %.1f -> %d participants/item**\n\n",
     rec$recommended_n, ceiling(rec$recommended_n)
   ))
   cat(sprintf(
-    "- Precision: %.1f (mean of %d/%d runs kept after IQR trim)\n",
-    rec$precision_mean, rec$precision_n_kept, rec$precision_n_total
+    "- Precision: %.1f (median of %d/%d runs kept after IQR trim)\n",
+    rec$precision_median, rec$precision_n_kept, rec$precision_n_total
   ))
   cat(sprintf(
-    "- Reliability: %.1f (mean of %d/%d runs kept after IQR trim)\n",
-    rec$reliability_mean, rec$reliability_n_kept, rec$reliability_n_total
+    "- Reliability: %.1f (median of %d/%d runs kept after IQR trim)\n",
+    rec$reliability_median, rec$reliability_n_kept, rec$reliability_n_total
   ))
 
   cat("\n\n**Per-dataset detail (n at 80% precision, n at 80% reliability, outlier flags):**\n\n")
@@ -335,9 +339,9 @@ recommendation at once - the binding number is the **largest**
 combined_recommendation <- purrr::imap_dfr(variable_recommendation, function(rec, v) {
   tibble::tibble(
     variable = v,
-    n_precision = rec$precision_mean,
+    n_precision = rec$precision_median,
     precision_kept = sprintf("%d/%d", rec$precision_n_kept, rec$precision_n_total),
-    n_reliability = rec$reliability_mean,
+    n_reliability = rec$reliability_median,
     reliability_kept = sprintf("%d/%d", rec$reliability_n_kept, rec$reliability_n_total),
     recommended_n = rec$recommended_n
   )
@@ -362,7 +366,7 @@ ggplot2::ggplot(plot_dat, ggplot2::aes(x = reorder(variable, n), y = n, fill = m
   ggplot2::labs(
     x = NULL, y = "Recommended sample size per item",
     fill = NULL,
-    title = "IQR-trimmed mean sample size per item, by variable and metric"
+    title = "IQR-trimmed median sample size per item, by variable and metric"
   ) +
   ggplot2::theme_minimal()
 ```
