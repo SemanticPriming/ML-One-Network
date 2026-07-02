@@ -56,6 +56,84 @@ label_by_target <- function(overall_power, power_levels = REFINE_POWER_LEVELS) {
     dplyr::mutate(target_power = power_levels[((dplyr::row_number() - 1) %% length(power_levels)) + 1]) %>%
     dplyr::ungroup()
 }
+
+# Standard 1.5x IQR rule. Applied separately to the precision-recommended
+# and reliability-recommended sample sizes for a variable, so a handful of
+# very small/noisy source datasets (which can swing corrected_sample_size or
+# the reliability-hit sample size wildly) don't dominate the average.
+IQR_MULTIPLIER <- 1.5
+
+iqr_bounds <- function(x, multiplier = IQR_MULTIPLIER) {
+  x <- x[is.finite(x)]
+  if (length(x) < 4) return(c(lower = -Inf, upper = Inf))
+  qs <- stats::quantile(x, probs = c(0.25, 0.75), na.rm = TRUE, type = 7)
+  iqr <- qs[[2]] - qs[[1]]
+  c(lower = qs[[1]] - multiplier * iqr, upper = qs[[2]] + multiplier * iqr)
+}
+
+remove_iqr_outliers <- function(x, multiplier = IQR_MULTIPLIER) {
+  x <- x[is.finite(x)]
+  bounds <- iqr_bounds(x, multiplier)
+  x[x >= bounds[["lower"]] & x <= bounds[["upper"]]]
+}
+
+n_at_precision_per_run <- function(overall_power, target_power = 80) {
+  label_by_target(overall_power) %>%
+    dplyr::filter(target_power == !!target_power) %>%
+    dplyr::transmute(run_id, n_precision = corrected_sample_size)
+}
+
+n_at_reliability_per_run <- function(overall_rel, target_reliability = 0.80) {
+  overall_rel %>%
+    dplyr::mutate(
+      reliability_m = as.numeric(reliability_m),
+      sample_size = as.numeric(sample_size)
+    ) %>%
+    dplyr::filter(is.finite(reliability_m)) %>%
+    dplyr::group_by(run_id) %>%
+    dplyr::filter(reliability_m >= target_reliability) %>%
+    dplyr::arrange(sample_size) %>%
+    dplyr::slice_head(n = 1) %>%
+    dplyr::ungroup() %>%
+    dplyr::transmute(run_id, n_reliability = sample_size)
+}
+
+# For one variable: per-run n needed for target_power% precision and for
+# target_reliability split-half reliability, IQR-outlier-trimmed separately,
+# then averaged together into a single recommended sample size.
+summarize_variable_recommendation <- function(res, target_power = 80, target_reliability = 0.80) {
+  precision_per_run <- n_at_precision_per_run(res$overall_power, target_power)
+  reliability_per_run <- n_at_reliability_per_run(res$overall_rel, target_reliability)
+
+  precision_bounds <- iqr_bounds(precision_per_run$n_precision)
+  reliability_bounds <- iqr_bounds(reliability_per_run$n_reliability)
+
+  per_run <- precision_per_run %>%
+    dplyr::full_join(reliability_per_run, by = "run_id") %>%
+    dplyr::mutate(
+      precision_outlier = is.finite(n_precision) &
+        (n_precision < precision_bounds[["lower"]] | n_precision > precision_bounds[["upper"]]),
+      reliability_outlier = is.finite(n_reliability) &
+        (n_reliability < reliability_bounds[["lower"]] | n_reliability > reliability_bounds[["upper"]])
+    )
+
+  precision_clean <- per_run$n_precision[is.finite(per_run$n_precision) & !per_run$precision_outlier]
+  reliability_clean <- per_run$n_reliability[is.finite(per_run$n_reliability) & !per_run$reliability_outlier]
+
+  precision_mean <- mean(precision_clean)
+  reliability_mean <- mean(reliability_clean)
+
+  list(
+    per_run = per_run,
+    precision_n_total = nrow(precision_per_run),
+    precision_n_kept = length(precision_clean),
+    precision_mean = precision_mean,
+    reliability_n_total = nrow(reliability_per_run),
+    reliability_n_kept = length(reliability_clean),
+    reliability_mean = reliability_mean,
+    recommended_n = mean(c(precision_mean, reliability_mean))
+  )
+}
 ```
 
 ## Why this analysis exists
@@ -112,6 +190,26 @@ variables:
 VARIABLES
 ```
 
+## Target criteria and outlier handling
+
+We target **80% power** (AIPE precision) and **80% split-half reliability**,
+and report the recommended sample size per variable as the **average of
+those two numbers**. Precision and reliability answer different questions
+about the same design (how accurate is the estimated mean vs. how
+consistent are the item scores), so averaging them gives one practical
+number rather than always taking the stricter of the two.
+
+Each of these numbers is computed **per dataset run** (i.e., per source
+paper/corpus) before pooling: for a given variable, every dataset run
+contributes one "n needed for 80% precision" value and one "n needed for
+80% reliability" value. A handful of source datasets are small, noisy, or
+otherwise unusual and can pull these per-run numbers to extreme highs or
+lows. Before averaging across runs, we drop outlier runs using the standard
+**1.5 x IQR rule** (values more than 1.5 interquartile ranges below Q1 or
+above Q3 are dropped), applied separately to the precision values and the
+reliability values for that variable. The per-variable sections below show
+which runs were flagged.
+
 ## Loading refined results
 
 ```{r load-results}
@@ -140,6 +238,7 @@ per item, not one sample per source paper.
 ```{r per-variable-results, results='asis'}
 target_results_by_variable <- purrr::map(results_by_variable, ~ summarize_by_target(.x$overall_power))
 labeled_power_by_variable <- purrr::map(results_by_variable, ~ label_by_target(.x$overall_power))
+variable_recommendation <- purrr::map(results_by_variable, ~ summarize_variable_recommendation(.x))
 
 variable_labels <- c(
   familiar = "Familiarity", concrete = "Concreteness", valence = "Valence",
@@ -199,13 +298,25 @@ for (v in available_vars) {
     }
   }
 
-  cat("\n\n**Per-dataset detail (recommended n at 80% target precision):**\n\n")
-  per_dataset <- labeled_power_by_variable[[v]] %>%
-    dplyr::filter(target_power == 80) %>%
-    dplyr::select(run_id, corrected_sample_size) %>%
-    dplyr::arrange(dplyr::desc(corrected_sample_size))
+  rec <- variable_recommendation[[v]]
+  cat(sprintf(
+    "\n\n**Recommended n (80%% precision + 80%% reliability, IQR-trimmed average): %.1f -> %d participants/item**\n\n",
+    rec$recommended_n, ceiling(rec$recommended_n)
+  ))
+  cat(sprintf(
+    "- Precision: %.1f (mean of %d/%d runs kept after IQR trim)\n",
+    rec$precision_mean, rec$precision_n_kept, rec$precision_n_total
+  ))
+  cat(sprintf(
+    "- Reliability: %.1f (mean of %d/%d runs kept after IQR trim)\n",
+    rec$reliability_mean, rec$reliability_n_kept, rec$reliability_n_total
+  ))
+
+  cat("\n\n**Per-dataset detail (n at 80% precision, n at 80% reliability, outlier flags):**\n\n")
   print(htmltools::tagList(DT::datatable(
-    per_dataset %>% dplyr::mutate(corrected_sample_size = round(corrected_sample_size, 1)),
+    rec$per_run %>%
+      dplyr::mutate(dplyr::across(c(n_precision, n_reliability), ~ round(.x, 1))) %>%
+      dplyr::arrange(dplyr::desc(n_precision)),
     rownames = FALSE, options = list(pageLength = 10)
   )))
 
@@ -215,132 +326,76 @@ for (v in available_vars) {
 
 ## Combined recommendation across variables
 
-Our norming study collects all variables from the same participants per
-item, so the binding constraint is the **largest** recommended sample size
-across variables and across *both* precision and reliability, not any single
-variable's number. Precision (AIPE) and split-half reliability answer
-different questions and don't move together at the same rate - the two
-sections below show why.
-
-### Precision (AIPE)
+Our norming study collects all six variables from the same participants per
+item, so the design has to satisfy every variable's IQR-trimmed 80/80
+recommendation at once - the binding number is the **largest**
+`recommended_n` across variables below.
 
 ```{r combined-summary}
-combined_power <- purrr::imap_dfr(target_results_by_variable, function(target_summary, v) {
-  target_summary %>%
-    dplyr::filter(target_power %in% c(80, 90, 95)) %>%
-    dplyr::transmute(
-      variable = v,
-      target_precision = target_power,
-      recommended_n = recommended_sample_size
-    )
+combined_recommendation <- purrr::imap_dfr(variable_recommendation, function(rec, v) {
+  tibble::tibble(
+    variable = v,
+    n_precision = rec$precision_mean,
+    precision_kept = sprintf("%d/%d", rec$precision_n_kept, rec$precision_n_total),
+    n_reliability = rec$reliability_mean,
+    reliability_kept = sprintf("%d/%d", rec$reliability_n_kept, rec$reliability_n_total),
+    recommended_n = rec$recommended_n
+  )
 })
 
-combined_power_wide <- combined_power %>%
-  tidyr::pivot_wider(names_from = target_precision, values_from = recommended_n,
-                      names_prefix = "n_at_") %>%
-  dplyr::arrange(dplyr::desc(n_at_95))
+combined_recommendation_display <- combined_recommendation %>%
+  dplyr::mutate(dplyr::across(c(n_precision, n_reliability, recommended_n), ~ round(.x, 1))) %>%
+  dplyr::arrange(dplyr::desc(recommended_n))
 
-DT::datatable(combined_power_wide, rownames = FALSE, options = list(dom = "t", pageLength = 10))
+DT::datatable(combined_recommendation_display, rownames = FALSE, options = list(dom = "t", pageLength = 10))
 ```
 
 ```{r combined-plot, fig.height=4}
-plot_dat <- combined_power %>%
-  dplyr::mutate(target_precision = factor(target_precision))
+plot_dat <- combined_recommendation %>%
+  dplyr::select(variable, n_precision, n_reliability) %>%
+  tidyr::pivot_longer(c(n_precision, n_reliability), names_to = "metric", values_to = "n") %>%
+  dplyr::mutate(metric = dplyr::recode(metric, n_precision = "80% precision", n_reliability = "80% reliability"))
 
-ggplot2::ggplot(plot_dat, ggplot2::aes(x = reorder(variable, recommended_n), y = recommended_n, fill = target_precision)) +
+ggplot2::ggplot(plot_dat, ggplot2::aes(x = reorder(variable, n), y = n, fill = metric)) +
   ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.7), width = 0.6) +
   ggplot2::coord_flip() +
   ggplot2::labs(
     x = NULL, y = "Recommended sample size per item",
-    fill = "Target precision (%)",
-    title = "Recommended sample size per item, by variable and target precision"
-  ) +
-  ggplot2::theme_minimal()
-```
-
-### Reliability (split-half, Spearman-Brown corrected)
-
-Reliability climbs to an acceptable level much faster than precision does at
-the *lower* targets - across all six variables it clears 0.80 by n=20-30
-(the smallest sample sizes the refine stage actually tested). At the
-strictest 95% target, though, it is not automatically dominated by
-precision: see the bottom line below for which one actually binds once both
-are compared directly.
-
-```{r combined-reliability}
-combined_reliability <- purrr::imap_dfr(results_by_variable, function(res, v) {
-  if (nrow(res$reliability_recommendation) == 0) return(tibble::tibble())
-  res$reliability_recommendation %>%
-    dplyr::transmute(variable = v, target_reliability, recommended_sample_size)
-})
-
-combined_reliability_wide <- combined_reliability %>%
-  tidyr::pivot_wider(names_from = target_reliability, values_from = recommended_sample_size,
-                      names_prefix = "n_at_rel_") %>%
-  dplyr::arrange(dplyr::desc(n_at_rel_0.95))
-
-DT::datatable(combined_reliability_wide, rownames = FALSE, options = list(dom = "t", pageLength = 10))
-```
-
-```{r combined-reliability-plot, fig.height=4}
-rel_plot_dat <- combined_reliability %>%
-  dplyr::filter(target_reliability %in% c(0.8, 0.9, 0.95)) %>%
-  dplyr::mutate(target_reliability = factor(target_reliability))
-
-ggplot2::ggplot(rel_plot_dat, ggplot2::aes(x = reorder(variable, recommended_sample_size), y = recommended_sample_size, fill = target_reliability)) +
-  ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.7), width = 0.6) +
-  ggplot2::coord_flip() +
-  ggplot2::labs(
-    x = NULL, y = "Recommended sample size per item",
-    fill = "Target reliability",
-    title = "Recommended sample size per item, by variable and target reliability"
+    fill = NULL,
+    title = "IQR-trimmed mean sample size per item, by variable and metric"
   ) +
   ggplot2::theme_minimal()
 ```
 
 ```{r overall-max}
-overall_n_precision <- max(combined_power_wide$n_at_95, na.rm = TRUE)
-precision_driver <- combined_power_wide$variable[[which.max(combined_power_wide$n_at_95)]]
-
-overall_n_reliability <- max(combined_reliability_wide$n_at_rel_0.95, na.rm = TRUE)
-reliability_driver <- combined_reliability_wide$variable[[which.max(combined_reliability_wide$n_at_rel_0.95)]]
-
-overall_n_needed <- max(overall_n_precision, overall_n_reliability, na.rm = TRUE)
-binding_constraint <- if (overall_n_reliability > overall_n_precision) {
-  sprintf("reliability (%s, needing %d for 0.95 reliability)", reliability_driver, overall_n_reliability)
-} else {
-  sprintf("precision (%s, needing %d for 95%% target precision)", precision_driver, overall_n_precision)
-}
+overall_n_needed <- max(combined_recommendation$recommended_n, na.rm = TRUE)
+overall_driver <- combined_recommendation$variable[[which.max(combined_recommendation$recommended_n)]]
 overall_n_needed
 ```
 
-**Bottom line:** at the 95% target level the binding constraint is
-`r binding_constraint`, not the other metric. Precision alone needs at
-least **`r overall_n_precision`** participants per item (driven by
-`r precision_driver`); reliability alone needs at least
-**`r overall_n_reliability`** (driven by `r reliability_driver`). Combined
-across both metrics and all six variables, our norming study needs at least
-**`r overall_n_needed`** participants per item. If budget requires trading
-precision for sample size, the per-variable tables show what's achievable at
-80%/90% instead.
+**Bottom line:** averaging 80% precision and 80% reliability (after dropping
+outlier dataset runs via the 1.5 x IQR rule) puts every variable's
+recommended sample size at roughly **`r round(min(combined_recommendation$recommended_n))`-`r ceiling(overall_n_needed)`**
+participants per item, with `r overall_driver` needing the most. Our norming
+study needs at least **`r ceiling(overall_n_needed)`** participants per item
+to satisfy every variable at once.
 
 ## Notes and caveats
 
-- These recommendations are pooled across dataset runs that vary in scale,
-  language, and item set - a per-dataset table is included above so outliers
-  (e.g., unusually small or noisy source datasets) can be inspected directly.
-- `run_job()` in `run_power_batch.R` currently subsamples any input dataset
-  over 100 rows down to 100 rows before simulating. If that subsampling
-  turns out to be unintentional, these numbers should be treated as
-  provisional and rerun on the full item sets.
-- AoA (`aoa`) is included in `VARIABLES` but its refined-stage simulation may
-  not have finished yet - if it's missing from the results above, rerun this
-  document after `run_power_refine.R` completes for `aoa`.
+- Precision and reliability are computed per dataset run and outlier-trimmed
+  independently for each variable (see "Target criteria and outlier
+  handling" above) - the per-variable sections show exactly which runs were
+  dropped and why.
+- `run_job()` in `run_power_batch.R` samples up to `max_rows` items per
+  dataset (currently 1000) before simulating, and the refine stage runs
+  `nsim` simulations per sample size (currently 500). If these are changed
+  again, rerun the full pilot -> refine pipeline before re-knitting this
+  document, since stale `.rds` output will silently make the numbers here
+  wrong.
 - A handful of individual split-half reliability draws come out as exactly
   -1.0 (perfect negative correlation on a small, noisy split), which sends
-  the Spearman-Brown-corrected value to +/-Infinity and poisons
-  `mean_reliability` for a few sample sizes in `valence`/`arousal`
-  (visible if you inspect `overall_rel` directly). All reliability figures
-  reported in this document use the median, which is unaffected - flag this
-  if a mean-based reliability figure is ever pulled from these `.rds`
-  files elsewhere.
+  the Spearman-Brown-corrected value to +/-Infinity for that one draw. This
+  document filters those out via `is.finite()` before computing per-run
+  reliability targets, so it doesn't affect the numbers above - flag it if
+  a mean-based reliability figure is ever pulled from these `.rds` files
+  some other way.
