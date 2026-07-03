@@ -33,7 +33,6 @@ Chan2024.csv,arousal,word_chinese_traditional,arousal_mean,arousal_sd,25281,1.6,
 Chan2024.csv,imagine,word_chinese_traditional,imagine_mean,imagine_sd,25281,1.85,6.65,20
 Cheng2025.csv,valence,word_chinese_traditional,valence_mean,valence_sd,3971,1.75,7.95,20
 Cheng2025.csv,arousal,word_chinese_traditional,arousal_mean,arousal_sd,3971,2.1,7.2,20
-Chiarello1999.csv,imagine,word_english,imagine_mean,imagine_sd,1196,1.21,7,28
 Clarke2018.csv,familiar,word_thai_intended,familiar_mean,familiar_sd,480,1.29,5,58
 Clarke2024.csv,imagine,word_english,imagine_mean,imagine_sd,627,1.5714285714285714,7,60
 Conca2024.csv,familiar,word_turkish,familiar_mean,familiar_sd,503,1.375,7,10
