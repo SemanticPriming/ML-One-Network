@@ -10,6 +10,13 @@ Sample-size (AIPE-based) power simulations for the semanticprimeR norming variab
 -   `run_power_batch.R` — shared setup and helpers (`build_jobs`, `run_job`, `run_jobs_stage`, manifest builders). Not run directly; sourced by the pilot and refine scripts.
 -   `run_power_pilot.R` — stage 1, broad sweep.
 -   `run_power_refine.R` — stage 2, narrow/precise rerun.
+-   `orig_n_dependency.R` — checks whether the recommended sample sizes (80%
+    precision, 80% reliability) are a function of the original source study's
+    `n_per_item` rather than a property of the item content. Reads the refined
+    `.rds` output plus `power_job_list.csv`, writes `orig_n_dependency_data.csv`
+    (merged per-run data) and `orig_n_dependency.html` (per-variable scatter
+    report, built from `orig_n_dependency_template.html`). Requires the refine
+    stage to have completed first.
 
 ## Running the pipeline
 
@@ -29,6 +36,13 @@ Rscript run_power_refine.R
 ```
 
 Output for each stage goes to `simulations/<variable>/pilot/` and `simulations/<variable>/refined/`, one `.rds` per dataset plus a `*_grid_manifest.csv`/`.rds` summarizing the recommended sample-size window per dataset. Both stages skip datasets that already have output, so they're safe to resume/re-run.
+
+
+### note to self
+
+30
+simulate population of full size, but then sample from it 
+rerun analyses
 
 ### Options
 

@@ -135,13 +135,56 @@ extract_overall_curve <- function(run_obj) {
   NULL
 }
 
+extract_overall_rel <- function(run_obj) {
+  if (is.list(run_obj) && !is.null(run_obj$overall_rel)) {
+    return(run_obj$overall_rel)
+  }
+  NULL
+}
+
+# The precision curve (percent_below) drives recommend_followup_window()'s
+# start/stop, but split-half reliability often crosses its target at a much
+# smaller sample size than precision does - reusing the precision-derived
+# window for reliability silently never tests those smaller sizes, so the
+# refine stage's "n needed for target reliability" ends up equal to whatever
+# the precision window's floor was, not a real crossing point. This finds
+# where the *pilot's own* reliability curve (already computed over the full
+# 20-500 sweep) first reaches the target, so the refine window's start can be
+# pulled down to cover it.
+recommend_reliability_start <- function(rel_curve, target = 80, min_start = 20, step = 5) {
+  if (is.null(rel_curve) || nrow(rel_curve) == 0) {
+    return(NA_real_)
+  }
+
+  rel_curve <- dplyr::arrange(
+    dplyr::mutate(
+      rel_curve,
+      reliability_m = as.numeric(reliability_m),
+      sample_size = as.numeric(sample_size)
+    ),
+    sample_size
+  )
+
+  hit <- dplyr::slice_head(
+    dplyr::filter(rel_curve, is.finite(reliability_m), reliability_m * 100 >= target),
+    n = 1
+  )
+
+  if (nrow(hit) == 0) {
+    return(NA_real_)
+  }
+
+  max(min_start, floor(hit$sample_size[[1]] / step) * step)
+}
+
 build_followup_manifest <- function(jobs,
                                     out_dir,
                                     lower_target = 70,
                                     upper_target = 95,
                                     min_start = 20,
                                     max_stop = 500,
-                                    step = 5) {
+                                    step = 5,
+                                    reliability_target = 80) {
   purrr::pmap_dfr(
     jobs,
     function(name, data_file, item_col, mean_col, sd_col, n_per_item, min_score, max_score, output, status) {
@@ -158,7 +201,8 @@ build_followup_manifest <- function(jobs,
           stop_sample_size = NA_real_,
           lower_hit_sample_size = NA_real_,
           upper_hit_sample_size = NA_real_,
-          max_percent_below = NA_real_
+          max_percent_below = NA_real_,
+          reliability_hit_sample_size = NA_real_
         ))
       }
 
@@ -172,6 +216,17 @@ build_followup_manifest <- function(jobs,
         max_stop = max_stop,
         step = step
       )
+
+      reliability_start <- recommend_reliability_start(
+        rel_curve = extract_overall_rel(run_obj),
+        target = reliability_target,
+        min_start = min_start,
+        step = step
+      )
+      window$reliability_hit_sample_size <- reliability_start
+      if (!is.na(reliability_start)) {
+        window$start_sample_size <- min(window$start_sample_size, reliability_start)
+      }
 
       dplyr::bind_cols(
         tibble::tibble(
