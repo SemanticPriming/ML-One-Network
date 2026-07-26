@@ -1,0 +1,15 @@
+"name","output","status","pilot_file","lower_target","upper_target","start_sample_size","stop_sample_size","lower_hit_sample_size","upper_hit_sample_size","max_percent_below","reliability_hit_sample_size"
+"Bonin2003","Bonin2003.rds","ready","simulations/familiar/pilot/Bonin2003.rds",70,95,20,50,30,50,100,20
+"Chan2024","Chan2024.rds","ready","simulations/familiar/pilot/Chan2024.rds",70,95,20,50,30,50,100,20
+"DeDeyne2008","DeDeyne2008.rds","ready","simulations/familiar/pilot/DeDeyne2008.rds",70,95,20,60,40,60,100,20
+"Ferre2012","Ferre2012.rds","ready","simulations/familiar/pilot/Ferre2012.rds",70,95,20,80,60,80,100,20
+"Gilhooly1980a","Gilhooly1980a.rds","ready","simulations/familiar/pilot/Gilhooly1980a.rds",70,95,20,70,50,70,100,20
+"Hermans1994","Hermans1994.rds","ready","simulations/familiar/pilot/Hermans1994.rds",70,95,20,110,80,110,100,20
+"Kerr1991","Kerr1991.rds","ready","simulations/familiar/pilot/Kerr1991.rds",70,95,20,40,30,40,100,20
+"Li2021","Li2021.rds","ready","simulations/familiar/pilot/Li2021.rds",70,95,20,80,60,80,100,20
+"Montefinese2014","Montefinese2014.rds","ready","simulations/familiar/pilot/Montefinese2014.rds",70,95,20,60,40,60,100,20
+"Quadflieg2014","Quadflieg2014.rds","ready","simulations/familiar/pilot/Quadflieg2014.rds",70,95,20,40,30,40,100,20
+"Schroder2012","Schroder2012.rds","ready","simulations/familiar/pilot/Schroder2012.rds",70,95,20,40,30,40,100,20
+"Snodgrass1980","Snodgrass1980.rds","ready","simulations/familiar/pilot/Snodgrass1980.rds",70,95,20,80,60,80,100,20
+"Toglia1978","Toglia1978.rds","ready","simulations/familiar/pilot/Toglia1978.rds",70,95,20,130,90,130,100,20
+"Yao2017","Yao2017.rds","ready","simulations/familiar/pilot/Yao2017.rds",70,95,20,120,80,120,100,20
