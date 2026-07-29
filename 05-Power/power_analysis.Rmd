@@ -136,7 +136,9 @@ summarize_variable_recommendation <- function(res, target_power = 80, target_rel
 }
 ```
 
-## Why this analysis exists
+## Sample Size Estimation for Subjective Rating Variables
+
+The project will collect data for popular 
 
 The ML One Network stimuli are scored on several norming variables collected
 by SPAML/semanticprimeR contributor datasets: familiarity, concreteness,
