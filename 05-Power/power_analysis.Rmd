@@ -2,14 +2,18 @@
 title: "ML One Network: Norming Variable Power Analysis"
 author: "Erin M. Buchanan"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
-output: 
+output:
     pdf_document
 always_allow_html: true
+bibliography: power_references.bib
   # html_document:
   #   toc: true
   #   toc_float: true
   #   code_folding: hide
   #   df_print: paged
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -140,80 +144,148 @@ summarize_variable_recommendation <- function(res, target_power = 80, target_rel
 
 ## Sample Size Estimation for Subjective Rating Variables
 
-In a follow up to the Semantic Priming Across Many Languages [@cite] project, we will collect data across 45 languages/variants on the following norming variables: familiarity, concreteness,
-valence, arousal, imageability, and age of acquisition (AoA). We will use the Buchanan et al. [cite] accuracy in parameter estimation procedure to determine how many participants we need to create a sufficiently narrow confidence interval around the mean for each item. In this procedure, we use the following steps (reproduced from original article):
+In a follow up to the Semantic Priming Across Many Languages
+[@buchanan2025] project, we will collect data across 45
+languages/variants on the following norming variables: familiarity,
+concreteness, valence, arousal, imageability, and age of acquisition
+(AoA). We will use the Buchanan et al. [-@buchanan2026] accuracy in
+parameter estimation procedure to determine how many participants we
+need to create a sufficiently narrow confidence interval around the mean
+for each item. In this procedure, we use the following steps (reproduced
+from original article):
 
-### Step 1. 
+### Step 1.
 
 Use representative pilot data.
 
-We included all norming datasets found in the original Linguistic Annotated Bibiolography [cite] and the updated LAB workflow under construction at https://manynorms.many-languages.com. We included datasets with our target variables that included information about the mean and standard deviation of each item. Datasets with only the mean were excluded, as we could not simulate the data appropriately with no information about variance. The original articles were reviewed for information on item sample sizes, which was matched to the variables included in the dataset. In cases of range estimates provided in the manuscript (i.e., 15-20 people rated each item), we used the lower end of the range to estimate with less precision (which would, in turn, increase sample size requirements due to more uncertainty). The following datasets were used: 
+We included all norming datasets found in the original Linguistic
+Annotated Bibiolography [@buchanan2019LABLinguisticAnnotated] and the
+updated LAB workflow under construction at
+<https://manynorms.many-languages.com>. We included datasets with our
+target variables that included information about the mean and standard
+deviation of each item. Datasets with only the mean were excluded, as we
+could not simulate the data appropriately with no information about
+variance. The original articles were reviewed for information on item
+sample sizes, which was matched to the variables included in the
+dataset. In cases of range estimates provided in the manuscript (i.e.,
+15-20 people rated each item), we used the lower end of the range to
+estimate with less precision (which would, in turn, increase sample size
+requirements due to more uncertainty). The following datasets were used:
 
-INCLUDE TABLE HERE AND REFERENCES 
+```{r dataset-citation-table, results='asis'}
+dataset_variables <- read.csv("datasets_with_power_variables.csv", stringsAsFactors = FALSE)
 
-### Step 2. 
+dataset_citation_table <- dataset_variables %>%
+  dplyr::mutate(
+    bibtex_key = sub("\\.csv$", "", dataset),
+    Reference = sprintf("[@%s]", bibtex_key),
+    Variables = dplyr::case_when(
+      TRUE ~ apply(
+        dplyr::select(., familiar, concrete, valence, arousal, imagine, aoa), 1,
+        function(row) paste(names(row)[row == "x" & !is.na(row)], collapse = ", ")
+      )
+    )
+  ) %>%
+  dplyr::transmute(Dataset = bibtex_key, Variables, Reference)
 
-Calculate the standard error of each of the items in the pilot data. Using the 4th decile, determine the cutoff and stopping rule for the standard error of the items.
+knitr::kable(dataset_citation_table, row.names = FALSE)
+```
 
-Using the *semanticprimeR* package [cite], we then simulated the pilot data using the mean, standard deviation, and sample size from each dataset for the items included. This dataset was treated as the "population", and we estimated the 4th decile standard error across all items as the cutoff score and stopping rule for the standard error of the items.  
+### Step 2.
 
-### Step 3. 
+Calculate the standard error of each of the items in the pilot data.
+Using the 4th decile, determine the cutoff and stopping rule for the
+standard error of the items.
 
-Create simulated samples of your pilot data, starting with at least 20 participants, up to a maximum number of participants.
+Using the *semanticprimeR* package [@buchanan2024], we then simulated
+the pilot data using the mean, standard deviation, and sample size from
+each dataset for the items included. This dataset was treated as the
+"population", and we estimated the 4th decile standard error across all
+items as the cutoff score and stopping rule for the standard error of
+the items.
 
-We then sampled from the simulated pilot data, from *n* = 20 up to *n* = 500. However, running the simulation over many samples by many simulations by every dataset would be extremely slow. Therefore, we broke the simulations into two stages: 
+### Step 3.
 
-1. Pilot - a coarse sweep per dataset (sample sizes 20-500, step 10, 10
-   simulations per step) to find roughly where the precision curve crosses
-   70% and 95% rates. `run_power_pilot.R`
-2. Refine - a narrow, high-precision rerun (step 5, 100 simulations per
-   step) restricted to the pilot's recommended `[start, stop]` window for
-   that specific dataset. `run_power_refine.R`
-   
-Both of these scripts call `run_power_batch.R` to do the simulations. This document reads the refined stage output only, since that is the
+Create simulated samples of your pilot data, starting with at least 20
+participants, up to a maximum number of participants.
+
+We then sampled from the simulated pilot data, from *n* = 20 up to *n* =
+500. However, running the simulation over many samples by many
+simulations by every dataset would be extremely slow. Therefore, we
+broke the simulations into two stages:
+
+1.  Pilot - a coarse sweep per dataset (sample sizes 20-500, step 10, 10
+    simulations per step) to find roughly where the precision curve
+    crosses 70% and 95% rates. `run_power_pilot.R`
+2.  Refine - a narrow, high-precision rerun (step 5, 100 simulations per
+    step) restricted to the pilot's recommended `[start, stop]` window
+    for that specific dataset. `run_power_refine.R`
+
+Both of these scripts call `run_power_batch.R` to do the simulations.
+This document reads the refined stage output only, since that is the
 higher-precision, final estimate.
 
-## Step 4. 
+### Step 4.
 
-Calculate the standard error of each of the items in the simulated data. From these scores, calculate the percent of items below the cutoff score from Step 2.
+Calculate the standard error of each of the items in the simulated data.
+From these scores, calculate the percent of items below the cutoff score
+from Step 2.
 
-### Step 5. 
+### Step 5.
 
-Determine the sample size at which 80%, 85%, 90%, 95% of items are below the cutoff score. Use the correction formula to adjust your proposed sample size based on pilot data size, power, and percent variability.
+Determine the sample size at which 80%, 85%, 90%, 95% of items are below
+the cutoff score. Use the correction formula to adjust your proposed
+sample size based on pilot data size, power, and percent variability.
 
-`functions.R` implements steps 3-5 using tools from the `semanticprimeR` package for each real dataset in `power_job_list.csv`. 
+`functions.R` implements steps 3-5 using tools from the `semanticprimeR`
+package for each real dataset in `power_job_list.csv`.
 
-### Step 6. 	
+### Step 6.
 
-Report all values. Designate one as the minimum sample size, the cutoff score as the stopping rule for adaptive designs, and the maximum sample size.
+Report all values. Designate one as the minimum sample size, the cutoff
+score as the stopping rule for adaptive designs, and the maximum sample
+size.
 
-### Split-half Reliability 
+### Split-half Reliability
 
-We additionally included a calculation of split-half reliability for each of the sample sizes. Participants for each item are split in half, the two half-means are correlated, and the  Spearman-Brown correction is then applied. This result tells us how consistent the item-level scores would be with a given number of raters per item. Generally, numbers can be very low and obtain reliability. We tested reliability at sample sizes of *n* = 5 to the stop of the range found for each dataset from the pilot sample size estimation steps. 
+We additionally included a calculation of split-half reliability for
+each of the sample sizes. Participants for each item are split in half,
+the two half-means are correlated, and the Spearman-Brown correction is
+then applied. This result tells us how consistent the item-level scores
+would be with a given number of raters per item. Generally, numbers can
+be very low and obtain reliability. We tested reliability at sample
+sizes of *n* = 5 to the stop of the range found for each dataset from
+the pilot sample size estimation steps.
 
 ## Target Criteria and Outlier Handling
 
-We target 80% power (AIPE precision) and 80% split-half reliability,
-and report the recommended sample size per variable as the average of
-those two numbers. Precision and reliability answer different questions
-about the same design (how accurately measured is the estimated mean vs. how
+We target 80% power (AIPE precision) and 80% split-half reliability, and
+report the recommended sample size per variable as the average of those
+two numbers. Precision and reliability answer different questions about
+the same design (how accurately measured is the estimated mean vs. how
 consistent are the item scores), so averaging them gives one practical
-number rather than always taking the stricter of the two. We tested *n* = 5, but set the bottom value for reliability to be *n* = 20. Therefore, that means even if samples achieved high reliability at *n* = 5, 10, or 15, the lowest number we would accept for the average of criterions would be *n* = 20, as otherwise the low numbers might bias the sample size estimates downward inappropriately. 
+number rather than always taking the stricter of the two. We tested *n*
+= 5, but set the bottom value for reliability to be *n* = 20. Therefore,
+that means even if samples achieved high reliability at *n* = 5, 10, or
+15, the lowest number we would accept for the average of criterions
+would be *n* = 20, as otherwise the low numbers might bias the sample
+size estimates downward inappropriately.
 
 Each of these numbers is computed per dataset run (i.e., per source
 paper/corpus) before pooling: for a given variable, every dataset run
 contributes one "n needed for 80% precision" value and one "n needed for
-80% reliability" value. A handful of source datasets are small, noisy, or
-otherwise unusual and can pull these per-run numbers to extreme highs or
-lows. Before pooling across runs, we drop outlier runs using the standard
-1.5 x IQR rule (values more than 1.5 interquartile ranges below Q1 or
-above Q3 are dropped), applied separately to the precision values and the
-reliability values for that variable. We then take the median of the
-remaining runs for each metric (median rather than mean, since a handful of
-runs can still sit near the outlier boundary without being dropped outright -
-in practice the two are close once outliers are trimmed, but median is the
-more standard choice for a "typical" recommendation). The per-variable
-sections below show which runs were considered outliers.
+80% reliability" value. A handful of source datasets are small, noisy,
+or otherwise unusual and can pull these per-run numbers to extreme highs
+or lows. Before pooling across runs, we drop outlier runs using the
+standard 1.5 x IQR rule (values more than 1.5 interquartile ranges below
+Q1 or above Q3 are dropped), applied separately to the precision values
+and the reliability values for that variable. We then take the median of
+the remaining runs for each metric (median rather than mean, since a
+handful of runs can still sit near the outlier boundary without being
+dropped outright - in practice the two are close once outliers are
+trimmed, but median is the more standard choice for a "typical"
+recommendation). The per-variable sections below show which runs were
+considered outliers.
 
 ## Loading Refined Results
 
@@ -232,11 +304,12 @@ results_by_variable <- purrr::map(
 )
 ```
 
-Each dataset contributes one simulation "run" per variable (i.e., one row
-per source paper/corpus that reported that variable for the words in our
-stimuli set). The tables below pool across *all* dataset runs for a
-variable, since our own norming study will draw one sample of participants
-per item. Each of these datasets is a mix of languages, so we estimate our overall sample size globally, rather than by language. 
+Each dataset contributes one simulation "run" per variable (i.e., one
+row per source paper/corpus that reported that variable for the words in
+our stimuli set). The tables below pool across *all* dataset runs for a
+variable, since our own norming study will draw one sample of
+participants per item. Each of these datasets is a mix of languages, so
+we estimate our overall sample size globally, rather than by language.
 
 ## Per-Variable Results
 
@@ -331,10 +404,10 @@ for (v in available_vars) {
 
 ## Combined Recommendation Across Variables
 
-Our norming study collects all six variables from the same participants per
-item, so the design has to satisfy every variable's IQR-trimmed 80/80
-recommendation at once - the number is the largest
-`recommended_n` across variables below.
+Our norming study collects all six variables from the same participants
+per item, so the design has to satisfy every variable's IQR-trimmed
+80/80 recommendation at once - the number is the largest `recommended_n`
+across variables below.
 
 ```{r combined-summary}
 combined_recommendation <- purrr::imap_dfr(variable_recommendation, function(rec, v) {
@@ -380,7 +453,10 @@ overall_n_needed
 
 Bottom line: averaging 80% precision and 80% reliability (after dropping
 outlier dataset runs via the 1.5 x IQR rule) puts every variable's
-recommended sample size at roughly `r round(min(combined_recommendation$recommended_n))`-`r ceiling(overall_n_needed)`
-participants per item, with `r overall_driver` needing the most. Our norming
-study needs at least `r ceiling(overall_n_needed)` participants per item
-to satisfy every variable at once.
+recommended sample size at roughly
+`r round(min(combined_recommendation$recommended_n))`-`r ceiling(overall_n_needed)`
+participants per item, with `r overall_driver` needing the most. Our
+norming study needs at least `r ceiling(overall_n_needed)` participants
+per item to satisfy every variable at once.
+
+## References
