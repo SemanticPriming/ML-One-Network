@@ -21,11 +21,11 @@ Sample-size (AIPE-based) power simulations for the semanticprimeR norming variab
 
 ## Finding the reliability "spot"
 
-Precision and split-half reliability don't reach their target at the same sample size — reliability generally gets there much earlier. The pilot sweep runs from **n=5** (not just n=20) up to 500 so it can locate exactly where each dataset's own reliability curve crosses the 80% target, instead of assuming that crossing never happens below some arbitrary floor. `recommend_reliability_start()` in `run_power_batch.R` reads the pilot's reliability curve and reports that true crossing point uncapped (it's a diagnostic value, `reliability_hit_sample_size` in the manifest) — mainly as a sanity check that reliability comfortably clears its target well before n=20.
+Precision and split-half reliability don't reach their target at the same sample size — reliability generally gets there much earlier. **n=20 is a fixed floor**: the recommended/refined sample size never drops below it, no matter how early reliability crosses 80%, because 20 is a practical floor for the study design, not a search-grid artifact.
 
-The recommended/refined sample size itself never drops below **n=20** regardless of where that crossing falls — 20 is a practical floor for the study design, not just a search-grid artifact, so `build_followup_manifest()` clamps the refine-stage window's `start_sample_size` to `max(20, ...)` even if reliability crosses much earlier. In short: search down to n=5 to confirm the floor is safe, but never recommend or refine below n=20.
+The pilot sweep runs from **n=5** (not just n=20) up to 500 purely to confirm that floor is safe — `recommend_reliability_start()` in `run_power_batch.R` reads the pilot's reliability curve and reports the true, uncapped crossing point as a diagnostic (`reliability_hit_sample_size` in the manifest), so we can see reliability clears 80% well before n=20 rather than assuming it. It's a sanity check, not a recommendation: `build_followup_manifest()` still clamps `start_sample_size` to `max(20, ...)` before it goes anywhere.
 
-(An earlier version of this pipeline started the sweep at n=20 and only checked reliability's true crossing point indirectly, by correlating recommended-N against each dataset's original source-study sample size — that exploratory detour has been removed now that the sweep itself starts low enough to check directly.)
+That 5-500 sweep only happens once, at pilot resolution (step 10, 10 sims/step) — it isn't repeated at refine resolution. `run_simulation_pipeline()` computes precision and reliability from the same simulated samples, so the refine stage's reliability curve only covers the `[start_sample_size, stop_sample_size]` window derived from the pilot's *precision* curve (floored at 20). `reliability_hit_sample_size` is carried into the manifest as a diagnostic; it never widens the refine window.
 
 ## Running the pipeline
 
