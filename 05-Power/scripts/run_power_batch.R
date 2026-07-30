@@ -190,7 +190,7 @@ build_followup_manifest <- function(jobs,
                                     reliability_target = 80) {
   purrr::pmap_dfr(
     jobs,
-    function(name, data_file, item_col, mean_col, sd_col, n_per_item, min_score, max_score, output, status) {
+    function(name, data_file, item_col, mean_col, sd_col, n_per_item, min_score, max_score, n_items, output, status) {
       out_file <- file.path(out_dir, output)
       if (!file.exists(out_file)) {
         return(tibble::tibble(
