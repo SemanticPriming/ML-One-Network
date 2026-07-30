@@ -712,6 +712,164 @@ run_simulation_pipeline <- function(
   ))
 }
 
+# Chunked variant of run_simulation_pipeline(), for jobs whose window is
+# large enough that materializing every sample-size step at once (as
+# run_population_pipeline() does) risks exhausting memory. That function
+# holds every step's simulated samples in one `samples` list for the whole
+# job - needed again later for reliability - so peak memory scales with
+# the *sum* over all steps, not any single step. This version simulates,
+# summarizes, and discards one sample size at a time, and checkpoints
+# out_file after every step so a killed/crashed job doesn't lose already-
+# computed steps. See run_job_chunked() / needs_chunked_run() in
+# run_power_batch.R for when this gets used instead of the normal path.
+run_simulation_pipeline_chunked <- function(
+  df,
+  item_col,
+  mean_col,
+  sd_col,
+  n_per_item = 68,
+  min_score = 0,
+  max_score = 9,
+  start = 20,
+  stop = 100,
+  increase = 5,
+  nsim = 500,
+  power_levels = c(80, 85, 90, 95),
+  out_file = NULL,
+  log_file = "power_batch.log"
+) {
+  cat(sprintf("Chunked pipeline started: %s\n", item_col))
+  cat(sprintf("  rows in input: %d\n", nrow(df)))
+
+  items <- df %>%
+    mutate(
+      item = .data[[item_col]],
+      mean = .data[[mean_col]],
+      sd   = .data[[sd_col]],
+      n    = n_per_item
+    ) %>%
+    select(item, mean, sd, n, everything()) %>%
+    filter(!is.na(item) & !is.na(mean) & !is.na(sd))
+
+  sim_data <- items %>%
+    mutate(scores = pmap(list(mean, sd, n),
+                         ~ rtruncnorm(..3,
+                                      a = min_score,
+                                      b = max_score,
+                                      mean = ..1,
+                                      sd = ..2))) %>%
+    unnest(scores) %>%
+    mutate(score = round(scores)) %>%
+    filter(is.finite(.data[["score"]])) %>%
+    select(item, score, any_of(c("pos", "length_bucket", "stroke_bucket")))
+
+  cat(sprintf("  simulated data ready: %d rows\n", nrow(sim_data)))
+
+  population <- sim_data %>% filter(is.finite(.data[["score"]]))
+
+  cutoff <- calculate_cutoff(
+    population = population,
+    grouping_items = "item",
+    score = "score",
+    minimum = min_score,
+    maximum = max_score
+  )
+  cat(sprintf("  cutoff: %.3f  prop_var: %.4f  n_items: %d\n",
+              cutoff$cutoff, cutoff$prop_var, n_distinct(population$item)))
+
+  sample_sizes <- seq(start, stop, by = increase)
+  cat(sprintf("  chunked run: %d step(s) from n=%d to n=%d, nsim=%d/step\n",
+              length(sample_sizes), start, stop, nsim))
+
+  proportion_summary_parts <- vector("list", length(sample_sizes))
+  split_half_rel_parts <- vector("list", length(sample_sizes))
+
+  save_checkpoint <- function(step_i) {
+    if (is.null(out_file)) return(invisible(NULL))
+    partial <- list(
+      corrected_summary  = NULL,
+      proportion_summary = dplyr::bind_rows(proportion_summary_parts[seq_len(step_i)]),
+      split_half_rel     = dplyr::bind_rows(split_half_rel_parts[seq_len(step_i)])
+    )
+    saveRDS(build_save_data(partial), out_file)
+  }
+
+  for (i in seq_along(sample_sizes)) {
+    n <- sample_sizes[[i]]
+    log_line("  [", format(Sys.time(), "%H:%M:%S"), "] chunked step ", i, "/",
+             length(sample_sizes), ": n=", n, log_file = log_file)
+
+    step_samples <- simulate_samples(
+      start = n,
+      stop = n,
+      increase = increase,
+      population = population,
+      replace = TRUE,
+      nsim = nsim,
+      grouping_items = "item"
+    )
+    step_samples <- purrr::map(step_samples, function(sample_dat) {
+      sample_dat %>%
+        filter(is.finite(.data[["score"]]))
+    })
+
+    proportion_summary_parts[[i]] <- calculate_proportion(
+      samples = step_samples,
+      cutoff = cutoff$cutoff,
+      grouping_items = "item",
+      score = "score"
+    )
+
+    split_half_rel_parts[[i]] <- data.frame(
+      sample_size = n,
+      reliability = map_dbl(step_samples, function(sample_dat) {
+        split_half_item_rel(
+          dat = sample_dat,
+          item_col = "item",
+          score_col = "score"
+        )
+      })
+    )
+
+    rm(step_samples)
+    gc()
+
+    save_checkpoint(i)
+  }
+
+  proportion_summary <- dplyr::bind_rows(proportion_summary_parts)
+  split_half_rel <- dplyr::bind_rows(split_half_rel_parts)
+
+  corrected_summary <- calculate_correction(
+    proportion_summary = proportion_summary,
+    pilot_sample_size = n_per_item,
+    proportion_variability = cutoff$prop_var,
+    power_levels = power_levels
+  )
+
+  cat("  split-half reliability done\n")
+
+  if (!is.null(out_file)) {
+    saveRDS(build_save_data(list(
+      corrected_summary = corrected_summary,
+      proportion_summary = proportion_summary,
+      split_half_rel = split_half_rel
+    )), out_file)
+    cat(sprintf("  [%s] final checkpoint saved\n", format(Sys.time(), "%H:%M:%S")))
+  }
+
+  cat("Chunked pipeline done\n")
+
+  list(
+    sim_data = sim_data,
+    cutoff = cutoff,
+    samples = NULL,
+    proportion_summary = proportion_summary,
+    corrected_summary = corrected_summary,
+    split_half_rel = split_half_rel
+  )
+}
+
 split_half_item_rel <- function(dat, item_col = "item", score_col = "score") {
   dat <- dat %>%
     group_by(.data[[item_col]]) %>%

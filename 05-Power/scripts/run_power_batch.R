@@ -271,8 +271,8 @@ build_jobs <- function(variable, job_list_file = JOB_LIST_FILE, data_dir = DATA_
     return(data.frame(
       name = character(), data_file = character(), item_col = character(),
       mean_col = character(), sd_col = character(), n_per_item = numeric(),
-      min_score = numeric(), max_score = numeric(), output = character(),
-      status = character(), stringsAsFactors = FALSE
+      min_score = numeric(), max_score = numeric(), n_items = numeric(),
+      output = character(), status = character(), stringsAsFactors = FALSE
     ))
   }
 
@@ -287,10 +287,38 @@ build_jobs <- function(variable, job_list_file = JOB_LIST_FILE, data_dir = DATA_
     n_per_item = as.numeric(job_list$n_per_item),
     min_score = as.numeric(job_list$min_score),
     max_score = as.numeric(job_list$max_score),
+    n_items = as.numeric(job_list$n_items),
     output = paste0(name, ".rds"),
     status = "ready",
     stringsAsFactors = FALSE
   )
+}
+
+# Peak memory for the normal pipeline (run_job()/run_simulation_pipeline())
+# scales with the *sum* across every sample-size step, because
+# run_population_pipeline() holds every step's simulated samples in one
+# list for the whole job (needed again later for reliability) rather than
+# freeing each step as it's used. estimate_sim_rows() approximates that
+# peak as n_items * nsim * sum(seq(start, stop, increase)).
+#
+# CHUNKED_ROW_BUDGET is calibrated from two real refine-stage jobs on this
+# machine (128GB RAM): an estimated ~4.7 billion rows (Montefinese2023_en,
+# concrete) finished fine in ~12 minutes; an estimated ~7.9 billion rows
+# (Janschewitz2008, valence) used 77GB RAM and hadn't finished after 3.5
+# hours (had to be killed). The budget sits between those two observed
+# points - it's a heuristic, not an exact memory model, so treat it as
+# "definitely chunk above this" rather than a precise cutoff.
+CHUNKED_ROW_BUDGET <- 5e9
+
+estimate_sim_rows <- function(n_items, start, stop, increase, nsim) {
+  sample_sizes <- seq(start, stop, by = increase)
+  n_items * nsim * sum(sample_sizes)
+}
+
+needs_chunked_run <- function(n_items, start, stop, increase, nsim,
+                              budget = CHUNKED_ROW_BUDGET) {
+  is.finite(n_items) &&
+    estimate_sim_rows(n_items, start, stop, increase, nsim) > budget
 }
 
 run_job <- function(job,
@@ -354,6 +382,79 @@ run_job <- function(job,
   saveRDS(save_data, out_file)
 
   rm(saved_sim, save_data)
+  gc()
+
+  log_line("done ", job$name, " -> ", out_file, log_file = log_file)
+  invisible(list(status = "done", file = out_file))
+}
+
+# Same contract as run_job(), but for jobs whose window is large enough
+# that run_job()/run_simulation_pipeline() risks exhausting memory (see
+# CHUNKED_ROW_BUDGET / needs_chunked_run() above). Delegates to
+# run_simulation_pipeline_chunked(), which simulates and summarizes one
+# sample size at a time instead of holding every step in memory at once,
+# and checkpoints out_file after every step. Only intended to be called
+# for jobs needs_chunked_run() flags - normal-sized jobs should keep using
+# run_job(), which is simpler and already well-exercised.
+run_job_chunked <- function(job,
+                            skip_existing = TRUE,
+                            out_dir = "simulations",
+                            start = 20,
+                            stop = 100,
+                            increase = 5,
+                            nsim = 100,
+                            power_levels = c(80, 85, 90, 95),
+                            max_rows = 1000,
+                            log_file = "power_batch.log") {
+  out_file <- file.path(out_dir, job$output)
+
+  if (skip_existing && file.exists(out_file)) {
+    log_line("skip ", job$name, " -> existing ", out_file, log_file = log_file)
+    return(invisible(list(status = "skipped", file = out_file)))
+  }
+
+  log_line("start (chunked) ", job$name, " -> ", out_file, log_file = log_file)
+
+  df <- rio::import(job$data_file)
+  on.exit({
+    rm(df)
+    gc()
+  }, add = TRUE)
+
+  log_line("imported ", job$name, " rows: ", nrow(df), log_file = log_file)
+
+  if (!is.null(max_rows) && nrow(df) > max_rows) {
+    log_line(
+      "sampling ",
+      max_rows,
+      " rows for ",
+      job$name,
+      " test run",
+      log_file = log_file
+    )
+    df <- dplyr::slice_sample(df, n = max_rows)
+  }
+
+  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+  saved_sim <- run_simulation_pipeline_chunked(
+    df = df,
+    item_col = job$item_col,
+    mean_col = job$mean_col,
+    sd_col = job$sd_col,
+    n_per_item = job$n_per_item,
+    min_score = job$min_score,
+    max_score = job$max_score,
+    start = start,
+    stop = stop,
+    increase = increase,
+    nsim = nsim,
+    power_levels = power_levels,
+    out_file = out_file,
+    log_file = log_file
+  )
+
+  rm(saved_sim)
   gc()
 
   log_line("done ", job$name, " -> ", out_file, log_file = log_file)

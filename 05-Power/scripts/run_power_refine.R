@@ -81,9 +81,19 @@ run_refine_for_variable <- function(variable) {
     start_size <- manifest$start_sample_size[[i]]
     stop_size <- manifest$stop_sample_size[[i]]
 
+    # Estimate against the same n_items cap run_job()/run_job_chunked()
+    # apply (max_rows subsampling), so the estimate matches what actually
+    # gets simulated.
+    n_items_est <- min(job$n_items, 1000)
+    chunked <- needs_chunked_run(
+      n_items = n_items_est, start = start_size, stop = stop_size,
+      increase = 5, nsim = 500
+    )
+    run_mode <- if (chunked) "chunked" else "normal"
+
     log_line(
       "refine ", job$name,
-      " using start=", start_size, " stop=", stop_size, " nsim=500 (subprocess)",
+      " using start=", start_size, " stop=", stop_size, " nsim=500 (subprocess, ", run_mode, ")",
       log_file = log_file
     )
 
@@ -98,7 +108,8 @@ run_refine_for_variable <- function(variable) {
           as.character(start_size),
           as.character(stop_size),
           "500",
-          shQuote(log_file)
+          shQuote(log_file),
+          run_mode
         )
       ),
       error = function(e) {
