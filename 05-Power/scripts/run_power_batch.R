@@ -295,20 +295,22 @@ build_jobs <- function(variable, job_list_file = JOB_LIST_FILE, data_dir = DATA_
 }
 
 # Peak memory for the normal pipeline (run_job()/run_simulation_pipeline())
-# scales with the *sum* across every sample-size step, because
+# scales *roughly* with the sum across every sample-size step, because
 # run_population_pipeline() holds every step's simulated samples in one
 # list for the whole job (needed again later for reliability) rather than
 # freeing each step as it's used. estimate_sim_rows() approximates that
-# peak as n_items * nsim * sum(seq(start, stop, increase)).
-#
-# CHUNKED_ROW_BUDGET is calibrated from two real refine-stage jobs on this
-# machine (128GB RAM): an estimated ~4.7 billion rows (Montefinese2023_en,
-# concrete) finished fine in ~12 minutes; an estimated ~7.9 billion rows
-# (Janschewitz2008, valence) used 77GB RAM and hadn't finished after 3.5
-# hours (had to be killed). The budget sits between those two observed
-# points - it's a heuristic, not an exact memory model, so treat it as
-# "definitely chunk above this" rather than a precise cutoff.
-CHUNKED_ROW_BUDGET <- 5e9
+# peak as n_items * nsim * sum(seq(start, stop, increase)) - but this is
+# only a rough proxy, not a reliable predictor: Clarke2024 (imagine,
+# ~4.2 billion estimated rows) used 85GB and didn't finish, while
+# Montefinese2023_en (concrete, ~4.7 billion - a *higher* estimate)
+# finished fine in ~12 minutes. Something beyond raw row volume drives the
+# actual blowups (possibly internal to semanticprimeR::simulate_samples(),
+# which isn't inspectable from here). Since the estimate can't reliably
+# separate safe from unsafe jobs, CHUNKED_ROW_BUDGET is set well below
+# every observed-safe job (smallest was ~1.9 billion, Raslescu2023) rather
+# than at some midpoint - i.e. err heavily toward chunking. Jobs still get
+# monitored live and killed/retried if one somehow slips through anyway.
+CHUNKED_ROW_BUDGET <- 1.5e9
 
 estimate_sim_rows <- function(n_items, start, stop, increase, nsim) {
   sample_sizes <- seq(start, stop, by = increase)
