@@ -6694,3 +6694,253 @@ hi_final$ok <- NULL
 export(hi_final, paste0(out_path, "/hi/hi_trials_final.csv"))
 ```
 
+## uk Ukranian
+
+```{r eval = F}
+# original words
+uk <- import(paste0(out_path, "/uk/uk_translated_final.xlsx"))
+uk$en_cue <- gsub("digusting", "disgusting", uk$en_cue)
+
+uk$uk_cue <- uk$uk_cue_trans
+uk$uk_target <- uk$uk_target_trans
+uk$uk_fake_cue <- uk$uk_fake_cue_trans
+uk$uk_fake_target <- uk$uk_fake_target_trans
+
+uk <- uk %>% 
+  select(en_cue, en_target, uk_cue, uk_target, 
+         uk_fake_cue, uk_fake_target) 
+
+sum(duplicated(uk$uk_cue))
+sum(duplicated(uk$uk_target))
+sum(duplicated(uk$uk_fake_cue))
+sum(duplicated(uk$uk_fake_target))
+
+nrow(uk %>% filter(uk_cue == uk_target))
+
+export(uk, paste0(match_path, "/uk_matched.csv"), row.names = F)
+
+# create possible trials ----
+uk_trials <- uk[ , c("uk_cue", "uk_target")]
+uk_trials$type <- "related"
+uk_trials$cue_type <- "word"
+uk_trials$target_type <- "word"
+
+en <- import(paste0(out_path, "/en/en_trials_final.csv"))
+uk$en_cue <- tolower(uk$en_cue)
+uk$en_target <- tolower(uk$en_target)
+# match unrelated pairs as a start 
+uk_unrelated <- en %>% filter(type == "unrelated")
+for (i in 1:nrow(uk_unrelated)){
+  uk_unrelated$en_cue[i] <- uk$uk_cue[uk$en_cue == uk_unrelated$en_cue[i]]
+  uk_unrelated$en_target[i] <- uk$uk_target[uk$en_target == uk_unrelated$en_target[i]]
+}
+
+uk_trials <- rbind(uk_trials,
+                   uk_unrelated %>% select(-en_cosine) %>% 
+                     rename("uk_cue" = "en_cue", 
+                            "uk_target" = "en_target"), 
+                   data.frame(uk_cue = uk$uk_fake_cue,
+                              uk_target = uk$uk_target[sample(1:1000,
+                                                              1000)],
+                              type = "nonword",
+                              cue_type = "nonword",
+                              target_type = "word"),
+                   data.frame(uk_cue = uk$uk_cue[sample(1:1000,
+                                                        1000)],
+                              uk_target = uk$uk_fake_target,
+                              type = "nonword",
+                              cue_type = "word",
+                              target_type = "nonword"),
+                   data.frame(uk_cue = uk$uk_fake_cue[sample(1:1000,
+                                                        1000)],
+                              uk_target = uk$uk_fake_target[sample(1:1000,
+                                                        1000)],
+                              type = "nonword",
+                              cue_type = "nonword",
+                              target_type = "nonword"))
+
+# check dups run until 0
+sum(duplicated(uk_trials[ , c("uk_cue", "uk_target")]))
+
+# update with low cosines from random shuffle ----
+# set up model
+uk_model <- import(paste0(spaml_path, "/subs_vec/uk_300_5_sg_wxd.csv"))
+uk_model <- na.omit(uk_model)
+uk_model$V1 <- tolower(uk_model$V1)
+uk_model <- uk_model[!duplicated(uk_model$V1), ]
+rownames(uk_model) <- uk_model$V1
+uk_model <- uk_model[ , -1]
+
+# vectorized cosine lookups over just the words we actually need, so the
+# reshuffle/swap loops below don't re-subset the 1.2M-row model per pair.
+# words missing from the model get cosine 0 (same fallback used in the
+# ja/ko/cs sections above).
+uk_vocab <- unique(c(uk_trials$uk_cue, uk_trials$uk_target,
+                     uk_trials$uk_fake_cue, uk_trials$uk_fake_target))
+uk_vocab <- uk_vocab[uk_vocab %in% rownames(uk_model)]
+uk_vec_mat <- as.matrix(uk_model[uk_vocab, ])
+uk_vec_norms <- sqrt(rowSums(uk_vec_mat^2))
+names(uk_vec_norms) <- uk_vocab
+
+get_cosine_safe <- function(cue, target) {
+  if (!(cue %in% uk_vocab) || !(target %in% uk_vocab)) return(0)
+  as.numeric((uk_vec_mat[cue, ] %*% uk_vec_mat[target, ]) /
+    (uk_vec_norms[cue] * uk_vec_norms[target]))
+}
+
+# cosine between one word and many candidate words at once
+cosine_many <- function(word, words) {
+  out <- rep(0, length(words))
+  if (!(word %in% uk_vocab)) return(out)
+  idx <- match(words, uk_vocab)
+  valid <- !is.na(idx)
+  if (any(valid)) {
+    dots <- as.vector(uk_vec_mat[idx[valid], , drop = FALSE] %*% uk_vec_mat[word, ])
+    out[valid] <- dots / (uk_vec_norms[idx[valid]] * uk_vec_norms[word])
+  }
+  out
+}
+
+uk_trials$uk_cosine <- NA
+
+# get cosine
+for (row in 1:nrow(uk_trials)){
+
+  if(uk_trials$type[row] != "nonword") {
+
+    uk_trials$uk_cosine[row] <- get_cosine_safe(uk_trials$uk_cue[row], uk_trials$uk_target[row])
+
+  }
+
+}
+
+# update trials that have cosines too big
+uk_trials$ok <- TRUE
+uk_trials$ok[uk_trials$type == "unrelated" & abs(uk_trials$uk_cosine) > .15] <- FALSE
+
+good_trials <- uk_trials %>% filter(ok == TRUE)
+bad_trials <- uk_trials %>% filter(ok == FALSE)
+
+# iterate on those bad trials until all gone
+# run reshuffle passes until the bad_trials count is stable for 5
+# iterations in a row (or hits 0), instead of a single manual pass
+prev_counts <- integer(0)
+iter <- 0
+repeat {
+  iter <- iter + 1
+
+  bad_trials$uk_target <- sample(bad_trials$uk_target,
+                                 size = length(bad_trials$uk_target),
+                                 replace = FALSE)
+  for (row in 1:nrow(bad_trials)){
+      bad_trials$uk_cosine[row] <- get_cosine_safe(bad_trials$uk_cue[row], bad_trials$uk_target[row])
+  }
+
+  good_trials <- bind_rows(good_trials,
+                           (bad_trials %>% filter(uk_cosine < .15)))
+  bad_trials <- bad_trials %>% filter(uk_cosine >= .15)
+
+  n_bad <- nrow(bad_trials)
+  message("reshuffle iter ", iter, " bad_trials: ", n_bad)
+  prev_counts <- c(prev_counts, n_bad)
+
+  if (n_bad == 0) break
+  if (length(prev_counts) >= 5 && length(unique(tail(prev_counts, 5))) == 1) break
+  if (iter >= 300) break
+}
+nrow(bad_trials)
+
+# resolve remaining bad pairs by swapping targets 1:1 against the good
+# unrelated pool, removing each used good pair from that pool as soon as
+# it's consumed. That's the fix for the old bug: the previous version let
+# multiple bad pairs pick the *same* good pair as a swap partner, which
+# added more new rows than it removed and inflated the trial count past
+# 1000. Doing it one-at-a-time with removal guarantees the total unrelated
+# count is conserved exactly, no matter how many pairs get swapped.
+remaining_good <- good_trials %>% filter(type == "unrelated")
+other_trials <- good_trials %>% filter(type != "unrelated")
+
+new_pairs <- data.frame(uk_cue = character(), uk_target = character(),
+                        type = character(), cue_type = character(),
+                        target_type = character(), uk_cosine = numeric())
+still_bad <- bad_trials[0, ]
+
+for (i in seq_len(nrow(bad_trials))) {
+  cue_b <- bad_trials$uk_cue[i]
+  target_b <- bad_trials$uk_target[i]
+
+  if (nrow(remaining_good) == 0) {
+    still_bad <- bind_rows(still_bad, bad_trials[i, ])
+    next
+  }
+
+  cos_to_target_b <- cosine_many(target_b, remaining_good$uk_cue)
+  cos_from_cue_b  <- cosine_many(cue_b, remaining_good$uk_target)
+
+  candidates <- which(abs(cos_to_target_b) < .15 & abs(cos_from_cue_b) < .15)
+
+  if (length(candidates) == 0) {
+    still_bad <- bind_rows(still_bad, bad_trials[i, ])
+    next
+  }
+
+  best <- candidates[which.min(abs(cos_to_target_b[candidates]) + abs(cos_from_cue_b[candidates]))]
+
+  cue_g <- remaining_good$uk_cue[best]
+  target_g <- remaining_good$uk_target[best]
+
+  new_pairs <- bind_rows(new_pairs,
+    data.frame(uk_cue = cue_b, uk_target = target_g, type = "unrelated",
+               cue_type = "word", target_type = "word",
+               uk_cosine = cos_from_cue_b[best]),
+    data.frame(uk_cue = cue_g, uk_target = target_b, type = "unrelated",
+               cue_type = "word", target_type = "word",
+               uk_cosine = cos_to_target_b[best]))
+
+  remaining_good <- remaining_good[-best, ]
+}
+
+message("swapped ", nrow(bad_trials) - nrow(still_bad), " of ", nrow(bad_trials),
+       " -- still unresolved (kept, flagged for manual review): ", nrow(still_bad))
+
+# unresolved pairs keep their original (over-threshold) pairing rather
+# than being dropped, so the total row count still lands on exactly 1000
+uk_final <- bind_rows(other_trials, remaining_good, new_pairs, still_bad)
+uk_final$still_over_threshold <- uk_final$uk_cue %in% still_bad$uk_cue &
+  uk_final$uk_target %in% still_bad$uk_target
+
+# only a few found
+sum(duplicated(uk_final[ , c("uk_cue", "uk_target")]))
+
+# check cosines
+tapply(uk_final$uk_cosine, uk_final$type, mean, na.rm = T)
+tapply(uk_final$uk_cosine, uk_final$type, min, na.rm = T)
+tapply(uk_final$uk_cosine, uk_final$type, max, na.rm = T)
+
+# check that everyone has a mate
+target_table <- uk_final %>% 
+  filter(target_type == "word") %>% 
+  filter(type != "nonword") %>% 
+  count(uk_target) %>% 
+  filter(n != 2)
+
+weird_trials <- uk_final %>% 
+  filter(target_type == "word") %>% 
+  filter(type != "nonword") %>% 
+  filter(uk_target %in% target_table$uk_target)
+
+# check for NA
+sum(is.na(uk_final$uk_cue))
+sum(is.na(uk_final$uk_target))
+sum(grepl("^NA", uk_final$uk_cue))
+sum(grepl("^NA", uk_final$uk_target))
+
+# check rows
+nrow(uk_final)
+table(uk_final$type, uk_final$cue_type, uk_final$target_type)
+
+uk_final$ok <- NULL
+
+export(uk_final, paste0(out_path, "/uk/uk_trials_final.csv"))
+```
+
