@@ -26,13 +26,14 @@ First, the lexical level variables for each item pair (prime and target frequenc
 ## Item Data
 
 ```{r}
-# load translation - this was not done in round 1
+# load translation
 # convert to item data format
-DF <- rio::import("ukr_word_pairs_update.csv") %>% 
-  select(final_ukr_cue, ukr_target) %>% 
+DF <- rio::import("../../01-Translation/05_final_languages/uk/uk_trials_final.csv") %>%
+  filter(type == "related") %>%
+  select(uk_cue, uk_target) %>%
   pivot_longer(cols = everything(),
                names_to = "type",
-               values_to = "word") %>% 
+               values_to = "word") %>%
   select(word)
 ```
 
