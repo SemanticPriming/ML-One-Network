@@ -1,0 +1,156 @@
+---
+title: "Subtitle Frequency Counts"
+author: "Erin M. Buchanan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r}
+library(readr)
+library(stringi)
+library(data.table)
+library(dplyr)
+library(rio)
+```
+
+First, this document pulls the **OpenSubtitles2024** monolingual dump directly from OPUS and builds unigram frequency counts from scratch. Two things come out of it, both consumed downstream:
+
+- The raw decompressed subtitle text, saved to `open_subs/{lang_code}/{lang_code}.txt` -- this is what `03_diversity.rmd` reads.
+- A unigram frequency count table, saved to `{lang_code}/{lang_code}.unigram_freq.csv` -- this is what `02_phonemizer.rmd` reads.
+
+## Language
+
+Set this, then run the rest of the document for that language.
+
+```{r language-params}
+lang_code <- "uk"
+
+subs_dir <- paste0("open_subs/", lang_code, "/")
+lang_dir <- paste0(lang_code, "/")
+dir.create(subs_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(lang_dir, recursive = TRUE, showWarnings = FALSE)
+
+gz_path <- paste0(subs_dir, lang_code, ".txt.gz")
+txt_path <- paste0(subs_dir, lang_code, ".txt")
+count_path <- paste0(lang_dir, lang_code, ".unigram.freq.csv")
+```
+
+## Download
+
+OPUS hosts OpenSubtitles2024 as one monolingual file per language (one subtitle line per row, already deduplicated at the subtitle-file level upstream). If the language you're after 404s at this URL, check the language code against <https://opus.nlpl.eu/OpenSubtitles/corpus/version/OpenSubtitles> -- most use the two-letter code, but a few (e.g. Chinese, Portuguese) are split by variant.
+
+```{r download}
+subs_url <- paste0("https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2024/mono/", lang_code, ".txt.gz")
+
+if (!file.exists(gz_path)) {
+  message("Downloading ", subs_url)
+  download.file(subs_url, destfile = gz_path, mode = "wb")
+}
+
+file.info(gz_path)$size / 1e6  # size in MB, sanity check it's not an error page
+```
+
+## Decompress
+
+Streamed through in chunks rather than reading the whole thing into memory at once -- these dumps can be a few hundred MB compressed, well over 1GB decompressed.
+
+```{r decompress}
+if (!file.exists(txt_path)) {
+  con_in <- gzfile(gz_path, "rt", encoding = "UTF-8")
+  con_out <- file(txt_path, "wt", encoding = "UTF-8")
+
+  repeat {
+    chunk <- readLines(con_in, n = 200000)
+    if (length(chunk) == 0) break
+    writeLines(chunk, con_out, useBytes = TRUE)
+  }
+
+  close(con_in)
+  close(con_out)
+}
+
+file.info(txt_path)$size / 1e6  # size in MB
+```
+
+## Tokenizer
+
+Default path is Unicode-aware word extraction (`stringi::stri_extract_all_words`), which works fine for space-delimited languages and, via ICU's dictionary-based break iterator, for Thai too (checked against a sample -- it segments real Thai words correctly out of the box).
+
+Chinese and Japanese don't get spaces *or* a working ICU dictionary segmenter: ICU splits Chinese into character-ish fragments (e.g. it cuts `图书馆` "library" into `图书` + `馆`) and mangles Japanese verb conjugations. Those two get a real segmenter instead, via reticulate: `jieba` for Chinese, `fugashi` (MeCab) for Japanese. `fugashi` segments at the morpheme level (standard practice for Japanese frequency lists -- e.g. it'll split a conjugated verb into stem + inflection), which is expected, not a bug.
+
+```{r python-tokenizers}
+library(reticulate)
+py_require(c("jieba", "fugashi", "unidic-lite"))
+
+jieba <- NULL
+ja_tagger <- NULL
+
+if (lang_code %in% c("zh", "zh_cn", "zh_tw", "zh_hk")) {
+  jieba <- import("jieba")
+} else if (lang_code == "ja") {
+  fugashi <- import("fugashi")
+  ja_tagger <- fugashi$Tagger()
+}
+
+tokenize_lines <- function(lines) {
+  if (!is.null(jieba)) {
+    words <- unlist(jieba$lcut(paste(lines, collapse = " ")))
+  } else if (!is.null(ja_tagger)) {
+    words <- vapply(ja_tagger$`__call__`(paste(lines, collapse = " ")),
+                    function(w) w$surface, character(1))
+  } else {
+    words <- unlist(stringi::stri_extract_all_words(lines))
+  }
+  words <- stringi::stri_trans_tolower(words)
+  words <- words[!is.na(words)]
+  words[stringi::stri_detect_regex(words, "\\p{L}")]
+}
+```
+
+## Tokenize and count
+
+Processed in chunks and tabulated with `data.table` for speed on a multi-million-line file; drops tokens with no letters (pure numbers/punctuation survivors). For `zh`/`ja`, `chunk_size` may need to come down from the default if a single joined chunk gets too large for `jieba`/`fugashi` to process comfortably.
+
+```{r tokenize-count}
+con <- file(txt_path, "rt", encoding = "UTF-8")
+chunk_size <- 200000
+freq_chunks <- list()
+lines_seen <- 0
+
+repeat {
+  lines <- readLines(con, n = chunk_size, encoding = "UTF-8")
+  if (length(lines) == 0) break
+  lines_seen <- lines_seen + length(lines)
+
+  words <- tokenize_lines(lines)
+
+  if (length(words)) {
+    dt <- data.table(unigram = words)[, .N, by = unigram]
+    freq_chunks[[length(freq_chunks) + 1]] <- dt
+  }
+
+  message("processed ", lines_seen, " lines")
+}
+close(con)
+
+freq_all <- rbindlist(freq_chunks)[, .(unigram_freq = sum(N)), by = unigram]
+setorder(freq_all, -unigram_freq)
+
+nrow(freq_all)
+head(freq_all, 20)
+```
+
+## Export
+
+Written as CSV with a header (`unigram`, `unigram_freq`) -- tokens are word-boundary extracted so they'll never contain a comma, and CSV round-trips cleanly with `rio::import()`.
+
+```{r export}
+rio::export(freq_all, count_path)
+count_path
+```
