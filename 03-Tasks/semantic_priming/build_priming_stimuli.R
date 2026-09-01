@@ -32,7 +32,7 @@
 # Configuration -----------------------------------------------------------
 
 MODE           <- "panel"   # "panel" or "lab"
-LANG           <- "de"      # language code matching 05_final_languages/{lang}/
+LANG           <- "uk"      # language code matching 05_final_languages/{lang}/
 NUMBER_FOLDERS <- 14        # number of panel versions
 RANDOM_SEED    <- 42        # set to NULL for lab mode truly-random runs
 
