@@ -145,15 +145,32 @@ build_context_space <- function(
   }
 
   # batching
+  .format_secs <- function(s) {
+    if (!is.finite(s)) return("--:--:--")
+    s <- max(0, round(s))
+    sprintf("%02d:%02d:%02d", s %/% 3600, (s %% 3600) %/% 60, s %% 60)
+  }
+
   batches <- split(seq_along(file_list), ceiling(seq_along(file_list) / batch_size))
+  n_batches <- length(batches)
   C <- NULL
+  t0 <- Sys.time()
+  pb <- utils::txtProgressBar(min = 0, max = n_batches, style = 3)
   for (i in seq_along(batches)) {
     d_i <- .dfm_for_batch_contexts(file_list[batches[[i]]], i)
     C <- .combine_two(C, d_i)
     if (i %% 5 == 0) C <- quanteda::dfm_compress(C, margin = "features")
-    message(sprintf("Batch %d/%d → contexts=%d, vocab=%d",
-                    i, length(batches), quanteda::ndoc(C), quanteda::nfeat(C)))
+
+    elapsed <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
+    eta <- (elapsed / i) * (n_batches - i)
+    message(sprintf(
+      "Batch %d/%d -> contexts=%d, vocab=%d | elapsed=%s ETA=%s",
+      i, n_batches, quanteda::ndoc(C), quanteda::nfeat(C),
+      .format_secs(elapsed), .format_secs(eta)
+    ))
+    utils::setTxtProgressBar(pb, i)
   }
+  close(pb)
   if (is.null(C) || quanteda::ndoc(C) == 0) stop("No contexts produced.")
 
   # trim + top-N + whitelist
@@ -184,21 +201,29 @@ build_context_space <- function(
   nonzero <- which(col_sums > 0)
   H <- numeric(ncol(X))
   if (length(nonzero)) {
-    for (j in nonzero) {
+    message(sprintf("Computing per-term entropy weights for %d terms...", length(nonzero)))
+    pb_H <- utils::txtProgressBar(min = 0, max = length(nonzero), style = 3)
+    for (k in seq_along(nonzero)) {
+      j <- nonzero[k]
       v <- X[, j]; s <- sum(v)
       if (s > 0) {
         p <- as.numeric(v) / s
         p <- p[p > 0]
         H[j] <- -sum(p * log(p))
       }
+      if (k %% 500 == 0 || k == length(nonzero)) utils::setTxtProgressBar(pb_H, k)
     }
+    close(pb_H)
   }
   w <- ifelse(H > 0, 1/H, 1)  # divide by entropy; if H==0 keep as-is
   X <- X %*% Matrix::Diagonal(x = w)
 
   # ---- truncated SVD (contexts embedding) ----
   k <- max(2L, min(svd_k, min(dim(X)) - 1L))
+  message(sprintf("Running truncated SVD (k=%d) over %d contexts x %d terms...", k, nrow(X), ncol(X)))
+  svd_t0 <- Sys.time()
   sv <- irlba::irlba(X, nv = k, nu = k)
+  message(sprintf("SVD done in %s", .format_secs(as.numeric(difftime(Sys.time(), svd_t0, units = "secs")))))
   context_vectors <- sv$u %*% diag(sv$d)   # contexts x k
   rownames(context_vectors) <- rownames(X)
 
@@ -342,8 +367,34 @@ dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 # within the open_subs folder, have the folder be the language label
 path <- paste0("open_subs/", language)
 
-file_list <- list.files(path = path,
-                        pattern = ".txt",
+# OpenSubtitles2024 ships as one monolithic file per language (see
+# 01_subs_count.rmd), but build_context_space() batches file-by-file and
+# reads/tokenizes each one whole before chunking it into contexts -- handing
+# it a single multi-million-line file means it tries to tokenize the entire
+# corpus as one document in one shot, which is what was hanging. Split it
+# into many smaller chunk files once (streamed, so this doesn't itself
+# require holding the whole corpus in memory) and read those instead.
+raw_txt_path <- paste0(path, "/", language, ".txt")
+chunks_dir <- paste0(path, "/chunks/")
+chunk_lines <- 2000  # lines per chunk file -- roughly one "document" worth
+
+if (!dir.exists(chunks_dir) || length(list.files(chunks_dir, pattern = "\\.txt$")) == 0) {
+  dir.create(chunks_dir, recursive = TRUE, showWarnings = FALSE)
+
+  con <- file(raw_txt_path, "rt", encoding = "UTF-8")
+  chunk_i <- 0L
+  repeat {
+    lines <- readLines(con, n = chunk_lines, encoding = "UTF-8")
+    if (length(lines) == 0) break
+    chunk_i <- chunk_i + 1L
+    writeLines(lines, sprintf("%s%s_chunk_%05d.txt", chunks_dir, language, chunk_i),
+               useBytes = TRUE)
+  }
+  close(con)
+}
+
+file_list <- list.files(path = chunks_dir,
+                        pattern = "\\.txt$",
                         full.names = TRUE,
                         recursive = TRUE)
 
