@@ -62,20 +62,27 @@ DF <- add_orthographic_levenshtein(DF, subs_DF, k = 20, max_len_diff = 3)
 # phonographic Levenshtein
 DF <- add_phonographic_levenshtein(DF, k = 20, max_len_diff = 3)
 
-# semantic diversity
-DF <- DF %>% 
-  left_join(
-    rio::import("uk_semantic_diversity.csv") %>%
-      select(-V1),
-    by = c("word" = "term")
-  )
+# semantic diversity -- 03_diversity.rmd can take a long time to run over the
+# full subtitle corpus, so this join is skipped (leaving no semdiv columns,
+# rather than erroring) if that file isn't ready yet; rerun this chunk once
+# uk_semantic_diversity.csv exists to backfill the real values
+if (file.exists("uk_semantic_diversity.csv")) {
+  DF <- DF %>%
+    left_join(
+      rio::import("uk_semantic_diversity.csv") %>%
+        select(-V1),
+      by = c("word" = "term")
+    )
+} else {
+  message("uk_semantic_diversity.csv not found yet (03_diversity.rmd still running) -- skipping for now")
+}
 
 # check out the NAs
 ```
 
 ## Subjective Data
 
-Candidate sources are found automatically from `lab_variables_target_means.csv`: any row whose `word_column` is `word_ukrainian` names a norming dataset that includes Ukrainian words. Each row is then matched to one of the six subjective categories below by keyword in its `variable` name, the matching file is loaded and averaged by word, and when more than one source lands in the same category their values are averaged together. As of now no rows match Ukrainian, so every category below comes back empty (all `NA`) until we add our own collected norms.
+Candidate sources are found automatically from `lab_variables_target_means.csv`: any row whose `word_column` is `word_ukrainian` names a norming dataset that includes Ukrainian words. Each row is then matched to one of the six subjective categories below by keyword in its `variable` name, and the matching file is loaded and averaged by word. Rather than collapsing multiple sources for the same category into one averaged number, each source keeps its own column named `{category}_{file}` (e.g. `aoa_Person1986`) so it's traceable which dataset a value came from -- this also means the same category can have several columns when more than one source is available. As of now no rows match Ukrainian, so every category below comes back with no columns at all until we add our own collected norms.
 
 ```{r}
 labData <- rio::import("../lab_variables_target_means.csv") %>%
@@ -97,21 +104,33 @@ get_subjective_source <- function(file, word_column, variable) {
     summarize(value = mean(value, na.rm = TRUE), .groups = "drop")
 }
 
-# combine every labData row whose `variable` matches `pattern` into one column
-combine_subjective <- function(labData, pattern) {
+# one column per labData row whose `variable` matches `pattern`, named
+# `{category}_{source file}` so multiple sources for the same category
+# (e.g. two AOA norms) stay distinguishable instead of being averaged together
+combine_subjective <- function(labData, pattern, category) {
   matches <- labData %>%
     filter(grepl(pattern, variable, ignore.case = TRUE))
 
   if (nrow(matches) == 0) {
-    return(tibble(word = character(), value = numeric()))
+    return(tibble(word = character()))
   }
 
-  purrr::pmap(matches, function(file, word_column, variable) {
+  labels <- make.unique(tools::file_path_sans_ext(matches$file))
+
+  sources <- purrr::pmap(matches, function(file, word_column, variable) {
     get_subjective_source(file, word_column, variable)
+  })
+  names(sources) <- labels
+  sources <- purrr::compact(sources)
+
+  if (length(sources) == 0) {
+    return(tibble(word = character()))
+  }
+
+  purrr::imap(sources, function(d, label) {
+    rename(d, !!paste0(category, "_", label) := value)
   }) %>%
-    bind_rows() %>%
-    group_by(word) %>%
-    summarize(value = mean(value, na.rm = TRUE), .groups = "drop")
+    purrr::reduce(full_join, by = "word")
 }
 ```
 
@@ -119,42 +138,42 @@ combine_subjective <- function(labData, pattern) {
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "aoa") %>% rename(aoa = value), by = "word")
+  left_join(combine_subjective(labData, "aoa", "aoa"), by = "word")
 ```
 
 ### Imageability
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "image") %>% rename(image = value), by = "word")
+  left_join(combine_subjective(labData, "image", "image"), by = "word")
 ```
 
 ### Concrete
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "concrete") %>% rename(concrete = value), by = "word")
+  left_join(combine_subjective(labData, "concrete", "concrete"), by = "word")
 ```
 
 ### Valence
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "valence") %>% rename(valence = value), by = "word")
+  left_join(combine_subjective(labData, "valence", "valence"), by = "word")
 ```
 
 ### Arousal
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "arousal") %>% rename(arousal = value), by = "word")
+  left_join(combine_subjective(labData, "arousal", "arousal"), by = "word")
 ```
 
 ### Familiar
 
 ```{r}
 DF <- DF %>%
-  left_join(combine_subjective(labData, "familiar") %>% rename(familiar = value), by = "word")
+  left_join(combine_subjective(labData, "familiar", "familiar"), by = "word")
 ```
 
 ## Similarity Statistics
@@ -169,20 +188,115 @@ DF <- DF %>%
 
 ### BERT Priming
 
+```{r}
+# not ready yet 
+```
+
 ## Embeddings
 
-## Combine
+Each pair is dropped into template sentences, and `get_embeddings()`/`embed_dataframe()` (from `functions.R`) pull a context-free (static) embedding for the target plus a contextual embedding of the target as it appears in each sentence. The model is a single variable below so different GPT-2-family checkpoints can be swapped in while we're still testing this out -- `embed_dataframe()` assumes a GPT-2-style architecture (it reaches into `model$transformer$wte`), so any replacement needs to expose that same structure (e.g. other `AutoModelForCausalLM`-loadable GPT-2 variants, including multilingual ones like `sberbank-ai/mGPT`).
 
 ```{r}
+# swap the checkpoint here -- must be a GPT-2-architecture causal LM
+embed_model_name <- "openai-community/gpt2"
 
+transformers <- reticulate::import("transformers")
+torch <- reticulate::import("torch")
+
+hf <- (function(model_name) {
+  tokzr <- transformers$AutoTokenizer$from_pretrained(model_name)
+  model <- transformers$AutoModelForCausalLM$from_pretrained(model_name)
+  model$eval()
+  list(tokzr = tokzr, model = model, name = model_name)
+})(embed_model_name)
+
+# target_word_unique carries a make.unique() suffix (e.g. "слово.1") for the
+# handful of targets that repeat across the 1,000 pairs -- kept as-is here
+# since it's what goes into the sentences and what embed_dataframe indexes
+# on; `word` (suffix stripped) is what's used later to join back onto DF
+llm_embed <- rio::import("../../01-Translation/03_match_stimuli/matched_stimuli/uk_trial_unique.csv") %>%
+  mutate(
+    word = sub("\\.[0-9]+$", "", target_word_unique),
+    sentence_related = paste0("Дано слово ", cue_word_related, ", наступне слово - ", target_word_unique),
+    sentence_unrelated = paste0("Дано слово ", cue_word_unrelated, ", наступне слово - ", target_word_unique)
+  )
+
+embedded <- embed_dataframe(
+  llm_embed,
+  tokzr = hf$tokzr,
+  model = hf$model,
+  layer = NULL,          # NULL = last hidden layer
+  occurrence = "last",   # which occurrence of the target to use if it repeats in a sentence
+  word_col = "target_word_unique",
+  sent_rel_col = "sentence_related",
+  sent_unrel_col = "sentence_unrelated",
+  quiet = FALSE
+)
+
+# one row per pair (all 1,000 kept): static + contextual-in-related +
+# contextual-in-unrelated vectors, written out on their own so we can decide
+# what to do with the raw vectors later
+embeddings_DF <- bind_cols(
+  cue_related = llm_embed$cue_word_related,
+  cue_unrelated = llm_embed$cue_word_unrelated,
+  target = llm_embed$target_word_unique,
+  word = llm_embed$word,
+  as.data.frame(embedded$static)            %>% rename_with(~paste0("static_", .x)),
+  as.data.frame(embedded$context_related)   %>% rename_with(~paste0("context_related_", .x)),
+  as.data.frame(embedded$context_unrelated) %>% rename_with(~paste0("context_unrelated_", .x))
+)
+
+rio::export(embeddings_DF, "uk_embeddings.csv")
+```
+
+### Cue-Target Cosine Similarity
+
+For each pair, the cosine similarity between the target's contextual embedding in the related sentence and the unrelated sentence captures how much a related vs. unrelated prime shifts the model's representation of the target. `DF` has one row per word (not per pair), and a handful of targets show up in more than one pair, so those get averaged before the single `embedding_cosine` column is joined in.
+
+```{r}
+cosine_sim <- function(a, b) {
+  if (anyNA(a) || anyNA(b)) return(NA_real_)
+  sum(a * b) / (sqrt(sum(a^2)) * sqrt(sum(b^2)))
+}
+
+embedding_cosine_DF <- tibble(
+  word = llm_embed$word,
+  embedding_cosine = vapply(
+    seq_len(nrow(llm_embed)),
+    function(i) cosine_sim(embedded$context_related[i, ], embedded$context_unrelated[i, ]),
+    numeric(1)
+  )
+) %>%
+  group_by(word) %>%
+  summarize(embedding_cosine = mean(embedding_cosine, na.rm = TRUE), .groups = "drop")
+
+DF <- DF %>%
+  left_join(embedding_cosine_DF, by = "word")
 ```
 
 ## Output Variable Match
 
-```{r}
-DF_var_match <- DF %>% 
-  select(word, aoa, image, concrete, valence, arousal, familiar) %>% 
-  mutate(across(-word, ~replace_na(.x, FALSE)))
+One TRUE/FALSE column per subjective category: TRUE means no source covered that word for that category yet (still needs norming), FALSE means at least one `{category}_*` source already has a value. This drives what goes out for collection in `03-Tasks` (see `02-Stimuli/uk/{category}/{category}_list_*.csv`) -- it's a plain CSV, so it's also fine to hand-edit if a word's status needs correcting outside this pipeline.
 
-rio::export(DF_var_match, "ukr_variables_normed.csv", row.names = F)
+```{r}
+# TRUE if every {prefix}* column is NA for that row (or there are no such
+# columns at all, e.g. no Ukrainian sources exist yet -- then everyone is TRUE)
+category_missing <- function(df, prefix) {
+  cols <- df %>% select(starts_with(prefix)) %>% names()
+  if (length(cols) == 0) return(rep(TRUE, nrow(df)))
+  apply(df[cols], 1, function(row) all(is.na(row)))
+}
+
+DF_var_match <- DF %>%
+  transmute(
+    word,
+    aoa = category_missing(DF, "aoa_"),
+    image = category_missing(DF, "image_"),
+    concrete = category_missing(DF, "concrete_"),
+    valence = category_missing(DF, "valence_"),
+    arousal = category_missing(DF, "arousal_"),
+    familiar = category_missing(DF, "familiar_")
+  )
+
+rio::export(DF_var_match, "uk_variables_normed.csv", row.names = F)
 ```
