@@ -37,54 +37,124 @@ DF <- rio::import("../../01-Translation/05_final_languages/uk/uk_trials_final.cs
   select(word)
 ```
 
-## Lexical Data - TO DO 
+## Lexical Data
 
-frequency open sub
-word length
+```{r}
+# length
+DF$length <- nchar(DF$word)
 
-1) linguistic information including length, frequency, orthographic neighborhood, bigram frequency, orthographic and phonographic Levenshtein distance, and semantic diversity 
+# frequency processed with phonemes
+subs_DF <- rio::import("uk_subs_phono.csv") %>%
+  unique()
+
+DF <- DF %>% 
+  left_join(subs_DF, by = c("word" = "unigram"))
+
+# orthographic neighborhood
+DF <- calc_neighbors(DF, subs_DF)
+
+# bigram frequency
+DF <- add_bigram_frequency(DF, subs_DF, weight = "unigram_freq")
+
+# orthographic Levenshtein
+DF <- add_orthographic_levenshtein(DF, subs_DF, k = 20, max_len_diff = 3)
+
+# phonographic Levenshtein
+DF <- add_phonographic_levenshtein(DF, k = 20, max_len_diff = 3)
+
+# semantic diversity
+DF <- DF %>% 
+  left_join(
+    rio::import("uk_semantic_diversity.csv") %>%
+      select(-V1),
+    by = c("word" = "term")
+  )
+
+# check out the NAs
+```
 
 ## Subjective Data
 
+Candidate sources are found automatically from `lab_variables_target_means.csv`: any row whose `word_column` is `word_ukrainian` names a norming dataset that includes Ukrainian words. Each row is then matched to one of the six subjective categories below by keyword in its `variable` name, the matching file is loaded and averaged by word, and when more than one source lands in the same category their values are averaged together. As of now no rows match Ukrainian, so every category below comes back empty (all `NA`) until we add our own collected norms.
+
 ```{r}
-labData <- rio::import("../labData_variables.csv") %>% 
-  filter(grepl("ukran", word_column))
+labData <- rio::import("../lab_variables_target_means.csv") %>%
+  filter(word_column == "word_ukrainian")
+
+# where the underlying norming datasets live
+datasets_path <- "/Users/erinbuchanan/GitHub/Research/2_projects/SPAML/semanticprimeR/datasets/completed/"
+
+# pull one variable column from one source file, averaged by word
+get_subjective_source <- function(file, word_column, variable) {
+  path <- paste0(datasets_path, file)
+  if (!file.exists(path)) return(NULL)
+
+  rio::import(path) %>%
+    select(word = all_of(word_column), value = all_of(variable)) %>%
+    filter(!is.na(word)) %>%
+    mutate(value = as.numeric(value)) %>%
+    group_by(word) %>%
+    summarize(value = mean(value, na.rm = TRUE), .groups = "drop")
+}
+
+# combine every labData row whose `variable` matches `pattern` into one column
+combine_subjective <- function(labData, pattern) {
+  matches <- labData %>%
+    filter(grepl(pattern, variable, ignore.case = TRUE))
+
+  if (nrow(matches) == 0) {
+    return(tibble(word = character(), value = numeric()))
+  }
+
+  purrr::pmap(matches, function(file, word_column, variable) {
+    get_subjective_source(file, word_column, variable)
+  }) %>%
+    bind_rows() %>%
+    group_by(word) %>%
+    summarize(value = mean(value, na.rm = TRUE), .groups = "drop")
+}
 ```
 
-### AOA 
+### AOA
 
 ```{r}
-DF$aoa <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "aoa") %>% rename(aoa = value), by = "word")
 ```
 
-### Imageability 
+### Imageability
 
 ```{r}
-DF$image <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "image") %>% rename(image = value), by = "word")
 ```
 
 ### Concrete
 
 ```{r}
-DF$concrete <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "concrete") %>% rename(concrete = value), by = "word")
 ```
 
 ### Valence
 
 ```{r}
-DF$valence <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "valence") %>% rename(valence = value), by = "word")
 ```
 
 ### Arousal
 
 ```{r}
-DF$arousal <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "arousal") %>% rename(arousal = value), by = "word")
 ```
-  
+
 ### Familiar
 
 ```{r}
-DF$familiar <- NA
+DF <- DF %>%
+  left_join(combine_subjective(labData, "familiar") %>% rename(familiar = value), by = "word")
 ```
 
 ## Similarity Statistics

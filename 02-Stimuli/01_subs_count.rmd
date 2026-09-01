@@ -22,7 +22,7 @@ library(rio)
 First, this document pulls the **OpenSubtitles2024** monolingual dump directly from OPUS and builds unigram frequency counts from scratch. Two things come out of it, both consumed downstream:
 
 - The raw decompressed subtitle text, saved to `open_subs/{lang_code}/{lang_code}.txt` -- this is what `03_diversity.rmd` reads.
-- A unigram frequency count table, saved to `{lang_code}/{lang_code}.unigram_freq.csv` -- this is what `02_phonemizer.rmd` reads.
+- A unigram frequency count table, saved to `{lang_code}/{lang_code}_unigram_frequency.csv` -- this is what `02_phonemizer.rmd` reads.
 
 ## Language
 
@@ -38,7 +38,7 @@ dir.create(lang_dir, recursive = TRUE, showWarnings = FALSE)
 
 gz_path <- paste0(subs_dir, lang_code, ".txt.gz")
 txt_path <- paste0(subs_dir, lang_code, ".txt")
-count_path <- paste0(lang_dir, lang_code, ".unigram.freq.csv")
+count_path <- paste0(lang_dir, lang_code, "_unigram_frequency.csv")
 ```
 
 ## Download

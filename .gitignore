@@ -67,3 +67,6 @@ rsconnect/
 *.log
 *.err
 *.sh
+
+# machine-specific env vars (see .env.example)
+.env

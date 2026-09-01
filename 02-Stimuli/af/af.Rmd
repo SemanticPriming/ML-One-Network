@@ -36,7 +36,7 @@ DF <- rio::import("afr_word_pairs_update.csv") %>%
   select(word)
 ```
 
-## Lexical Data - TO DO 
+## Lexical Data
 
 ```{r}
 # length
@@ -75,7 +75,7 @@ DF <- DF %>%
 ## Subjective Data
 
 ```{r}
-labData <- rio::import("../labData_variables.csv") %>% 
+labData <- rio::import("../lab_variables_target_means.csv") %>%
   filter(grepl("afrikaans", word_column))
 ```
 

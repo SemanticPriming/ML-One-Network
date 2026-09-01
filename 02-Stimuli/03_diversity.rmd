@@ -21,6 +21,7 @@ library(stopwords)
 library(dplyr)
 library(irlba)
 library(rio)
+library(tidyr)
 
 # --------- helper: robust chunker (quanteda version-safe) ---------
 chunk_tokens <- function(toks, size = 1000) {
@@ -331,20 +332,32 @@ compute_semd_hoffman_parallel <- function(
 
 ```{r}
 # change this variable
-language <- "en"
+language <- "uk"
 
-# download the 2018 subtitles monolingual files 
+out_dir <- paste0(language, "/")
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+
+# download the 2018 subtitles monolingual files
 # put it in a folder called open_subs
 # within the open_subs folder, have the folder be the language label
 path <- paste0("open_subs/", language)
-22127-
+
 file_list <- list.files(path = path,
                         pattern = ".txt",
                         full.names = TRUE,
                         recursive = TRUE)
 
-my_keep <- import(paste0("item_data/", language, "/", language, "_item_data.csv")) %>% 
-  filter(class == "word") %>% 
+# read the word list straight from the finalized trials rather than a
+# separate item_data intermediate -- keeps this in sync with whatever
+# uk.Rmd (and its per-language equivalents) actually use as the item set
+my_keep <- rio::import(paste0("../01-Translation/05_final_languages/",
+                              language, "/", language, "_trials_final.csv")) %>%
+  filter(type == "related") %>%
+  select(all_of(c(paste0(language, "_cue"), paste0(language, "_target")))) %>%
+  pivot_longer(cols = everything(),
+               names_to = "word_role",
+               values_to = "word") %>%
+  distinct(word) %>%
   pull(word)
 
 # 1) Build the context space (LSA)
@@ -367,5 +380,5 @@ sem_hoff <- compute_semd_hoffman_parallel(
   n_workers   = 8              # tune for your machine
 )
 
-write.csv(sem_hoff, paste0("semdiv_data/", language, "/", language, "_semantic_diversity.csv"))
+write.csv(sem_hoff, paste0(out_dir, language, "_semantic_diversity.csv"))
 ```
