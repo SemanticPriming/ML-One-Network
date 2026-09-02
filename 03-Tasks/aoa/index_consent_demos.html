@@ -222,6 +222,9 @@
       if (completion_code === null && response_id !== null) {
         completion_code = response_id * bkey;
       }
+      if (completion_code === null) {
+        completion_code = participant_uuid;
+      }
 
       // Save to JATOS study session so all subsequent components can access them
       jatos.studySessionData.participantUUID = participant_uuid;
