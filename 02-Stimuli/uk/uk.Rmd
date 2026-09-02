@@ -200,6 +200,7 @@ Each pair is dropped into template sentences, and `get_embeddings()`/`embed_data
 # swap the checkpoint here -- must be a GPT-2-architecture causal LM
 embed_model_name <- "openai-community/gpt2"
 
+reticulate::py_require(c("transformers", "torch"))
 transformers <- reticulate::import("transformers")
 torch <- reticulate::import("torch")
 
@@ -246,7 +247,7 @@ embeddings_DF <- bind_cols(
   as.data.frame(embedded$context_unrelated) %>% rename_with(~paste0("context_unrelated_", .x))
 )
 
-rio::export(embeddings_DF, "uk_embeddings.csv")
+rio::export(embeddings_DF, "uk_embeddings.csv.gz")
 ```
 
 ### Cue-Target Cosine Similarity
