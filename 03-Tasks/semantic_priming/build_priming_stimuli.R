@@ -3,14 +3,24 @@
 # Builds semantic priming embedded stimulus files for SPAML deployment.
 #
 # Two modes:
-#   "panel" - 14 static versions, built once before launch.
+#   "lab"   - CURRENT MODE for this round. 1 version, one live lab folder.
+#             This script only builds the *initial* bootstrap version, before
+#             any data has been collected (random full-pool sample, same
+#             composition as a panel version would be). Once the study is
+#             live, ongoing adaptive regeneration -- prioritizing pairs that
+#             still need observations -- happens in spaml2-private instead:
+#             see functions_priming.R's regenerate_priming_stimuli(), which
+#             reads the deployed sqlite data and rewrites this folder's
+#             embedded/*.json directly on the server. Do not re-run this
+#             script in lab mode after launch; it would throw away the
+#             adaptive sampling and go back to a random full-pool draw.
+#
+#   "panel" - 14 static versions, built once before launch. Not used for this
+#             round (adaptive "lab" mode instead). Kept for a future study
+#             that wants a fixed panel instead of adaptive resampling.
 #             Participants are assigned a version number by the platform.
 #             Cycles through the full trial pool across versions so every
 #             word pair accumulates data roughly equally.
-#
-#   "lab"   - 1 version regenerated periodically as data comes in.
-#             Prioritises pairs that still need observations (high SE / low N).
-#             Stub for now — adaptive logic added once data collection starts.
 #
 # Trial composition per version (matches Korean SPAML):
 #   150 nonword–nonword pairs  → 300 items
@@ -25,16 +35,16 @@
 #   {lang}_practice_trials.csv — practice pairs (same column format)
 #
 # Output:
-#   builds/{lang}/priming/panel/v1/embedded/{hash}.json  … v14/
-#   builds/{lang}/priming/lab/v1/embedded/{hash}.json
+#   builds/{lang}/priming/lab/v1/embedded/{hash}.json     (this round)
+#   builds/{lang}/priming/panel/v1/embedded/{hash}.json … v14/  (panel mode only)
 
 
 # Configuration -----------------------------------------------------------
 
-MODE           <- "panel"   # "panel" or "lab"
+MODE           <- "lab"     # "panel" or "lab" -- see mode comments above
 LANG           <- "uk"      # language code matching 05_final_languages/{lang}/
-NUMBER_FOLDERS <- 14        # number of panel versions
-RANDOM_SEED    <- 42        # set to NULL for lab mode truly-random runs
+NUMBER_FOLDERS <- 14        # number of panel versions (panel mode only)
+RANDOM_SEED    <- 42        # panel mode only -- lab mode is always truly random
 
 # Paths (relative to this script's location in 03-Tasks/semantic_priming/)
 lang_path   <- paste0("../../01-Translation/05_final_languages/", LANG, "/")
@@ -187,25 +197,22 @@ if (MODE == "panel") {
 }
 
 
-# Lab Mode (adaptive stub) ------------------------------------------------
+# Lab Mode (initial bootstrap build only) ----------------------------------
+#
+# This is a ONE-TIME build: a random full-pool sample, since no data exists
+# yet to prioritize by. Once the study is live, spaml2-private's
+# processPrimingData.R / regenerate_priming_stimuli() takes over -- it reads
+# the deployed sqlite data, computes each pair's sample size / SE, and
+# rewrites this folder's embedded/*.json directly on the server to
+# prioritize pairs that still need observations. Re-running this script
+# after launch would overwrite that adaptive selection with another random
+# draw, so don't.
 
 if (MODE == "lab") {
 
-  cat("\n=== LAB MODE: adaptive version ===\n")
+  cat("\n=== LAB MODE: initial bootstrap version ===\n")
 
-  # TODO: read collected SQLite data for this language, compute per-pair stats,
-  # filter to undone pairs (SE > 0.09 or answered_n < 50), and sample from
-  # that pool — falling back to the full pool when undone pairs run low.
-  # See ko_summarize_stim.R adaptive section for the reference implementation.
-  #
-  # data_path <- paste0("/var/www/html/", LANG, "/data/data.sqlite")
-  # collected <- processData(data_path)
-  # ... compute SE, flag done/undone ...
-  # lang_use    <- subset(lang_merged, is.na(done_both) | done_both == FALSE)
-  # lang_sample <- subset(lang_merged, done_both == TRUE)
-
-  # For now: random sample from the full pool (same as first panel version)
-  message("Lab mode: no collected data path set — using random full-pool sample.")
+  message("Lab mode: bootstrap build, no collected data yet — using random full-pool sample.")
 
   set.seed(NULL)  # truly random each run
 

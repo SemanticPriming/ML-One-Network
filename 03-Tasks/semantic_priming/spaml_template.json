@@ -85,7 +85,7 @@
       ],
       "title": "Task Practice",
       "_tab": "Content",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "3": {
@@ -112,8 +112,8 @@
       "messageHandlers": [
         {
           "title": "",
-          "message": "",
-          "code": ""
+          "message": "run",
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Task Frame Practice",
@@ -122,7 +122,7 @@
       ],
       "_collapsed": false,
       "_tab": "Content",
-      "tardy": true
+      "tardy": false
     },
     "4": {
       "id": "4",
@@ -359,7 +359,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 7",
@@ -368,7 +368,7 @@
       ],
       "_collapsed": true,
       "_tab": "Files",
-      "tardy": true
+      "tardy": false
     },
     "8": {
       "id": "8",
@@ -454,7 +454,7 @@
       ],
       "title": "Task Real",
       "_tab": "Files",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "10": {
@@ -722,7 +722,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 8",
@@ -731,7 +731,7 @@
       ],
       "_collapsed": false,
       "_tab": "Files",
-      "tardy": true
+      "tardy": false
     },
     "15": {
       "id": "15",
@@ -785,7 +785,7 @@
       ],
       "title": "Task Real",
       "_tab": "Files",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": true
     },
     "16": {
@@ -1389,7 +1389,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 1",
@@ -1398,7 +1398,7 @@
       ],
       "_collapsed": true,
       "_tab": "Behavior",
-      "tardy": true
+      "tardy": false
     },
     "54": {
       "id": "54",
@@ -1452,7 +1452,7 @@
       ],
       "title": "Task Real",
       "_tab": "Content",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "55": {
@@ -1689,7 +1689,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 2",
@@ -1698,7 +1698,7 @@
       ],
       "_collapsed": true,
       "_tab": "Behavior",
-      "tardy": true
+      "tardy": false
     },
     "60": {
       "id": "60",
@@ -1752,7 +1752,7 @@
       ],
       "title": "Task Real",
       "_tab": "Behavior",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "61": {
@@ -1989,7 +1989,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 5",
@@ -1998,7 +1998,7 @@
       ],
       "_collapsed": true,
       "_tab": "Content",
-      "tardy": true
+      "tardy": false
     },
     "65": {
       "id": "65",
@@ -2052,7 +2052,7 @@
       ],
       "title": "Task Real",
       "_tab": "Content",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "66": {
@@ -2289,7 +2289,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 4",
@@ -2298,7 +2298,7 @@
       ],
       "_collapsed": true,
       "_tab": "Behavior",
-      "tardy": true
+      "tardy": false
     },
     "70": {
       "id": "70",
@@ -2352,7 +2352,7 @@
       ],
       "title": "Task Real",
       "_tab": "Content",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "71": {
@@ -2589,7 +2589,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 3",
@@ -2598,7 +2598,7 @@
       ],
       "_collapsed": true,
       "_tab": "Files",
-      "tardy": true
+      "tardy": false
     },
     "75": {
       "id": "75",
@@ -2652,7 +2652,7 @@
       ],
       "title": "Task Real",
       "_tab": "Files",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "76": {
@@ -2889,7 +2889,7 @@
         {
           "title": "language",
           "message": "run",
-          "code": ""
+          "code": "setTimeout(function() {\n  var el = this.options.el;\n  if (!el) return;\n  var wk = el.querySelector('.word-key');\n  var nk = el.querySelector('.nonword-key');\n  if (wk) wk.textContent = window.word_key;\n  if (nk) nk.textContent = window.nonword_key;\n}.bind(this), 0)"
         }
       ],
       "title": "Real Frame Task 6",
@@ -2898,7 +2898,7 @@
       ],
       "_collapsed": true,
       "_tab": "Files",
-      "tardy": true
+      "tardy": false
     },
     "80": {
       "id": "80",
@@ -2952,7 +2952,7 @@
       ],
       "title": "Task Real",
       "_tab": "Files",
-      "tardy": true,
+      "tardy": false,
       "_collapsed": false
     },
     "81": {
