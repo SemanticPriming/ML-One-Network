@@ -45,9 +45,30 @@
   </body>
 
   <script>
+    // BeSample participants (battempt in the URL) get sent back to BeSample
+    // with their completion code on Finish; everyone else just ends the study.
+    let redirect_url = null;
+
     var jsPsych = initJsPsych({
-      on_finish: () => jatos.endStudy(jsPsych.data.get().json()),
+      on_finish: () => {
+        if (redirect_url) {
+          jatos.endStudyAndRedirect(redirect_url, jsPsych.data.get().json());
+        } else {
+          jatos.endStudy(jsPsych.data.get().json());
+        }
+      },
     });
+
+    // Fallback link in case the automatic redirect doesn't fire -- still
+    // ends the JATOS study first, and falls back to a plain navigation.
+    window.returnToBeSample = () => {
+      try {
+        jatos.endStudyAndRedirect(redirect_url, jsPsych.data.get().json());
+      } catch (e) {
+        window.location.href = redirect_url;
+      }
+      return false;
+    };
 
     jatos.onLoad(() => {
       const labID =
@@ -55,6 +76,18 @@
       const completion_code = jatos.studySessionData.completion_code || null;
       const participantUUID = jatos.studySessionData.participantUUID || "N/A";
       const displayCode = completion_code || participantUUID;
+      const battempt =
+        jatos.studySessionData.battempt ||
+        jatos.urlQueryParameters.battempt ||
+        null;
+      if (battempt) {
+        redirect_url =
+          "https://step.besample.app/study/other/redirect?battempt=" +
+          encodeURIComponent(battempt) +
+          "&completion_code=" +
+          encodeURIComponent(displayCode);
+      }
+      const redirectDisplay = redirect_url ? "block" : "none";
       jsPsych.data.addProperties({ labID });
 
       const thankyou_trial = {
@@ -78,6 +111,10 @@
                     <p><strong>${displayCode}</strong></p>
                     <p>Please keep or copy this number if you are asked for it.</p>
                     <b><p>Important: You must click Finish to submit your responses and receive credit or payment.</p></b>
+                    <div style="display: ${redirectDisplay};">
+                      <p>When you click Finish, you will be returned to BeSample.</p>
+                      <p>If you are not redirected automatically, <a href="${redirect_url}" onclick="return returnToBeSample();">click here to return to BeSample</a>.</p>
+                    </div>
                   `,
                 },
               ],
