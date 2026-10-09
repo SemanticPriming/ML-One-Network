@@ -70,3 +70,6 @@ rsconnect/
 
 # machine-specific env vars (see .env.example)
 .env
+
+# scratch notes and summaries
+*/temp
