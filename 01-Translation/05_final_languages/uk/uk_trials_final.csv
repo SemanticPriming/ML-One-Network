@@ -163,7 +163,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 затока,гавань,related,word,word,0.433949930002207,FALSE
 стаття,газета,related,word,word,0.367614808524544,FALSE
 всесвіт,галактика,related,word,word,0.354231580640058,FALSE
-ілюзія,галюкування,related,word,word,0,FALSE
+ілюзія,галюцинація,related,word,word,0,FALSE
 кишеня,гаманець,related,word,word,0.240881603763804,FALSE
 бутерброд,гамбургер,related,word,word,0.542409476406313,FALSE
 семінар,гараж,related,word,word,0.223869976852759,FALSE
@@ -186,7 +186,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 грати,гра,related,word,word,0.327677389802221,FALSE
 красти,грабувати,related,word,word,0.485266851455175,FALSE
 тренер,гравець,related,word,word,0.400901219806265,FALSE
-кілограм,гран,related,word,word,0.313082036468096,FALSE
+кілограм,грам,related,word,word,0.313082036468096,FALSE
 барон,графиня,related,word,word,0.435750104110897,FALSE
 римський,грецький,related,word,word,0.57103738311369,FALSE
 блискавка,грім,related,word,word,0.496997693109989,FALSE
@@ -292,8 +292,8 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 перебування,залишати,related,word,word,0.261704576730768,FALSE
 уважність,залучати,related,word,word,0.259021932353156,FALSE
 замінити,замінник,related,word,word,0.380896534224881,FALSE
-палац,замку,related,word,word,0.425035685470285,FALSE
-ключ,замок,related,word,word,0.299559899631088,FALSE
+палац,замок,related,word,word,0.425035685470285,FALSE
+ключ,засув,related,word,word,0.299559899631088,FALSE
 розтопити,заморожувати,related,word,word,0.515976503630834,FALSE
 забути,запам'ятати,related,word,word,0,FALSE
 смак,запах,related,word,word,0.549675827245585,FALSE
@@ -441,7 +441,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 алкоголь,ліки,related,word,word,0.390510553881287,FALSE
 терапія,лікування,related,word,word,0.434196026460268,FALSE
 таксі,лімузин,related,word,word,0.390913882897986,FALSE
-мін,лін,related,word,word,0.24992368765133,FALSE
+рік,кіт,related,word,word,0.24992368765133,FALSE
 джунглі,ліс,related,word,word,0.423375668705959,FALSE
 земля,літати,related,word,word,0.14018514972316,FALSE
 мистецтво,література,related,word,word,0.457080477941481,FALSE
@@ -577,7 +577,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 характер,особистість,related,word,word,0.261398959357695,FALSE
 спочатку,остання,related,word,word,0.221853132295279,FALSE
 останній,остаточний,related,word,word,0.46001486770442,FALSE
-тріщина,отворити,related,word,word,0,FALSE
+тріщина,діра,related,word,word,0,FALSE
 стіл,офіс,related,word,word,0.2707044474892,FALSE
 офіціант,офіціантка,related,word,word,0.822286318123181,FALSE
 офіційно,офіційний,related,word,word,0.539548981468693,FALSE
@@ -1014,7 +1014,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 ект,ставлення,nonword,nonword,word,,FALSE
 могав,інструмент,nonword,nonword,word,,FALSE
 брімо,патруль,nonword,nonword,word,,FALSE
-фaрика,галюкування,nonword,nonword,word,,FALSE
+фaрика,галюцинація,nonword,nonword,word,,FALSE
 пітопсія,підготувати,nonword,nonword,word,,FALSE
 покаразо,небезпечний,nonword,nonword,word,,FALSE
 лезеон,копіювати,nonword,nonword,word,,FALSE
@@ -1154,7 +1154,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 ледоити,дно,nonword,nonword,word,,FALSE
 сеоваційний,саботаж,nonword,nonword,word,,FALSE
 надивні,дивитися,nonword,nonword,word,,FALSE
-білли,замку,nonword,nonword,word,,FALSE
+білли,замок,nonword,nonword,word,,FALSE
 бічннець,передавач,nonword,nonword,word,,FALSE
 проагент,надавати,nonword,nonword,word,,FALSE
 рло,розташування,nonword,nonword,word,,FALSE
@@ -1162,7 +1162,7 @@ uk_cue,uk_target,type,cue_type,target_type,uk_cosine,still_over_threshold
 сьогодер,нікчемний,nonword,nonword,word,,FALSE
 замека,лев,nonword,nonword,word,,FALSE
 стхотя,машина,nonword,nonword,word,,FALSE
-всдевіт,гран,nonword,nonword,word,,FALSE
+всдевіт,грам,nonword,nonword,word,,FALSE
 ирюзія,дурість,nonword,nonword,word,,FALSE
 авшеня,жалюгідний,nonword,nonword,word,,FALSE
 хотерброд,племінник,nonword,nonword,word,,FALSE
@@ -1391,7 +1391,7 @@ urіншому місці,зонд,nonword,nonword,word,,FALSE
 присукати,архітектор,nonword,nonword,word,,FALSE
 біaція,торговець,nonword,nonword,word,,FALSE
 принцеду,відповідати,nonword,nonword,word,,FALSE
-рормо,отворити,nonword,nonword,word,,FALSE
+рормо,діра,nonword,nonword,word,,FALSE
 ердіння,гравець,nonword,nonword,word,,FALSE
 ніконн,борода,nonword,nonword,word,,FALSE
 пломе,брат,nonword,nonword,word,,FALSE
@@ -1607,7 +1607,7 @@ maга,дуже,nonword,nonword,word,,FALSE
 недоклінювати,нудота,nonword,nonword,word,,FALSE
 даитик,королівство,nonword,nonword,word,,FALSE
 руботися,плавати,nonword,nonword,word,,FALSE
-небоаха,замок,nonword,nonword,word,,FALSE
+небоаха,засув,nonword,nonword,word,,FALSE
 розника,акт,nonword,nonword,word,,FALSE
 слязувати,зима,nonword,nonword,word,,FALSE
 раділк,грецький,nonword,nonword,word,,FALSE
@@ -1986,7 +1986,7 @@ roкціон,черевний,nonword,nonword,word,,FALSE
 татускання,достатньо,nonword,nonword,word,,FALSE
 бами,захворювання,nonword,nonword,word,,FALSE
 віртр,законний,nonword,nonword,word,,FALSE
-прирівний,лін,nonword,nonword,word,,FALSE
+прирівний,кіт,nonword,nonword,word,,FALSE
 захвволений,шосе,nonword,nonword,word,,FALSE
 кне,рідко,nonword,nonword,word,,FALSE
 співсунути,пил,nonword,nonword,word,,FALSE
@@ -2535,7 +2535,7 @@ roкціон,черевний,nonword,nonword,word,,FALSE
 шлунок,невіробив,nonword,word,nonword,,FALSE
 автограф,вигативний,nonword,word,nonword,,FALSE
 кабель,неапля,nonword,word,nonword,,FALSE
-мін,нестатній,nonword,word,nonword,,FALSE
+рік,нестатній,nonword,word,nonword,,FALSE
 черв'як,неприємств,nonword,word,nonword,,FALSE
 більше,неітовий,nonword,word,nonword,,FALSE
 гордий,несподамано,nonword,word,nonword,,FALSE
@@ -4136,7 +4136,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 відстань,прес,unrelated,word,word,0.121641455148122,FALSE
 вже,помідор,unrelated,word,word,0.14435519213671,FALSE
 банан,лють,unrelated,word,word,0.143003040736741,FALSE
-рекомендувати,гран,unrelated,word,word,0.0791773537926356,FALSE
+рекомендувати,грам,unrelated,word,word,0.0791773537926356,FALSE
 субота,продукт,unrelated,word,word,0.145353673375942,FALSE
 працювати,вулиця,unrelated,word,word,0.0234336337296941,FALSE
 радіо,кролик,unrelated,word,word,0.12356775266761,FALSE
@@ -4166,7 +4166,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 розмова,ліс,unrelated,word,word,0.0992516059228884,FALSE
 управляти,несподівано,unrelated,word,word,0.100932261583167,FALSE
 пізно,вовк,unrelated,word,word,0.120773593098028,FALSE
-струм,галюкування,unrelated,word,word,0,FALSE
+струм,галюцинація,unrelated,word,word,0,FALSE
 ніч,символ,unrelated,word,word,0.0706591090170705,FALSE
 успіх,станція,unrelated,word,word,0.117014947910348,FALSE
 клан,павутина,unrelated,word,word,0.143243485376289,FALSE
@@ -4717,7 +4717,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 пухлина,збирати,unrelated,word,word,0.11216979547979,FALSE
 розмова,жорсткий,unrelated,word,word,0.132870074979539,FALSE
 зомбі,перспективний,unrelated,word,word,0.14690817863366,FALSE
-жертва,замку,unrelated,word,word,0.0944876001483658,FALSE
+жертва,замок,unrelated,word,word,0.0944876001483658,FALSE
 явище,довго,unrelated,word,word,0.13645824283936,FALSE
 комерційний,зміст,unrelated,word,word,0.130200022632354,FALSE
 вдячний,горілка,unrelated,word,word,0.11732630269984,FALSE
@@ -4784,7 +4784,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 драматичний,підтверджувати,unrelated,word,word,0.0527803513300809,FALSE
 довіра,політ,unrelated,word,word,0.106115229993195,FALSE
 анонімний,якість,unrelated,word,word,0.10516073981369,FALSE
-порятунок,лін,unrelated,word,word,0.126425259955522,FALSE
+порятунок,кіт,unrelated,word,word,0.126425259955522,FALSE
 подивитися,обвинувачення,unrelated,word,word,0.121958179154414,FALSE
 сучасний,сигара,unrelated,word,word,0.140132496688672,FALSE
 небо,саботаж,unrelated,word,word,0.1403887180678,FALSE
@@ -4895,7 +4895,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 штовхати,дослідник,unrelated,word,word,0.0965565874219462,FALSE
 весна,негативний,unrelated,word,word,0.0778237977934456,FALSE
 оптимістичний,нос,unrelated,word,word,0.130564391485478,FALSE
-мін,абсурдний,unrelated,word,word,0.124119341907537,FALSE
+рік,абсурдний,unrelated,word,word,0.124119341907537,FALSE
 бідний,раноподібний,unrelated,word,word,0,FALSE
 місячний,всередині,unrelated,word,word,0.0937979795770976,FALSE
 герой,скорочувати,unrelated,word,word,0.122111634313864,FALSE
@@ -4944,7 +4944,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 антидот,вільний,unrelated,word,word,0.128771557756013,FALSE
 міцний,щотижня,unrelated,word,word,0.0639757872061042,FALSE
 корона,трагічний,unrelated,word,word,0.122352691243044,FALSE
-реклама,замок,unrelated,word,word,0.0947139045268839,FALSE
+реклама,засув,unrelated,word,word,0.0947139045268839,FALSE
 кар'єра,заморожувати,unrelated,word,word,0,FALSE
 бідність,виконання,unrelated,word,word,0.0878937680298876,FALSE
 генератор,дурість,unrelated,word,word,0.0640594405254453,FALSE
@@ -4954,7 +4954,7 @@ maга,сагут,nonword,nonword,nonword,,FALSE
 модель,іронічний,unrelated,word,word,0.135667375418969,FALSE
 спокійний,суміш,unrelated,word,word,0.071830122804037,FALSE
 листопад,спрага,unrelated,word,word,0.0967199942733153,FALSE
-незвичайний,отворити,unrelated,word,word,0,FALSE
+незвичайний,діра,unrelated,word,word,0,FALSE
 поет,дзеркало,unrelated,word,word,0.11914388804461,FALSE
 наївний,куртка,unrelated,word,word,0.122498760764692,FALSE
 губернатор,ковток,unrelated,word,word,0.134458332471365,FALSE
