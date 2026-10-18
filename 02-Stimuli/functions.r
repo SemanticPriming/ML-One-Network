@@ -451,12 +451,15 @@ find_subseq <- function(haystack_ids, needle_ids) {
 
 get_embeddings <- function(word, sentence = NULL, tokzr, model,
                            occurrence = c("last", "first", "all"),
-                           layer = NULL) {
+                           layer = NULL, emb_mat = NULL) {
   occurrence <- match.arg(occurrence)
-  
+
   # --- Static (average over subtokens) ---
+  # emb_mat can be passed in so callers looping over many words don't copy
+  # the whole embedding table out of torch on every call (slow for big
+  # vocabularies like mGPT's)
   word_ids   <- tokzr$encode(word, add_special_tokens = FALSE)
-  emb_mat    <- model$transformer$wte$weight$detach()$cpu()$numpy()
+  if (is.null(emb_mat)) emb_mat <- model$transformer$wte$weight$detach()$cpu()$numpy()
   static_avg <- colMeans(emb_mat[as.integer(word_ids) + 1L, , drop = FALSE])
   
   # --- Contextual (optional) ---
@@ -540,7 +543,7 @@ embed_dataframe <- function(df,
     # Static once per row
     emb_static <- try(
       get_embeddings(w, sentence = NULL,
-                     tokzr = tokzr, model = model),
+                     tokzr = tokzr, model = model, emb_mat = emb_mat),
       silent = TRUE
     )
     if (!inherits(emb_static, "try-error") && !is.null(emb_static$static)) {
@@ -551,7 +554,7 @@ embed_dataframe <- function(df,
     emb_rel <- try(
       get_embeddings(w, sentence = s_r,
                      tokzr = tokzr, model = model,
-                     layer = layer, occurrence = occurrence),
+                     layer = layer, occurrence = occurrence, emb_mat = emb_mat),
       silent = TRUE
     )
     if (!inherits(emb_rel, "try-error") && !is.null(emb_rel$contextual)) {
@@ -562,7 +565,7 @@ embed_dataframe <- function(df,
     emb_unrel <- try(
       get_embeddings(w, sentence = s_u,
                      tokzr = tokzr, model = model,
-                     layer = layer, occurrence = occurrence),
+                     layer = layer, occurrence = occurrence, emb_mat = emb_mat),
       silent = TRUE
     )
     if (!inherits(emb_unrel, "try-error") && !is.null(emb_unrel$contextual)) {

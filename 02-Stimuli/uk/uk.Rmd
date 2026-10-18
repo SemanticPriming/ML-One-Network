@@ -194,11 +194,14 @@ DF <- DF %>%
 
 ## Embeddings
 
-Each pair is dropped into template sentences, and `get_embeddings()`/`embed_dataframe()` (from `functions.R`) pull a context-free (static) embedding for the target plus a contextual embedding of the target as it appears in each sentence. The model is a single variable below so different GPT-2-family checkpoints can be swapped in while we're still testing this out -- `embed_dataframe()` assumes a GPT-2-style architecture (it reaches into `model$transformer$wte`), so any replacement needs to expose that same structure (e.g. other `AutoModelForCausalLM`-loadable GPT-2 variants, including multilingual ones like `sberbank-ai/mGPT`).
+Each pair is dropped into template sentences, and `get_embeddings()`/`embed_dataframe()` (from `functions.R`) pull a context-free (static) embedding for the target plus a contextual embedding of the target as it appears in each sentence. `cosine_related`/`cosine_unrelated` in the output are cue-target cosines from a separate model, LaBSE, which is built for comparing words across languages; language-model vectors (GPT-2, mGPT) separated related from unrelated pairs much less well. The model is a single variable below so different GPT-2-family checkpoints can be swapped in while we're still testing this out -- `embed_dataframe()` assumes a GPT-2-style architecture (it reaches into `model$transformer$wte`), so any replacement needs to expose that same structure (e.g. other `AutoModelForCausalLM`-loadable GPT-2 variants, including multilingual ones like `sberbank-ai/mGPT`).
 
 ```{r}
-# swap the checkpoint here -- must be a GPT-2-architecture causal LM
-embed_model_name <- "openai-community/gpt2"
+# swap the checkpoint here -- must be a GPT-2-architecture causal LM.
+# mGPT (61 languages, incl. Ukrainian and Russian) replaced English-only
+# openai-community/gpt2 on 2026-10-18: gpt2 splits Cyrillic into byte-level
+# pieces, so its vectors carried little meaning for Ukrainian words
+embed_model_name <- "ai-forever/mGPT"
 
 reticulate::py_require(c("transformers", "torch"))
 transformers <- reticulate::import("transformers")
@@ -234,14 +237,46 @@ embedded <- embed_dataframe(
   quiet = FALSE
 )
 
-# one row per pair (all 1,000 kept): static + contextual-in-related +
-# contextual-in-unrelated vectors, written out on their own so we can decide
-# what to do with the raw vectors later
+# cue-target similarity from LaBSE, a multilingual embedding model built
+# for this kind of comparison. On a 200-pair check it separated related
+# from unrelated pairs far better than GPT-2 or mGPT vectors (d = 1.61 vs
+# 0.51 / 0.75) and tracked the original word2vec cosines best (r = .72)
+labse_name <- "sentence-transformers/LaBSE"
+labse_tokzr <- transformers$AutoTokenizer$from_pretrained(labse_name)
+labse_model <- transformers$AutoModel$from_pretrained(labse_name)
+labse_model$eval()
+
+labse_embed <- function(words, batch_size = 64) {
+  words <- unique(words)
+  batches <- split(words, ceiling(seq_along(words) / batch_size))
+  vecs <- do.call(rbind, lapply(batches, function(b) {
+    enc <- labse_tokzr(as.list(b), padding = TRUE, return_tensors = "pt")
+    with(torch$no_grad(), {
+      out <- labse_model(input_ids = enc$input_ids,
+                         attention_mask = enc$attention_mask)
+    })
+    out$pooler_output$numpy()
+  }))
+  rownames(vecs) <- words
+  vecs
+}
+row_cosine <- function(a, b) rowSums(a * b) / (sqrt(rowSums(a^2)) * sqrt(rowSums(b^2)))
+
+labse_vecs <- labse_embed(c(llm_embed$cue_word_related,
+                            llm_embed$cue_word_unrelated,
+                            llm_embed$word))
+target_labse <- labse_vecs[llm_embed$word, ]
+
+# one row per pair (all 1,000 kept): cue-target cosines + static +
+# contextual-in-related + contextual-in-unrelated vectors, written out on
+# their own so we can decide what to do with the raw vectors later
 embeddings_DF <- bind_cols(
   cue_related = llm_embed$cue_word_related,
   cue_unrelated = llm_embed$cue_word_unrelated,
   target = llm_embed$target_word_unique,
   word = llm_embed$word,
+  cosine_related = row_cosine(labse_vecs[llm_embed$cue_word_related, ], target_labse),
+  cosine_unrelated = row_cosine(labse_vecs[llm_embed$cue_word_unrelated, ], target_labse),
   as.data.frame(embedded$static)            %>% rename_with(~paste0("static_", .x)),
   as.data.frame(embedded$context_related)   %>% rename_with(~paste0("context_related_", .x)),
   as.data.frame(embedded$context_unrelated) %>% rename_with(~paste0("context_unrelated_", .x))
