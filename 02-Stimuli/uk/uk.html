@@ -574,15 +574,22 @@ combine_subjective &lt;- function(labData, pattern, category) {
 <code>get_embeddings()</code>/<code>embed_dataframe()</code> (from
 <code>functions.R</code>) pull a context-free (static) embedding for the
 target plus a contextual embedding of the target as it appears in each
-sentence. The model is a single variable below so different GPT-2-family
-checkpoints can be swapped in while we’re still testing this out –
+sentence. <code>cosine_related</code>/<code>cosine_unrelated</code> in
+the output are cue-target cosines from a separate model, LaBSE, which is
+built for comparing words across languages; language-model vectors
+(GPT-2, mGPT) separated related from unrelated pairs much less well. The
+model is a single variable below so different GPT-2-family checkpoints
+can be swapped in while we’re still testing this out –
 <code>embed_dataframe()</code> assumes a GPT-2-style architecture (it
 reaches into <code>model$transformer$wte</code>), so any replacement
 needs to expose that same structure (e.g. other
 <code>AutoModelForCausalLM</code>-loadable GPT-2 variants, including
 multilingual ones like <code>sberbank-ai/mGPT</code>).</p>
-<pre class="r"><code># swap the checkpoint here -- must be a GPT-2-architecture causal LM
-embed_model_name &lt;- &quot;openai-community/gpt2&quot;
+<pre class="r"><code># swap the checkpoint here -- must be a GPT-2-architecture causal LM.
+# mGPT (61 languages, incl. Ukrainian and Russian) replaced English-only
+# openai-community/gpt2 on 2026-10-18: gpt2 splits Cyrillic into byte-level
+# pieces, so its vectors carried little meaning for Ukrainian words
+embed_model_name &lt;- &quot;ai-forever/mGPT&quot;
 
 reticulate::py_require(c(&quot;transformers&quot;, &quot;torch&quot;))
 transformers &lt;- reticulate::import(&quot;transformers&quot;)
@@ -637,14 +644,87 @@ embedded &lt;- embed_dataframe(
 <pre><code>## Processed 900 / 1000</code></pre>
 <pre><code>## Processed 950 / 1000</code></pre>
 <pre><code>## Processed 1000 / 1000</code></pre>
-<pre class="r"><code># one row per pair (all 1,000 kept): static + contextual-in-related +
-# contextual-in-unrelated vectors, written out on their own so we can decide
-# what to do with the raw vectors later
+<pre class="r"><code># cue-target similarity from LaBSE, a multilingual embedding model built
+# for this kind of comparison. On a 200-pair check it separated related
+# from unrelated pairs far better than GPT-2 or mGPT vectors (d = 1.61 vs
+# 0.51 / 0.75) and tracked the original word2vec cosines best (r = .72)
+labse_name &lt;- &quot;sentence-transformers/LaBSE&quot;
+labse_tokzr &lt;- transformers$AutoTokenizer$from_pretrained(labse_name)
+labse_model &lt;- transformers$AutoModel$from_pretrained(labse_name)
+labse_model$eval()</code></pre>
+<pre><code>## BertModel(
+##   (embeddings): BertEmbeddings(
+##     (word_embeddings): Embedding(501153, 768, padding_idx=0)
+##     (position_embeddings): Embedding(512, 768)
+##     (token_type_embeddings): Embedding(2, 768)
+##     (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True, bias=True)
+##     (dropout): Dropout(p=0.1, inplace=False)
+##   )
+##   (encoder): BertEncoder(
+##     (layer): ModuleList(
+##       (0-11): 12 x BertLayer(
+##         (attention): BertAttention(
+##           (self): BertSelfAttention(
+##             (query): Linear(in_features=768, out_features=768, bias=True)
+##             (key): Linear(in_features=768, out_features=768, bias=True)
+##             (value): Linear(in_features=768, out_features=768, bias=True)
+##             (dropout): Dropout(p=0.1, inplace=False)
+##           )
+##           (output): BertSelfOutput(
+##             (dense): Linear(in_features=768, out_features=768, bias=True)
+##             (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True, bias=True)
+##             (dropout): Dropout(p=0.1, inplace=False)
+##           )
+##         )
+##         (intermediate): BertIntermediate(
+##           (dense): Linear(in_features=768, out_features=3072, bias=True)
+##           (intermediate_act_fn): GELUActivation()
+##         )
+##         (output): BertOutput(
+##           (dense): Linear(in_features=3072, out_features=768, bias=True)
+##           (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True, bias=True)
+##           (dropout): Dropout(p=0.1, inplace=False)
+##         )
+##       )
+##     )
+##   )
+##   (pooler): BertPooler(
+##     (dense): Linear(in_features=768, out_features=768, bias=True)
+##     (activation): Tanh()
+##   )
+## )
+##  signature: (*args, **kwargs)</code></pre>
+<pre class="r"><code>labse_embed &lt;- function(words, batch_size = 64) {
+  words &lt;- unique(words)
+  batches &lt;- split(words, ceiling(seq_along(words) / batch_size))
+  vecs &lt;- do.call(rbind, lapply(batches, function(b) {
+    enc &lt;- labse_tokzr(as.list(b), padding = TRUE, return_tensors = &quot;pt&quot;)
+    with(torch$no_grad(), {
+      out &lt;- labse_model(input_ids = enc$input_ids,
+                         attention_mask = enc$attention_mask)
+    })
+    out$pooler_output$numpy()
+  }))
+  rownames(vecs) &lt;- words
+  vecs
+}
+row_cosine &lt;- function(a, b) rowSums(a * b) / (sqrt(rowSums(a^2)) * sqrt(rowSums(b^2)))
+
+labse_vecs &lt;- labse_embed(c(llm_embed$cue_word_related,
+                            llm_embed$cue_word_unrelated,
+                            llm_embed$word))
+target_labse &lt;- labse_vecs[llm_embed$word, ]
+
+# one row per pair (all 1,000 kept): cue-target cosines + static +
+# contextual-in-related + contextual-in-unrelated vectors, written out on
+# their own so we can decide what to do with the raw vectors later
 embeddings_DF &lt;- bind_cols(
   cue_related = llm_embed$cue_word_related,
   cue_unrelated = llm_embed$cue_word_unrelated,
   target = llm_embed$target_word_unique,
   word = llm_embed$word,
+  cosine_related = row_cosine(labse_vecs[llm_embed$cue_word_related, ], target_labse),
+  cosine_unrelated = row_cosine(labse_vecs[llm_embed$cue_word_unrelated, ], target_labse),
   as.data.frame(embedded$static)            %&gt;% rename_with(~paste0(&quot;static_&quot;, .x)),
   as.data.frame(embedded$context_related)   %&gt;% rename_with(~paste0(&quot;context_related_&quot;, .x)),
   as.data.frame(embedded$context_unrelated) %&gt;% rename_with(~paste0(&quot;context_unrelated_&quot;, .x))
