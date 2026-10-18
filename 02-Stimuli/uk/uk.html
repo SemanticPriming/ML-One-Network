@@ -11,7 +11,7 @@
 
 <meta name="author" content="Erin M. Buchanan - Addie Clark" />
 
-<meta name="date" content="2026-09-02" />
+<meta name="date" content="2026-10-18" />
 
 <title>Ukrainian Data Combination</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Ukrainian Data Combination</h1>
 <h4 class="author">Erin M. Buchanan - Addie Clark</h4>
-<h4 class="date">2026-09-02</h4>
+<h4 class="date">2026-10-18</h4>
 
 </div>
 
@@ -650,7 +650,7 @@ embeddings_DF &lt;- bind_cols(
   as.data.frame(embedded$context_unrelated) %&gt;% rename_with(~paste0(&quot;context_unrelated_&quot;, .x))
 )
 
-rio::export(embeddings_DF, &quot;uk_embeddings.csv&quot;)</code></pre>
+rio::export(embeddings_DF, &quot;uk_embeddings.csv.gz&quot;)</code></pre>
 <div id="cue-target-cosine-similarity" class="section level3">
 <h3>Cue-Target Cosine Similarity</h3>
 <p>For each pair, the cosine similarity between the target’s contextual
